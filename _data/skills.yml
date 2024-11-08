@@ -1,19 +1,13 @@
 - name: Software Engineer Keywords
   keywords:
-      - Java
-      - C++
       - Python
+      - C++
+      - qt
       - Design Patterns
 
-- name: Mobile Developer Keywords
+- name: English teacher and physics teacher
   keywords:
-      - Android
-      - Reverse Engineering
+      - Junior English
+      - Junior Physics
 
-- name: Windows Developer Keywords
-  keywords:
-      - Win32 SDK
-      - DuiLib
-      - WTL
-      - COM
-      - WinDbg
+
