@@ -4,10 +4,10 @@
 baseurl:
 url: https://icurious-d.github.io
 date_format: "ordinal"
-title: 码志
-subtitle: "公众号：闷骚的程序员"
-description: "马壮的个人博客，公众号：闷骚的程序员"
-keywords: 码志, Zhuang Ma, mzlogin, mazhuang, 闷骚的程序员
+title: iCurious
+subtitle: "stay hungry, stay foolish."
+description: "keep records of daily life"
+keywords: AI, Machine Learning, Deep Learning, Python, child's Education
 timezone: Asia/Shanghai
 encoding: "utf-8"
 # 页面左下角显示的年份
