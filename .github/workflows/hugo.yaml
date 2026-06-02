@@ -1,9 +1,11 @@
-name: Deploy Hugo site to Pages
+# .github/workflows/hugo.yaml
+
+name: Deploy Hugo Site to Pages
 
 on:
   push:
-    branches:
-      - main # 或者是 master，取决于你的主分支名
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -17,28 +19,27 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.147.0
     steps:
+      - name: Install Hugo CLI
+        run: |
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive # 非常重要！确保把 Stack 主题子模块一起拉取
-          fetch-depth: 0
-
+          submodules: recursive
       - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Setup Hugo
-        uses: actions/configure-hugo@v1
-        with:
-          hugo-version: 'latest'
-          extended: true # 必须开启 extended 编译 SCSS
-
+        id: pages
+        uses: actions/configure-pages@v5
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
         run: |
-          hugo --gc --minify
-
+          hugo \
+            --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -47,7 +48,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps: deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
     steps:
