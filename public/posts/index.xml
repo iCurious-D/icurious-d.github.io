@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>Posts on 我的小站</title>
+        <link>http://localhost:1313/posts/</link>
+        <description>Recent content in Posts on 我的小站</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh</language>
+        <lastBuildDate>Tue, 02 Jun 2026 16:32:43 +0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>My First Post</title>
+        <link>http://localhost:1313/posts/my-first-post/</link>
+        <pubDate>Tue, 02 Jun 2026 16:32:43 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/my-first-post/</guid>
+        <description>&lt;p&gt;这是我的第一篇文章，网站正式开通啦！&lt;/p&gt;
+&lt;p&gt;以后我会在这里分享一些技术笔记和想法。&lt;/p&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

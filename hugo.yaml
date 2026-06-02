@@ -1,0 +1,53 @@
+# hugo.yaml
+baseURL: http://gugugu.github.io/  # !!!替换为你的最终域名，部署后必须修改!!!
+locale: zh         # 语言设为中文
+title: 我的小站           # 网站标题
+# theme: hugo-theme-stack      # 主题名称，与模块名一致
+
+# 首页文章列表的设置
+paginate: 5                  # 每页显示5篇文章
+# 禁用普通分类，仅使用标签
+disableKinds: ["taxonomy"]
+
+# 模块配置：指定主题的git仓库地址
+module:
+    imports:
+    - path: github.com/CaiJimmy/hugo-theme-stack/v3
+
+# 菜单配置：定义导航栏的项目
+menu:
+    main:
+    - identifier: "home"
+      name: "首页"
+      url: "/"
+      weight: 10
+    - identifier: "posts"
+      name: "文章"
+      url: "/posts/"
+      weight: 20
+    - identifier: "about"
+      name: "关于我"
+      url: "/about/"
+      weight: 30
+
+params:
+  # 侧边栏配置 (这是重点)
+  sidebar:
+    subtitle: "喜欢讲故事的咕咕咕"  # 这里的 subname 会显示在头像下方作为个人签名
+    avatar:
+      src: "img/avatar.jpg"          # 头像路径 (稍后会解释如何放置)
+      # srcDark 用于暗色模式，可选用另一张图，可以不设置
+      # srcDark: "img/avatar-dark.png"
+      alt: "gugugu的头像"             # 图片描述
+
+  # 社交链接配置(数组格式)
+  social:
+    - identifier: "github"
+      name: "GitHub"
+      url: "https://github.com/iCurious-D"   # 自己的 GitHub 链接
+      params:
+        icon: "brand-github"
+
+  # 文章目录配置 (保证首页能显示)
+  mainSections:
+    - posts
