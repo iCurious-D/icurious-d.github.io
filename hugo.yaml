@@ -1,11 +1,13 @@
 # hugo.yaml
-baseURL: http://gugugu.github.io/  # !!!替换为你的最终域名，部署后必须修改!!!
+baseURL: http://icurious-d.github.io/  # !!!替换为你的最终域名，部署后必须修改!!!
 locale: zh         # 语言设为中文
 title: 我的小站           # 网站标题
 # theme: hugo-theme-stack      # 主题名称，与模块名一致
 
 # 首页文章列表的设置
-paginate: 5                  # 每页显示5篇文章
+#paginate: 5                  # 每页显示5篇文章
+pagination:
+  pagerSize: 5
 # 禁用普通分类，仅使用标签
 disableKinds: ["taxonomy"]
 
