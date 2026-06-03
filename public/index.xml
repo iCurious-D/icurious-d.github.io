@@ -6,7 +6,39 @@
         <description>Recent content on 我的小站</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh</language>
-        <lastBuildDate>Tue, 02 Jun 2026 16:32:43 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 03 Jun 2026 10:39:17 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>leetcode3635：游乐园正式服的挑战</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-03/</link>
+        <pubDate>Wed, 03 Jun 2026 10:39:17 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-03/</guid>
+        <description>&lt;h2 id=&#34;-游乐园正式服的挑战当昨天的代码遇上今天的数据量&#34;&gt;🎮 游乐园正式服的挑战：当昨天的代码遇上今天的数据量
+&lt;/h2&gt;&lt;p&gt;上回说到，我和老勇者从“算法乐园”逃回村里，及时救活了村里的魔法锅炉。今天，我蹲在炉子旁边添柴边打盹，火焰舔着锅底，浓汤咕嘟咕嘟冒泡，节奏稳得像台跑了十年没崩过的服务器。昨天的游乐园副本虽然惊险，但好歹白嫖了两份战报，O(n+m) 的剪枝优化躺在魔法书里，想想还有点小得意。&lt;/p&gt;
+&lt;p&gt;正迷糊着，一阵急促的脚步声由远及近。我睁眼一看，村长又来了。这回他手里没有门票，而是举着一封烫金信封：“小白，算法乐园那边来消息了——说上次的游园体验是‘试运营版本’，现在正式版上线了，叫 ‘3635 - 最早完成陆地和水上游乐设施的时间 II’。规则一模一样，但是——”&lt;/p&gt;
+&lt;p&gt;他把信封翻开，只见上面写着醒目的数据范围：“陆地项目 n ≤ 5×10⁴，水上项目 m ≤ 5×10⁴，时间上限 10⁵。”&lt;/p&gt;
+&lt;p&gt;我瞌睡当场醒了一半。五万乘五万，那可是 2.5×10⁹ 的组合量。拿暴力双循环去莽，别说 AC，评测机都得先给我发一封投诉邮件。但我没有慌。准确地说，是慌了两秒之后，脑子里突然闪过一道光——等等，这题昨天不是刚做过吗？规则一模一样，那昨天在长椅上推出来的优化思路……&lt;/p&gt;
+&lt;p&gt;我猛地把魔法书翻到昨天画过山车标记的那一页。几行代码安安静静躺在那里，旁边还黏着一小坨棉花糖的糖霜痕迹，散发着淡淡的甜味：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;solve&lt;/span&gt;(firstStart, firstDur, secondStart, secondDur):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    min_finish &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; min(start &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; dur &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; start, dur &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; zip(firstStart, firstDur))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; min(max(start, min_finish) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; dur &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; start, dur &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; zip(secondStart, secondDur))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;earliestFullTime&lt;/span&gt;(landStart, landDur, waterStart, waterDur):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; min(solve(landStart, landDur, waterStart, waterDur),
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;               solve(waterStart, waterDur, landStart, landDur))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我脑子里的灯泡亮得跟锅炉里的火光似的。昨天老勇者怎么说的来着？——“第一类设施里，只有最早结束的那个有意义，其他全是冗余信息。” 这句话跟数据量有半毛钱关系吗？没有。不管陆地项目是 100 个还是 50000 个，从陆地区出来的最早时间永远只取决于 &lt;code&gt;min(start + duration)&lt;/code&gt;。你有一百个过山车还是五万个过山车，你只需要知道哪个能让你最早下来，剩下的四万九千九百九十九个全是冗余数据，剪枝一刀全砍掉。&lt;/p&gt;
+&lt;p&gt;关键在于&lt;code&gt;solve&lt;/code&gt; 函数里那两个 &lt;code&gt;zip&lt;/code&gt; 遍历。它们肩并肩站着，谁也不嵌套谁——第一个找 &lt;code&gt;min_finish&lt;/code&gt;，第二个在水上项目里挑最优。n 和 m 从 100 膨胀到 5×10⁴，每个设施仍然只被摸一次，总共十万次操作。暴力法 2.5×10⁹，优化版 10⁵——差了整整四个数量级！这就好比别人在手动数麦粒，而你开了一台联合收割机——场地越大，差距越离谱。&lt;/p&gt;
+&lt;p&gt;代码一个字符都不用改。我原封不动贴上去，提交——秒 AC。耗时跟昨天跑 100 个项目的体感几乎一样，屏幕上弹出一个绿色的大勾，快得像锅炉里迸出的火星。村长在旁边看得一愣一愣的：“这就……做完了？那可是五万乘五万——”&lt;/p&gt;
+&lt;p&gt;“做完了，”我把魔法书往怀里一揣，拿起拨火棍继续给锅炉添柴，“昨天的我已经帮今天的我写好了。”&lt;/p&gt;
+&lt;p&gt;锅炉里的火苗欢快地蹿着，浓汤咕嘟咕嘟冒泡。我盯着跳动的火光，忍不住笑了。昨天在游乐园长椅上啃棉花糖的时候，还以为那段剪枝代码只是“今天先优雅一把，以后再说”。谁知道“以后”来得这么快——隔了一个晚上，正式版就砸脸上了。而代码躺在我的魔法书里，连个标点符号都没改，直接应战五万数据。这种感觉就像在新手村捡了一把木剑，以为后期还要换神装，结果发现这玩意是成长型神器，等级随角色自动缩放。&lt;/p&gt;
+&lt;p&gt;我把魔法书摊在锅炉边，在昨天的战报下面补了一行新记录：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;3635 - 最早完成陆地和水上游乐设施的时间 II&lt;/strong&gt;&lt;br&gt;
+解法：同 3633 优化版，O(n+m)，代码零改动，昨天多想十分钟，今天就省下四个数量级。&lt;br&gt;
+心得体会：剪枝剪得好，正式版再猛也不怕。暴力不是错，但知道什么时候不暴力，才是真正的抠门大师。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
         <title>My First Post</title>
         <link>http://localhost:1313/posts/my-first-post/</link>
         <pubDate>Tue, 02 Jun 2026 16:32:43 +0800</pubDate>

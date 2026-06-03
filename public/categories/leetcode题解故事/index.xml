@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Posts on 我的小站</title>
-        <link>http://localhost:1313/posts/</link>
-        <description>Recent content in Posts on 我的小站</description>
+        <title>Leetcode题解故事 on 我的小站</title>
+        <link>http://localhost:1313/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/</link>
+        <description>Recent content in Leetcode题解故事 on 我的小站</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh</language>
-        <lastBuildDate>Wed, 03 Jun 2026 10:39:17 +0800</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Wed, 03 Jun 2026 10:39:17 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>leetcode3635：游乐园正式服的挑战</title>
         <link>http://localhost:1313/posts/leetcode_stories/26-06-03/</link>
         <pubDate>Wed, 03 Jun 2026 10:39:17 +0800</pubDate>
@@ -36,16 +36,6 @@
 解法：同 3633 优化版，O(n+m)，代码零改动，昨天多想十分钟，今天就省下四个数量级。&lt;br&gt;
 心得体会：剪枝剪得好，正式版再猛也不怕。暴力不是错，但知道什么时候不暴力，才是真正的抠门大师。&lt;/p&gt;
 &lt;/blockquote&gt;
-</description>
-        </item>
-        <item>
-        <title>My First Post</title>
-        <link>http://localhost:1313/posts/my-first-post/</link>
-        <pubDate>Tue, 02 Jun 2026 16:32:43 +0800</pubDate>
-        
-        <guid>http://localhost:1313/posts/my-first-post/</guid>
-        <description>&lt;p&gt;这是我的第一篇文章，网站正式开通啦！&lt;/p&gt;
-&lt;p&gt;以后我会在这里分享一些技术笔记和想法。&lt;/p&gt;
 </description>
         </item>
         
