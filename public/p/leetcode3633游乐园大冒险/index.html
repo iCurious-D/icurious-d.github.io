@@ -4,11 +4,11 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 游乐园大冒险——从暴力枚举到剪枝优化的最早回村攻略 昨天帮村长省下一大笔糖果钱，今天一大早，老头就笑呵呵地塞给我两张游乐园门票：“小白，干得漂亮！这是给你的福利——新开的‘算法乐园’，陆地项目和水上项目随便挑。不过有个条件——”\n他压低声音，眼神突然犀利起来：“村里的魔法锅炉等着你回来添柴，你得给我早点回村。陆地区和水区各玩一个就撤，顺序你定，但要算出怎么安排能最早回来。记住，我要的是最早回村时间，不是玩得最爽——别玩疯了忘了正事！”\n我捏着门票，心里一半是期待一半是吐槽：这哪是福利，这分明是换了个场景继续刷题。不过转念一想，陆地项目 n 最多 100 个，水上项目 m 也最多 100 个——这数据量不就是道热身题吗？\n把门票往兜里一揣，我朝乐园大门走去。村长在后面又补了一嗓子：“回来晚了锅炉熄了，你上个月的 AC 我全给你清了！”\n“收到收到，速战速决！”我头也不回地摆了摆手。\n💥 第一战：直觉翻车——贪心的诱惑和陷阱 进了乐园，我先绕着园区转了一圈。左半边是陆地区，过山车轨道上挂着“Stack Overflow”的牌子，旋转木马叫“While True”，碰碰车场地写着“Index Out of Bounds”——好家伙，名字起得跟 bug 清单似的。右半边是水区，激流勇进叫“广度优先”，漂流叫“梯度下降”，还有个儿童泳池叫“Hello World”。\n我掏出村长塞给我的设施清单。陆地项目 landStart[i] 是最早开放时间，landDur[i] 是玩一圈要多久；水上项目同理。规则就一条：两类各挑一个，顺序随意，玩完就走。求最早离开时间。\n我往旁边的长椅上一坐，脑子里开始蹦各种贪心策略。先玩开放最早的？万一那个项目时长很长，另一个早就开放了，干等着浪费时间，典型的“先到先得但后到的人堵在门口”。先玩时长最短的？开放时间可能很晚，你这边三分钟完事了，那边还得等两个小时才能进去，更不靠谱。我甚至尝试先陆地后水上，每次都挑最早结束的组合，但发现不同组合之间互相影响，开放时间和持续时间互相牵制，贪心的局部最优推不出全局最优。\n折腾了十分钟，代码里便充斥着各种 if-else 。我猛一拍脑门：：“我在干嘛？陆地最多 100 个，水上最多 100 个，总共才一万种组合。直接暴力枚举，两种顺序各算一遍取最小，不就完了？我这是在跟空气斗智斗勇！”\n老勇者不知什么时候已经站在我身后，嘴里叼着根棒棒糖——儿童节的存货还没吃完——慢悠悠地吐了句：“数据量小的时候，暴力就是最优解。你刚才那通操作，属于典型的过早优化，面试官看了血压都上来了。”\n我脸一红，赶紧把刚才那堆乱七八糟的代码全删了，老老实实写暴力。\n⚡ 第二战：暴力枚举——简单粗暴，一拳超人 思路很直白：对于每一对陆地设施 i 和水上设施 j，算两种游玩顺序的完成时间，取最小值。\n先陆地后水上：陆地 landStart[i]准时开始，landStart[i] + landDur[i]结束。水上最早waterStart[j] 开放，但必须等我从陆地项目出来，所以实际开始 max(waterStart[j], 陆地结束时间)，然后加上 waterDur[j]。 先水上后陆地：同理，水上开始 waterStart[j]，结束 waterStart[j] + waterDur[j]；陆地开始 max(landStart[i], 水上结束时间)，再加 landDur[i]。 遍历所有组合，记录全局最小值。\ndef earliestCompletionTime(landStart, landDur, waterStart, waterDur): ans = float(&#39;inf&#39;) for i in range(len(landStart)): for j in range(len(waterStart)): # 先陆地后水上 land_end = landStart[i] + landDur[i] finish1 = max(waterStart[j], land_end) + waterDur[j] # 先水上后陆地 water_end = waterStart[j] + waterDur[j] finish2 = max(landStart[i], water_end) + landDur[i] # 更新最小值 ans = min(ans, finish1, finish2) return ans 写完一跑，样例秒过。我正准备截图留念，老勇者把一根棉花糖塞我手里——糖丝上竟然用糖霜写着“O(n×m)”，这乐园的主题贯彻得真是丧心病狂。\n">
 <title>leetcode3633：游乐园大冒险</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-02/'>
+<link rel='canonical' href='http://localhost:1313/p/leetcode3633%E6%B8%B8%E4%B9%90%E5%9B%AD%E5%A4%A7%E5%86%92%E9%99%A9/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode3633：游乐园大冒险">
+<link rel="stylesheet" href="/scss/style.min.86591c898bd806857815fbb8c47e8d3fed97c133b78e83d9bfc27b164dd0aa2b.css"><meta property='og:title' content="leetcode3633：游乐园大冒险">
 <meta property='og:description' content="🎮 游乐园大冒险——从暴力枚举到剪枝优化的最早回村攻略 昨天帮村长省下一大笔糖果钱，今天一大早，老头就笑呵呵地塞给我两张游乐园门票：“小白，干得漂亮！这是给你的福利——新开的‘算法乐园’，陆地项目和水上项目随便挑。不过有个条件——”\n他压低声音，眼神突然犀利起来：“村里的魔法锅炉等着你回来添柴，你得给我早点回村。陆地区和水区各玩一个就撤，顺序你定，但要算出怎么安排能最早回来。记住，我要的是最早回村时间，不是玩得最爽——别玩疯了忘了正事！”\n我捏着门票，心里一半是期待一半是吐槽：这哪是福利，这分明是换了个场景继续刷题。不过转念一想，陆地项目 n 最多 100 个，水上项目 m 也最多 100 个——这数据量不就是道热身题吗？\n把门票往兜里一揣，我朝乐园大门走去。村长在后面又补了一嗓子：“回来晚了锅炉熄了，你上个月的 AC 我全给你清了！”\n“收到收到，速战速决！”我头也不回地摆了摆手。\n💥 第一战：直觉翻车——贪心的诱惑和陷阱 进了乐园，我先绕着园区转了一圈。左半边是陆地区，过山车轨道上挂着“Stack Overflow”的牌子，旋转木马叫“While True”，碰碰车场地写着“Index Out of Bounds”——好家伙，名字起得跟 bug 清单似的。右半边是水区，激流勇进叫“广度优先”，漂流叫“梯度下降”，还有个儿童泳池叫“Hello World”。\n我掏出村长塞给我的设施清单。陆地项目 landStart[i] 是最早开放时间，landDur[i] 是玩一圈要多久；水上项目同理。规则就一条：两类各挑一个，顺序随意，玩完就走。求最早离开时间。\n我往旁边的长椅上一坐，脑子里开始蹦各种贪心策略。先玩开放最早的？万一那个项目时长很长，另一个早就开放了，干等着浪费时间，典型的“先到先得但后到的人堵在门口”。先玩时长最短的？开放时间可能很晚，你这边三分钟完事了，那边还得等两个小时才能进去，更不靠谱。我甚至尝试先陆地后水上，每次都挑最早结束的组合，但发现不同组合之间互相影响，开放时间和持续时间互相牵制，贪心的局部最优推不出全局最优。\n折腾了十分钟，代码里便充斥着各种 if-else 。我猛一拍脑门：：“我在干嘛？陆地最多 100 个，水上最多 100 个，总共才一万种组合。直接暴力枚举，两种顺序各算一遍取最小，不就完了？我这是在跟空气斗智斗勇！”\n老勇者不知什么时候已经站在我身后，嘴里叼着根棒棒糖——儿童节的存货还没吃完——慢悠悠地吐了句：“数据量小的时候，暴力就是最优解。你刚才那通操作，属于典型的过早优化，面试官看了血压都上来了。”\n我脸一红，赶紧把刚才那堆乱七八糟的代码全删了，老老实实写暴力。\n⚡ 第二战：暴力枚举——简单粗暴，一拳超人 思路很直白：对于每一对陆地设施 i 和水上设施 j，算两种游玩顺序的完成时间，取最小值。\n先陆地后水上：陆地 landStart[i]准时开始，landStart[i] + landDur[i]结束。水上最早waterStart[j] 开放，但必须等我从陆地项目出来，所以实际开始 max(waterStart[j], 陆地结束时间)，然后加上 waterDur[j]。 先水上后陆地：同理，水上开始 waterStart[j]，结束 waterStart[j] + waterDur[j]；陆地开始 max(landStart[i], 水上结束时间)，再加 landDur[i]。 遍历所有组合，记录全局最小值。\ndef earliestCompletionTime(landStart, landDur, waterStart, waterDur): ans = float(&#39;inf&#39;) for i in range(len(landStart)): for j in range(len(waterStart)): # 先陆地后水上 land_end = landStart[i] + landDur[i] finish1 = max(waterStart[j], land_end) + waterDur[j] # 先水上后陆地 water_end = waterStart[j] + waterDur[j] finish2 = max(landStart[i], water_end) + landDur[i] # 更新最小值 ans = min(ans, finish1, finish2) return ans 写完一跑，样例秒过。我正准备截图留念，老勇者把一根棉花糖塞我手里——糖丝上竟然用糖霜写着“O(n×m)”，这乐园的主题贯彻得真是丧心病狂。\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-02/'>
+<meta property='og:url' content='http://localhost:1313/p/leetcode3633%E6%B8%B8%E4%B9%90%E5%9B%AD%E5%A4%A7%E5%86%92%E9%99%A9/'>
 <meta property='og:site_name' content='我的小站'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-02T10:48:27&#43;08:00'/><meta property='article:modified_time' content='2026-06-02T10:48:27&#43;08:00'/>
 <meta name="twitter:title" content="leetcode3633：游乐园大冒险">
@@ -39,7 +39,7 @@
         }
     })();
 </script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+<div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
     <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
@@ -84,23 +84,17 @@
                         
                         
                             <!--
-tags: [logo, website, hosting, project, programming, software, development]
-category: Brand
-version: "1.18"
-unicode: "ec1c"
+version: "2.9"
+unicode: "f7e7"
 -->
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
+  width="20"
+  height="20"
   viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
+  fill="currentColor"
 >
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+  <path d="M5.315 2.1c.791 -.113 1.9 .145 3.333 .966l.272 .161l.16 .1l.397 -.083a13.3 13.3 0 0 1 4.59 -.08l.456 .08l.396 .083l.161 -.1c1.385 -.84 2.487 -1.17 3.322 -1.148l.164 .008l.147 .017l.076 .014l.05 .011l.144 .047a1 1 0 0 1 .53 .514a5.2 5.2 0 0 1 .397 2.91l-.047 .267l-.046 .196l.123 .163c.574 .795 .93 1.728 1.03 2.707l.023 .295l.007 .272c0 3.855 -1.659 5.883 -4.644 6.68l-.245 .061l-.132 .029l.014 .161l.008 .157l.004 .365l-.002 .213l-.003 3.834a1 1 0 0 1 -.883 .993l-.117 .007h-6a1 1 0 0 1 -.993 -.883l-.007 -.117v-.734c-1.818 .26 -3.03 -.424 -4.11 -1.878l-.535 -.766c-.28 -.396 -.455 -.579 -.589 -.644l-.048 -.019a1 1 0 0 1 .564 -1.918c.642 .188 1.074 .568 1.57 1.239l.538 .769c.76 1.079 1.36 1.459 2.609 1.191l.001 -.678l-.018 -.168a5.03 5.03 0 0 1 -.021 -.824l.017 -.185l.019 -.12l-.108 -.024c-2.976 -.71 -4.703 -2.573 -4.875 -6.139l-.01 -.31l-.004 -.292a5.6 5.6 0 0 1 .908 -3.051l.152 -.222l.122 -.163l-.045 -.196a5.2 5.2 0 0 1 .145 -2.642l.1 -.282l.106 -.253a1 1 0 0 1 .529 -.514l.144 -.047l.154 -.03z" />
 </svg>
 
                         
@@ -116,28 +110,6 @@ unicode: "ec1c"
                 
                 
                 
-                    <!--
-category: Buildings
-tags: [apple, devices, connection, link, wifi, bluetooth]
-version: "1.20"
-unicode: "ecde"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M19 8.71l-5.333 -4.148a2.666 2.666 0 0 0 -3.274 0l-5.334 4.148a2.665 2.665 0 0 0 -1.029 2.105v7.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-7.2c0 -.823 -.38 -1.6 -1.03 -2.105" />
-  <path d="M16 15c-2.21 1.333 -5.792 1.333 -8 0" />
-</svg>
-
-                
                 <span>主页</span>
             </a>
         </li>
@@ -148,29 +120,6 @@ unicode: "ecde"
                 
                 
                 
-                    <!--
-tags: [news, newspaper, media, blog]
-version: "1.69"
-unicode: "f1e2"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
-  <path d="M7 8h10" />
-  <path d="M7 12h10" />
-  <path d="M7 16h10" />
-</svg>
-
-                
                 <span>文章</span>
             </a>
         </li>
@@ -180,29 +129,6 @@ unicode: "f1e2"
             <a href='/about/' >
                 
                 
-                
-                    <!--
-category: System
-tags: [tick, person, account, role]
-version: "1.0"
-unicode: "eb49"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
-  <path d="M15 19l2 2l4 -4" />
-</svg>
-
                 
                 <span>关于我</span>
             </a>
@@ -237,42 +163,7 @@ unicode: "eb49"
     </ol>
 </aside>
 
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ul>
-    <li><a href="#-游乐园大冒险从暴力枚举到剪枝优化的最早回村攻略">🎮 游乐园大冒险——从暴力枚举到剪枝优化的最早回村攻略</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
+    
 
             <main class="main full-width">
     <article class="main-article">
@@ -294,7 +185,7 @@ unicode: "eb49"
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/posts/leetcode_stories/26-06-02/">leetcode3633：游乐园大冒险</a>
+            <a href="/p/leetcode3633%E6%B8%B8%E4%B9%90%E5%9B%AD%E5%A4%A7%E5%86%92%E9%99%A9/">leetcode3633：游乐园大冒险</a>
         </h2>
     
         

@@ -4,11 +4,11 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 游乐园正式服的挑战：当昨天的代码遇上今天的数据量 上回说到，我和老勇者从“算法乐园”逃回村里，及时救活了村里的魔法锅炉。今天，我蹲在炉子旁边添柴边打盹，火焰舔着锅底，浓汤咕嘟咕嘟冒泡，节奏稳得像台跑了十年没崩过的服务器。昨天的游乐园副本虽然惊险，但好歹白嫖了两份战报，O(n+m) 的剪枝优化躺在魔法书里，想想还有点小得意。\n正迷糊着，一阵急促的脚步声由远及近。我睁眼一看，村长又来了。这回他手里没有门票，而是举着一封烫金信封：“小白，算法乐园那边来消息了——说上次的游园体验是‘试运营版本’，现在正式版上线了，叫 ‘3635 - 最早完成陆地和水上游乐设施的时间 II’。规则一模一样，但是——”\n他把信封翻开，只见上面写着醒目的数据范围：“陆地项目 n ≤ 5×10⁴，水上项目 m ≤ 5×10⁴，时间上限 10⁵。”\n我瞌睡当场醒了一半。五万乘五万，那可是 2.5×10⁹ 的组合量。拿暴力双循环去莽，别说 AC，评测机都得先给我发一封投诉邮件。但我没有慌。准确地说，是慌了两秒之后，脑子里突然闪过一道光——等等，这题昨天不是刚做过吗？规则一模一样，那昨天在长椅上推出来的优化思路……\n我猛地把魔法书翻到昨天画过山车标记的那一页。几行代码安安静静躺在那里，旁边还黏着一小坨棉花糖的糖霜痕迹，散发着淡淡的甜味：\ndef solve(firstStart, firstDur, secondStart, secondDur): min_finish = min(start + dur for start, dur in zip(firstStart, firstDur)) return min(max(start, min_finish) + dur for start, dur in zip(secondStart, secondDur)) def earliestFullTime(landStart, landDur, waterStart, waterDur): return min(solve(landStart, landDur, waterStart, waterDur), solve(waterStart, waterDur, landStart, landDur)) 我脑子里的灯泡亮得跟锅炉里的火光似的。昨天老勇者怎么说的来着？——“第一类设施里，只有最早结束的那个有意义，其他全是冗余信息。” 这句话跟数据量有半毛钱关系吗？没有。不管陆地项目是 100 个还是 50000 个，从陆地区出来的最早时间永远只取决于 min(start + duration)。你有一百个过山车还是五万个过山车，你只需要知道哪个能让你最早下来，剩下的四万九千九百九十九个全是冗余数据，剪枝一刀全砍掉。\n关键在于solve 函数里那两个 zip 遍历。它们肩并肩站着，谁也不嵌套谁——第一个找 min_finish，第二个在水上项目里挑最优。n 和 m 从 100 膨胀到 5×10⁴，每个设施仍然只被摸一次，总共十万次操作。暴力法 2.5×10⁹，优化版 10⁵——差了整整四个数量级！这就好比别人在手动数麦粒，而你开了一台联合收割机——场地越大，差距越离谱。\n">
 <title>leetcode3635：游乐园正式服的挑战</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-03/'>
+<link rel='canonical' href='http://localhost:1313/p/leetcode3635%E6%B8%B8%E4%B9%90%E5%9B%AD%E6%AD%A3%E5%BC%8F%E6%9C%8D%E7%9A%84%E6%8C%91%E6%88%98/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode3635：游乐园正式服的挑战">
+<link rel="stylesheet" href="/scss/style.min.86591c898bd806857815fbb8c47e8d3fed97c133b78e83d9bfc27b164dd0aa2b.css"><meta property='og:title' content="leetcode3635：游乐园正式服的挑战">
 <meta property='og:description' content="🎮 游乐园正式服的挑战：当昨天的代码遇上今天的数据量 上回说到，我和老勇者从“算法乐园”逃回村里，及时救活了村里的魔法锅炉。今天，我蹲在炉子旁边添柴边打盹，火焰舔着锅底，浓汤咕嘟咕嘟冒泡，节奏稳得像台跑了十年没崩过的服务器。昨天的游乐园副本虽然惊险，但好歹白嫖了两份战报，O(n+m) 的剪枝优化躺在魔法书里，想想还有点小得意。\n正迷糊着，一阵急促的脚步声由远及近。我睁眼一看，村长又来了。这回他手里没有门票，而是举着一封烫金信封：“小白，算法乐园那边来消息了——说上次的游园体验是‘试运营版本’，现在正式版上线了，叫 ‘3635 - 最早完成陆地和水上游乐设施的时间 II’。规则一模一样，但是——”\n他把信封翻开，只见上面写着醒目的数据范围：“陆地项目 n ≤ 5×10⁴，水上项目 m ≤ 5×10⁴，时间上限 10⁵。”\n我瞌睡当场醒了一半。五万乘五万，那可是 2.5×10⁹ 的组合量。拿暴力双循环去莽，别说 AC，评测机都得先给我发一封投诉邮件。但我没有慌。准确地说，是慌了两秒之后，脑子里突然闪过一道光——等等，这题昨天不是刚做过吗？规则一模一样，那昨天在长椅上推出来的优化思路……\n我猛地把魔法书翻到昨天画过山车标记的那一页。几行代码安安静静躺在那里，旁边还黏着一小坨棉花糖的糖霜痕迹，散发着淡淡的甜味：\ndef solve(firstStart, firstDur, secondStart, secondDur): min_finish = min(start + dur for start, dur in zip(firstStart, firstDur)) return min(max(start, min_finish) + dur for start, dur in zip(secondStart, secondDur)) def earliestFullTime(landStart, landDur, waterStart, waterDur): return min(solve(landStart, landDur, waterStart, waterDur), solve(waterStart, waterDur, landStart, landDur)) 我脑子里的灯泡亮得跟锅炉里的火光似的。昨天老勇者怎么说的来着？——“第一类设施里，只有最早结束的那个有意义，其他全是冗余信息。” 这句话跟数据量有半毛钱关系吗？没有。不管陆地项目是 100 个还是 50000 个，从陆地区出来的最早时间永远只取决于 min(start + duration)。你有一百个过山车还是五万个过山车，你只需要知道哪个能让你最早下来，剩下的四万九千九百九十九个全是冗余数据，剪枝一刀全砍掉。\n关键在于solve 函数里那两个 zip 遍历。它们肩并肩站着，谁也不嵌套谁——第一个找 min_finish，第二个在水上项目里挑最优。n 和 m 从 100 膨胀到 5×10⁴，每个设施仍然只被摸一次，总共十万次操作。暴力法 2.5×10⁹，优化版 10⁵——差了整整四个数量级！这就好比别人在手动数麦粒，而你开了一台联合收割机——场地越大，差距越离谱。\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-03/'>
+<meta property='og:url' content='http://localhost:1313/p/leetcode3635%E6%B8%B8%E4%B9%90%E5%9B%AD%E6%AD%A3%E5%BC%8F%E6%9C%8D%E7%9A%84%E6%8C%91%E6%88%98/'>
 <meta property='og:site_name' content='我的小站'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-03T10:39:17&#43;08:00'/><meta property='article:modified_time' content='2026-06-03T10:39:17&#43;08:00'/>
 <meta name="twitter:title" content="leetcode3635：游乐园正式服的挑战">
@@ -39,7 +39,7 @@
         }
     })();
 </script>
-<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+<div class="container main-container flex on-phone--column compact"><aside class="sidebar left-sidebar sticky ">
     <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
@@ -84,23 +84,17 @@
                         
                         
                             <!--
-tags: [logo, website, hosting, project, programming, software, development]
-category: Brand
-version: "1.18"
-unicode: "ec1c"
+version: "2.9"
+unicode: "f7e7"
 -->
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
+  width="20"
+  height="20"
   viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
+  fill="currentColor"
 >
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+  <path d="M5.315 2.1c.791 -.113 1.9 .145 3.333 .966l.272 .161l.16 .1l.397 -.083a13.3 13.3 0 0 1 4.59 -.08l.456 .08l.396 .083l.161 -.1c1.385 -.84 2.487 -1.17 3.322 -1.148l.164 .008l.147 .017l.076 .014l.05 .011l.144 .047a1 1 0 0 1 .53 .514a5.2 5.2 0 0 1 .397 2.91l-.047 .267l-.046 .196l.123 .163c.574 .795 .93 1.728 1.03 2.707l.023 .295l.007 .272c0 3.855 -1.659 5.883 -4.644 6.68l-.245 .061l-.132 .029l.014 .161l.008 .157l.004 .365l-.002 .213l-.003 3.834a1 1 0 0 1 -.883 .993l-.117 .007h-6a1 1 0 0 1 -.993 -.883l-.007 -.117v-.734c-1.818 .26 -3.03 -.424 -4.11 -1.878l-.535 -.766c-.28 -.396 -.455 -.579 -.589 -.644l-.048 -.019a1 1 0 0 1 .564 -1.918c.642 .188 1.074 .568 1.57 1.239l.538 .769c.76 1.079 1.36 1.459 2.609 1.191l.001 -.678l-.018 -.168a5.03 5.03 0 0 1 -.021 -.824l.017 -.185l.019 -.12l-.108 -.024c-2.976 -.71 -4.703 -2.573 -4.875 -6.139l-.01 -.31l-.004 -.292a5.6 5.6 0 0 1 .908 -3.051l.152 -.222l.122 -.163l-.045 -.196a5.2 5.2 0 0 1 .145 -2.642l.1 -.282l.106 -.253a1 1 0 0 1 .529 -.514l.144 -.047l.154 -.03z" />
 </svg>
 
                         
@@ -116,28 +110,6 @@ unicode: "ec1c"
                 
                 
                 
-                    <!--
-category: Buildings
-tags: [apple, devices, connection, link, wifi, bluetooth]
-version: "1.20"
-unicode: "ecde"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M19 8.71l-5.333 -4.148a2.666 2.666 0 0 0 -3.274 0l-5.334 4.148a2.665 2.665 0 0 0 -1.029 2.105v7.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-7.2c0 -.823 -.38 -1.6 -1.03 -2.105" />
-  <path d="M16 15c-2.21 1.333 -5.792 1.333 -8 0" />
-</svg>
-
-                
                 <span>主页</span>
             </a>
         </li>
@@ -148,29 +120,6 @@ unicode: "ecde"
                 
                 
                 
-                    <!--
-tags: [news, newspaper, media, blog]
-version: "1.69"
-unicode: "f1e2"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
-  <path d="M7 8h10" />
-  <path d="M7 12h10" />
-  <path d="M7 16h10" />
-</svg>
-
-                
                 <span>文章</span>
             </a>
         </li>
@@ -180,29 +129,6 @@ unicode: "f1e2"
             <a href='/about/' >
                 
                 
-                
-                    <!--
-category: System
-tags: [tick, person, account, role]
-version: "1.0"
-unicode: "eb49"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
-  <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
-  <path d="M15 19l2 2l4 -4" />
-</svg>
-
                 
                 <span>关于我</span>
             </a>
@@ -237,38 +163,7 @@ unicode: "eb49"
     </ol>
 </aside>
 
-    <aside class="sidebar right-sidebar sticky">
-        
-            
-                
-    <section class="widget archives">
-        <div class="widget-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z"/>
-  <line x1="5" y1="9" x2="19" y2="9" />
-  <line x1="5" y1="15" x2="19" y2="15" />
-  <line x1="11" y1="4" x2="7" y2="20" />
-  <line x1="17" y1="4" x2="13" y2="20" />
-</svg>
-
-
-
-        </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
-        
-        <div class="widget--toc">
-            <nav id="TableOfContents">
-  <ul>
-    <li><a href="#-游乐园正式服的挑战当昨天的代码遇上今天的数据量">🎮 游乐园正式服的挑战：当昨天的代码遇上今天的数据量</a></li>
-  </ul>
-</nav>
-        </div>
-    </section>
-
-            
-        
-    </aside>
-
+    
 
             <main class="main full-width">
     <article class="main-article">
@@ -290,7 +185,7 @@ unicode: "eb49"
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/posts/leetcode_stories/26-06-03/">leetcode3635：游乐园正式服的挑战</a>
+            <a href="/p/leetcode3635%E6%B8%B8%E4%B9%90%E5%9B%AD%E6%AD%A3%E5%BC%8F%E6%9C%8D%E7%9A%84%E6%8C%91%E6%88%98/">leetcode3635：游乐园正式服的挑战</a>
         </h2>
     
         
@@ -400,7 +295,7 @@ unicode: "eb49"
             
                 
 <article class="">
-    <a href="/posts/leetcode_stories/26-06-02/">
+    <a href="/p/leetcode3633%E6%B8%B8%E4%B9%90%E5%9B%AD%E5%A4%A7%E5%86%92%E9%99%A9/">
         
         
 

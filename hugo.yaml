@@ -20,21 +20,36 @@ module:
 menu:
     main:
     - identifier: "home"
-      name: "首页"
+      name: "主页"
       url: "/"
       weight: 10
+      params:
+        icon: "home"
     - identifier: "posts"
       name: "文章"
       url: "/posts/"
       weight: 20
+      params:
+        icon: "article"       # 文章图标
     - identifier: "about"
       name: "关于我"
       url: "/about/"
       weight: 30
+      params:
+        icon: "user"          # 用户图标
+
+    # 社交链接配置(数组格式)
+    social:
+    - identifier: "github"
+      name: "GitHub"
+      url: "https://github.com/iCurious-D"   # 自己的 GitHub 链接
+      params:
+        icon: "brand-github"
 
 params:
   # 侧边栏配置 (这是重点)
   sidebar:
+    emoji: "✏️"
     subtitle: "喜欢讲故事的咕咕咕"  # 这里的 subname 会显示在头像下方作为个人签名
     avatar:
       src: "img/avatar.jpg"          # 头像路径 (稍后会解释如何放置)
@@ -42,14 +57,27 @@ params:
       # srcDark: "img/avatar-dark.png"
       alt: "gugugu的头像"             # 图片描述
 
-  # 社交链接配置(数组格式)
-  social:
-    - identifier: "github"
-      name: "GitHub"
-      url: "https://github.com/iCurious-D"   # 自己的 GitHub 链接
-      params:
-        icon: "brand-github"
-
   # 文章目录配置 (保证首页能显示)
   mainSections:
     - posts
+
+  # 侧边栏配置
+  widgets:
+    homepage:
+      - type: search
+      - type: archives
+        params:
+          limit: 5
+      - type: categories
+        params:
+          limit: 5
+      - type: tag-cloud
+        params:
+          limit: 5
+    page:
+      - type: toc
+    # 可选：也可以为文章页单独配置
+    # post:
+    #   - type: toc
+    #   - type: related-posts
+

@@ -1,0 +1,73 @@
+// assets/scss/custom.scss
+
+// 调整右侧边栏所有widget的间距和内边距
+.widget {
+    margin-bottom: 1rem;  // 减少widget之间的间距
+    .widget-content {
+        padding: 0.75rem; // 减少widget内部的边距
+    }
+}
+
+// 调整侧边栏标题字体大小
+.widget-title {
+    font-size: 0.9rem;   // 调小标题字号
+}
+
+// 单独调整“归档”小部件
+.widget-archives {
+    .widget-content {
+        font-size: 0.8rem;
+    }
+}
+
+.container.extended .right-sidebar {
+    max-width: 160px; // 侧边栏最大宽度，默认约300px
+}
+
+
+.left-sidebar {
+    // 加宽内边距，让内容不贴边
+    padding-left: 4rem;
+    padding-right: 4rem;
+    // 如果想整体更宽，可以解除 max-width 限制或设置更大的宽度
+    // max-width: 280px;   // 默认在768px以上是 auto
+}
+
+// 让头像和站点信息水平居中
+.sidebar header {
+    align-items: center;   // 关键：水平居中对齐所有子元素
+}
+
+.sidebar {
+    text-align: left;
+}
+
+
+//// 测试：给左侧边栏加红色边框，看是否生效
+//.left-sidebar {
+//    border: 2px solid red !important;
+//}
+
+//// 头像和 GitHub 图标居中
+//.sidebar header {
+//    display: flex;
+//    justify-content: center !important;   // 强制父容器水平居中
+//}
+//
+//.sidebar header .site-avatar {
+//    margin: 0 !important;                 // 移除原有 margin
+//    // 不需要改变宽高，只需确保它是 flex 子项且不受 margin auto 干扰
+//}
+//
+//// 社交菜单（GitHub图标）居中
+//.sidebar .social-menu ul {
+//    display: flex;
+//    justify-content: center !important;
+//    gap: 1rem;          // 可选，控制图标间距
+//}
+
+
+//// 让社交图标（GitHub）水平居中
+//.sidebar .social-menu ul {
+//    justify-content: center;
+//}
