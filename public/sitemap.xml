@@ -24,10 +24,13 @@
     <loc>http://localhost:1313/tags/%E9%A2%98%E8%A7%A3/</loc>
     <lastmod>2026-06-03T10:39:17+08:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/my-first-post/</loc>
-    <lastmod>2026-06-02T16:32:43+08:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/about/</loc>
     <lastmod>2026-06-02T16:30:07+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/leetcode_stories/26-06-02/</loc>
+    <lastmod>2026-06-02T10:48:27+08:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/posts/hello_world/</loc>
+    <lastmod>2026-06-01T10:52:10+08:00</lastmod>
   </url>
 </urlset>

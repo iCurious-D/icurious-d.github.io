@@ -39,13 +39,99 @@
 </description>
         </item>
         <item>
-        <title>My First Post</title>
-        <link>http://localhost:1313/posts/my-first-post/</link>
-        <pubDate>Tue, 02 Jun 2026 16:32:43 +0800</pubDate>
+        <title>leetcode3633：游乐园大冒险</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-02/</link>
+        <pubDate>Tue, 02 Jun 2026 10:48:27 +0800</pubDate>
         
-        <guid>http://localhost:1313/posts/my-first-post/</guid>
-        <description>&lt;p&gt;这是我的第一篇文章，网站正式开通啦！&lt;/p&gt;
-&lt;p&gt;以后我会在这里分享一些技术笔记和想法。&lt;/p&gt;
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-02/</guid>
+        <description>&lt;h2 id=&#34;-游乐园大冒险从暴力枚举到剪枝优化的最早回村攻略&#34;&gt;🎮 游乐园大冒险——从暴力枚举到剪枝优化的最早回村攻略
+&lt;/h2&gt;&lt;p&gt;昨天帮村长省下一大笔糖果钱，今天一大早，老头就笑呵呵地塞给我两张游乐园门票：“小白，干得漂亮！这是给你的福利——新开的‘算法乐园’，陆地项目和水上项目随便挑。不过有个条件——”&lt;/p&gt;
+&lt;p&gt;他压低声音，眼神突然犀利起来：“村里的魔法锅炉等着你回来添柴，你得给我早点回村。陆地区和水区各玩一个就撤，顺序你定，但要算出怎么安排能最早回来。记住，我要的是最早回村时间，不是玩得最爽——别玩疯了忘了正事！”&lt;/p&gt;
+&lt;p&gt;我捏着门票，心里一半是期待一半是吐槽：这哪是福利，这分明是换了个场景继续刷题。不过转念一想，陆地项目 n 最多 100 个，水上项目 m 也最多 100 个——这数据量不就是道热身题吗？&lt;/p&gt;
+&lt;p&gt;把门票往兜里一揣，我朝乐园大门走去。村长在后面又补了一嗓子：“回来晚了锅炉熄了，你上个月的 AC 我全给你清了！”&lt;/p&gt;
+&lt;p&gt;“收到收到，速战速决！”我头也不回地摆了摆手。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;-第一战直觉翻车贪心的诱惑和陷阱&#34;&gt;💥 第一战：直觉翻车——贪心的诱惑和陷阱
+&lt;/h4&gt;&lt;p&gt;进了乐园，我先绕着园区转了一圈。左半边是陆地区，过山车轨道上挂着“Stack Overflow”的牌子，旋转木马叫“While True”，碰碰车场地写着“Index Out of Bounds”——好家伙，名字起得跟 bug 清单似的。右半边是水区，激流勇进叫“广度优先”，漂流叫“梯度下降”，还有个儿童泳池叫“Hello World”。&lt;/p&gt;
+&lt;p&gt;我掏出村长塞给我的设施清单。陆地项目 &lt;code&gt;landStart[i]&lt;/code&gt; 是最早开放时间，&lt;code&gt;landDur[i]&lt;/code&gt; 是玩一圈要多久；水上项目同理。规则就一条：两类各挑一个，顺序随意，玩完就走。求最早离开时间。&lt;/p&gt;
+&lt;p&gt;我往旁边的长椅上一坐，脑子里开始蹦各种贪心策略。先玩开放最早的？万一那个项目时长很长，另一个早就开放了，干等着浪费时间，典型的“先到先得但后到的人堵在门口”。先玩时长最短的？开放时间可能很晚，你这边三分钟完事了，那边还得等两个小时才能进去，更不靠谱。我甚至尝试先陆地后水上，每次都挑最早结束的组合，但发现不同组合之间互相影响，开放时间和持续时间互相牵制，贪心的局部最优推不出全局最优。&lt;/p&gt;
+&lt;p&gt;折腾了十分钟，代码里便充斥着各种 &lt;code&gt;if-else&lt;/code&gt; 。我猛一拍脑门：：“我在干嘛？陆地最多 100 个，水上最多 100 个，总共才一万种组合。直接暴力枚举，两种顺序各算一遍取最小，不就完了？我这是在跟空气斗智斗勇！”&lt;/p&gt;
+&lt;p&gt;老勇者不知什么时候已经站在我身后，嘴里叼着根棒棒糖——儿童节的存货还没吃完——慢悠悠地吐了句：“数据量小的时候，暴力就是最优解。你刚才那通操作，属于典型的过早优化，面试官看了血压都上来了。”&lt;/p&gt;
+&lt;p&gt;我脸一红，赶紧把刚才那堆乱七八糟的代码全删了，老老实实写暴力。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;-第二战暴力枚举简单粗暴一拳超人&#34;&gt;⚡ 第二战：暴力枚举——简单粗暴，一拳超人
+&lt;/h4&gt;&lt;p&gt;思路很直白：对于每一对陆地设施 &lt;code&gt;i&lt;/code&gt; 和水上设施 &lt;code&gt;j&lt;/code&gt;，算两种游玩顺序的完成时间，取最小值。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;先陆地后水上&lt;/strong&gt;：陆地 &lt;code&gt;landStart[i]&lt;/code&gt;准时开始，&lt;code&gt;landStart[i] + landDur[i]&lt;/code&gt;结束。水上最早&lt;code&gt;waterStart[j]&lt;/code&gt; 开放，但必须等我从陆地项目出来，所以实际开始 &lt;code&gt;max(waterStart[j], 陆地结束时间)&lt;/code&gt;，然后加上 &lt;code&gt;waterDur[j]&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;先水上后陆地&lt;/strong&gt;：同理，水上开始 &lt;code&gt;waterStart[j]&lt;/code&gt;，结束 &lt;code&gt;waterStart[j] + waterDur[j]&lt;/code&gt;；陆地开始 &lt;code&gt;max(landStart[i], 水上结束时间)&lt;/code&gt;，再加 &lt;code&gt;landDur[i]&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;遍历所有组合，记录全局最小值。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;earliestCompletionTime&lt;/span&gt;(landStart, landDur, waterStart, waterDur):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; float(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;inf&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(len(landStart)):        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(len(waterStart)):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 先陆地后水上&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            land_end &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; landStart[i] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; landDur[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            finish1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; max(waterStart[j], land_end) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; waterDur[j]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 先水上后陆地&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            water_end &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; waterStart[j] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; waterDur[j]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            finish2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; max(landStart[i], water_end) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; landDur[i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 更新最小值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; min(ans, finish1, finish2)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; ans
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;写完一跑，样例秒过。我正准备截图留念，老勇者把一根棉花糖塞我手里——糖丝上竟然用糖霜写着“O(n×m)”，这乐园的主题贯彻得真是丧心病狂。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;-第三战剪枝优化从-onm-到-onm&#34;&gt;🚀 第三战：剪枝优化——从 O(n×m) 到 O(n+m)
+&lt;/h4&gt;&lt;p&gt;“暴力双循环，数据小的时候没毛病——代码短、逻辑直、bug 藏不住。不过——” 老勇者话锋一转，“你想过没有，如果这道题出个 II，n 和 m 飙到十万，你这 O(n×m) 打算怎么收场？”&lt;/p&gt;
+&lt;p&gt;我咬了口棉花糖，含含糊糊地说：“那……那就再想办法呗，今天才 100，先爽了再说。”&lt;/p&gt;
+&lt;p&gt;“巧了，我有个办法，既能让你今天写得更优雅，也能给以后留条路。”老勇者把我从长椅上拽起来，指向园区地图，“你看，不管先玩陆地还是先玩水上，一旦你选定了第一类设施，第二类设施的等待时间只取决于你从第一类设施出来时的最早时间。换句话说——第一类设施里，你没必要每个都试，你只需要找到那个&lt;strong&gt;结束得最早&lt;/strong&gt;的，因为出来得越早，留给第二类设施的缓冲就越大。”&lt;/p&gt;
+&lt;p&gt;我眼睛一亮：“你的意思是……如果我先玩陆地，只需要找出所有陆地项目里 &lt;code&gt;start + duration&lt;/code&gt; 最小的那个值，记作 &lt;code&gt;min_finish&lt;/code&gt;，这就是我从陆地区出来的最早时间。然后水上设施不管挑哪个，实际开始时间都是 &lt;code&gt;max(waterStart, min_finish)&lt;/code&gt;，再加上自己的时长就是总完成时间。我只需要在水上项目里找一个能最早收工的就行！等等——这不就把嵌套循环拆成两个独立的单循环？！”&lt;/p&gt;
+&lt;p&gt;“一点就通。”老勇者满意地点点头，“ 第一个循环找陆地最早结束时间，第二个循环在水上设施里挑最优。先水上后陆地同理，把函数反转一下就行。总复杂度从 O(n×m) 降到了 O(n+m)，哪天数据真飙到十万，你也能面不改色。”&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;solve&lt;/span&gt;(firstStart, firstDur, secondStart, secondDur):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 从第一类设施中找出最早结束时间&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    min_finish &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; min(start &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; dur &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; start, dur &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; zip(firstStart, firstDur))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 在第二类设施中，找最早完成时间    &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; min(max(start, min_finish) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; dur &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; start, dur &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; zip(secondStart, secondDur))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;earliestCompletionTime&lt;/span&gt;(landStart, landDur, waterStart, waterDur):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    land_water &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; solve(landStart, landDur, waterStart, waterDur)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    water_land &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; solve(waterStart, waterDur, landStart, landDur)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; min(land_water, water_land)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我盯着这几行代码：“&lt;code&gt;min_finish&lt;/code&gt; 是所有陆地项目里的最早结束时间……然后在水上项目里，每个都从 &lt;code&gt;max(start, min_finish)&lt;/code&gt; 开始算完成时间，取最小。这不就是把我刚才内层循环的 &lt;code&gt;land_end&lt;/code&gt; 换成了一个全局最优的常量吗？难怪能砍掉一层循环！”&lt;/p&gt;
+&lt;p&gt;“这就是去冗余。”老勇者把棒棒糖棍子一扔，精准投进三米外的垃圾桶，“暴力法里，你对每个陆地项目都重复计算了水上等待，但实际上最优解只可能从‘陆地最早结束’这个分支里产生——因为如果某个陆地项目结束得更晚，你从它出来再去玩水上，只有可能更晚，不会更早。所以直接把其他陆地项目剪枝掉，一步到位。这种思路就像数据库查询优化里的谓词下推——把过滤条件提前，减少后面要处理的数据量。”&lt;/p&gt;
+&lt;p&gt;他顿了顿，又补了一刀：“你今天这趟没白来。暴力是基操，优化是觉悟。能立刻理解 O(n+m) 的优化思路，说明你对问题结构的敏感度在涨。记住，以后看到‘两类各选一个，顺序任意’这种题型，先想想能不能把其中一类的选择压缩成一个最优候选值。剪枝剪得好，复杂度直接降维打击。”&lt;/p&gt;
+&lt;p&gt;我正想谦虚两句，旁边突然冲过来一个小孩，拽着他爸的袖子喊：“爸爸爸爸，我要玩那个‘递归过山车’！”他爸脸都绿了：“别，上次你爷爷玩了递归过山车没设 base case，到现在还在天上转呢！栈溢出一万多层，园区用 debugger 都救不下来，现在全家每天抬头都能看见爷爷在轨道上挥手！”&lt;/p&gt;
+&lt;p&gt;我和老勇者同时倒吸一口凉气，抬头一看——好家伙，天上真有个小黑点在轨道上循环，隐约还能听见“谁来帮我 return 一下——”的喊声。&lt;/p&gt;
+&lt;p&gt;“撤。”老勇者把棒棒糖从嘴里拔出来，起跑的脚步比 C++ 的 move 语义还快。&lt;/p&gt;
+&lt;p&gt;我抄起魔法书，跟着老勇者就往乐园门口冲，路过正在施工的新项目时，围挡上的海报差点让我们脚底打滑：“即将推出——并发漂流，同时体验三条河道，偶尔死锁，体验真实多线程。”&lt;/p&gt;
+&lt;p&gt;我们的脚步又加快了三成。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;-回村烧锅&#34;&gt;🎮 回村烧锅
+&lt;/h4&gt;&lt;p&gt;回到村口，我把今天的两份战报收进魔法书——一份 O(n×m) 暴力版，一份 O(n+m) 剪枝版，旁边画了个过山车做标记，批注：“算法乐园，项目刺激，没设 base case 者慎入。”&lt;/p&gt;
+&lt;p&gt;刚合上书，村长就扛着锅铲冲了过来，围裙上还沾着火星：“小白！你可算回来了！锅炉火都快灭了，赶紧添柴！”&lt;/p&gt;
+&lt;p&gt;“来了来了！”我一把抓起柴火往炉膛里塞，火苗重新蹿起来，村长的眉头这才舒展开。&lt;/p&gt;
+&lt;p&gt;“村长，”我擦了把汗，往锅炉里又扔了根柴，“下次再发福利，换个正常点的游乐园行不？那个递归过山车，有个老头没设 base case，到现在还在天上转呢。”&lt;/p&gt;
+&lt;p&gt;村长愣了一下，抬头往乐园方向望了望——天边那个小黑点还在轨道上循环，隐约的“谁来帮我 return 啊——”随风飘来。他沉默了两秒，诚恳地点了点头：“行，下次发隔壁‘数据结构农场’的票，最多也就被二叉树的刺扎一下，至少人还能回来。”&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Hello_world</title>
+        <link>http://localhost:1313/posts/hello_world/</link>
+        <pubDate>Mon, 01 Jun 2026 10:52:10 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/hello_world/</guid>
+        <description>&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;中文&lt;/strong&gt;：你好（nǐ hǎo）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;英语&lt;/strong&gt;：Hello（哈喽）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;法语&lt;/strong&gt;：Bonjour（布恩入）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;西班牙语&lt;/strong&gt;：¡Buenas!（哈咯）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;日语&lt;/strong&gt;：こんにちは（konnichiwa）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;俄语&lt;/strong&gt;：Привет（привет）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;阿拉伯语&lt;/strong&gt;：مرحبا（salaam）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;德语&lt;/strong&gt;：Hallo（古藤塔克）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;葡萄牙语&lt;/strong&gt;：Olá（奥拉）&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;希伯来语&lt;/strong&gt;：(שלום（שלום&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         </item>
         
