@@ -10,7 +10,7 @@
 <meta property='og:description' content="喜欢讲故事的咕咕咕">
 <meta property='og:url' content='http://localhost:1313/about/'>
 <meta property='og:site_name' content='我的小站'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-06-03T10:39:17&#43;08:00 '/>
+<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-06-08T12:47:26&#43;08:00 '/>
 <meta name="twitter:title" content="关于我">
 <meta name="twitter:description" content="喜欢讲故事的咕咕咕"><link rel="alternate" type="application/rss&#43;xml" href="http://localhost:1313/about/index.xml">
     </head>
@@ -322,6 +322,57 @@ unicode: "eb49"
      
     
         
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="iCurious-D/icurious-d.github.io"
+    data-repo-id="R_kgDOSu3GEQ"
+    data-category="General"
+    data-category-id="DIC_kwDOSu3GEc4C-u1E"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark');
+            }
+        }
+    })();
+</script>
+
     
 
     <footer class="site-footer">

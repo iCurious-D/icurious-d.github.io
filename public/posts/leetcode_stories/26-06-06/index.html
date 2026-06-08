@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 空间复杂度O(1)？村长说这是节俭美德！\n“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：[10, 4, 8, 3]，“你看，这是咱村拔河比赛的对阵表！”\n我定睛一看，“这……不就是个数组吗？”\n“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”\n我挠挠头：“&hellip;&hellip;求每个位置的 |leftSum - rightSum| ？”\n“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”\n我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：\ndef leftRightDifference(nums): n = len(nums) left_sum = [0] * n right_sum = [0] * n # 从左到右，计算每个位置的左侧总和 for i in range(1, n): left_sum[i] = left_sum[i - 1] + nums[i - 1] # 从右到左，计算每个位置的右侧总和 for i in range(n - 2, -1, -1): right_sum[i] = right_sum[i + 1] + nums[i + 1] # 计算差值的绝对值 for i in range(n): answer[i] = abs(left_sum[i] - right_sum[i]) return answer 村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。\n“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——left_sum 、right_sum 、answer ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”\n我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。\n">
+<title>leetcode2574：空间复杂度O(1)？村长说这是节俭美德！</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-06/'>
+
+<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode2574：空间复杂度O(1)？村长说这是节俭美德！">
+<meta property='og:description' content="🎮 空间复杂度O(1)？村长说这是节俭美德！\n“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：[10, 4, 8, 3]，“你看，这是咱村拔河比赛的对阵表！”\n我定睛一看，“这……不就是个数组吗？”\n“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”\n我挠挠头：“&hellip;&hellip;求每个位置的 |leftSum - rightSum| ？”\n“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”\n我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：\ndef leftRightDifference(nums): n = len(nums) left_sum = [0] * n right_sum = [0] * n # 从左到右，计算每个位置的左侧总和 for i in range(1, n): left_sum[i] = left_sum[i - 1] + nums[i - 1] # 从右到左，计算每个位置的右侧总和 for i in range(n - 2, -1, -1): right_sum[i] = right_sum[i + 1] + nums[i + 1] # 计算差值的绝对值 for i in range(n): answer[i] = abs(left_sum[i] - right_sum[i]) return answer 村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。\n“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——left_sum 、right_sum 、answer ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”\n我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。\n">
+<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-06/'>
+<meta property='og:site_name' content='我的小站'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-06T12:36:25&#43;08:00'/><meta property='article:modified_time' content='2026-06-06T12:36:25&#43;08:00'/>
+<meta name="twitter:title" content="leetcode2574：空间复杂度O(1)？村长说这是节俭美德！">
+<meta name="twitter:description" content="🎮 空间复杂度O(1)？村长说这是节俭美德！\n“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：[10, 4, 8, 3]，“你看，这是咱村拔河比赛的对阵表！”\n我定睛一看，“这……不就是个数组吗？”\n“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”\n我挠挠头：“&hellip;&hellip;求每个位置的 |leftSum - rightSum| ？”\n“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”\n我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：\ndef leftRightDifference(nums): n = len(nums) left_sum = [0] * n right_sum = [0] * n # 从左到右，计算每个位置的左侧总和 for i in range(1, n): left_sum[i] = left_sum[i - 1] + nums[i - 1] # 从右到左，计算每个位置的右侧总和 for i in range(n - 2, -1, -1): right_sum[i] = right_sum[i + 1] + nums[i + 1] # 计算差值的绝对值 for i in range(n): answer[i] = abs(left_sum[i] - right_sum[i]) return answer 村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。\n“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——left_sum 、right_sum 、answer ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”\n我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_ff27af45f451325d.jpg" width="300"
+                            height="397" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">✏️</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">我的小站</a></h1>
+            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/iCurious-D'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <!--
+tags: [logo, website, hosting, project, programming, software, development]
+category: Brand
+version: "1.18"
+unicode: "ec1c"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <!--
+category: Buildings
+tags: [apple, devices, connection, link, wifi, bluetooth]
+version: "1.20"
+unicode: "ecde"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M19 8.71l-5.333 -4.148a2.666 2.666 0 0 0 -3.274 0l-5.334 4.148a2.665 2.665 0 0 0 -1.029 2.105v7.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-7.2c0 -.823 -.38 -1.6 -1.03 -2.105" />
+  <path d="M16 15c-2.21 1.333 -5.792 1.333 -8 0" />
+</svg>
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/posts/' >
+                
+                
+                
+                    <!--
+tags: [news, newspaper, media, blog]
+version: "1.69"
+unicode: "f1e2"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+  <path d="M7 8h10" />
+  <path d="M7 12h10" />
+  <path d="M7 16h10" />
+</svg>
+
+                
+                <span>文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <!--
+category: System
+tags: [tick, person, account, role]
+version: "1.0"
+unicode: "eb49"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+  <path d="M15 19l2 2l4 -4" />
+</svg>
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
+                Leetcode题解故事
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/leetcode_stories/26-06-06/">leetcode2574：空间复杂度O(1)？村长说这是节俭美德！</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-06-06T12:36:25&#43;08:00'>6月 06, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <p>🎮 空间复杂度O(1)？村长说这是节俭美德！</p>
+<p>“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：<code>[10, 4, 8, 3]</code>，“你看，这是咱村拔河比赛的对阵表！”</p>
+<p>我定睛一看，“这……不就是个数组吗？”</p>
+<p>“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”</p>
+<p>我挠挠头：“&hellip;&hellip;求每个位置的 <code>|leftSum - rightSum|</code> ？”</p>
+<p>“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”</p>
+<p>我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">leftRightDifference</span>(nums):
+</span></span><span style="display:flex;"><span>    n <span style="color:#f92672">=</span> len(nums)
+</span></span><span style="display:flex;"><span>    left_sum <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> n
+</span></span><span style="display:flex;"><span>    right_sum <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> n
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 从左到右，计算每个位置的左侧总和</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, n):
+</span></span><span style="display:flex;"><span>        left_sum[i] <span style="color:#f92672">=</span> left_sum[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> nums[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 从右到左，计算每个位置的右侧总和</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        right_sum[i] <span style="color:#f92672">=</span> right_sum[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">+</span> nums[i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 计算差值的绝对值</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(n):
+</span></span><span style="display:flex;"><span>        answer[i] <span style="color:#f92672">=</span> abs(left_sum[i] <span style="color:#f92672">-</span> right_sum[i])
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> answer
+</span></span></code></pre></div><p>村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。</p>
+<p>“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——<code>left_sum</code> 、<code>right_sum</code> 、<code>answer</code> ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”</p>
+<p>我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。</p>
+<p>“节省……”我咬着笔杆，盯着那三个数组开始琢磨。<code>left_sum</code> 好办——用一个 <code>left</code> 变量一路滚到底就行。从最左边往右走，走哪儿加哪儿，根本不用开数组，一个变量搞定。但 <code>right_sum</code> 怎么办？右边队员的体重和，在从左往右走的时候是未知的——还没走到右边呢，怎么知道右边那群人加起来多重？除非我先算一遍总和。</p>
+<p>总和！我一个激灵，在草稿纸上划拉起来：设全队总重 <code>total = sum(nums)</code>，对于位置 i，左边的体重和是 <code>left</code>，当前这个人自己的体重是 <code>nums[i]</code>，那右边的和<code>right</code>不就是 <code>total - left - nums[i]</code> 吗？</p>
+<ul>
+<li><code>answer[i] = |left - right|</code></li>
+<li><code>right = total - left - nums[i]</code></li>
+<li><code>answer[i] = |left - (total - left - nums[i])| = |2 * left + nums[i] - total|</code></li>
+</ul>
+<p>我整理了下思路：<code>left_sum</code> 用一个滚动的变量 <code>left</code> 取代，<code>right_sum</code> 用 <code>total - left - nums[i]</code> 表达式消解，<code>answer</code> 干脆直接写回原数组 <code>nums</code>，连额外空间都省了。代码从三循环三数组，缩成一趟遍历原地修改：</p>
+<pre tabindex="0"><code>def leftRightDifference(nums):
+    total = sum(nums)       # 全队总体重
+    left = 0                # 左边已经算过的人总体重，初始为 0
+    for i, num in enumerate(nums):      
+        nums[i] = abs(left * 2 + num - total)  # 计算差值，直接写回原数组
+        left += num         # 把当前人算到左边的队伍里
+    return nums
+</code></pre><p>时间复杂度 O(n)，空间复杂度 O(1)（不算答案数组的话），是真正的&quot;原地算法&quot;！</p>
+<p>“三张表变零张，好啊！连草纸钱都省了！这才是咱们村的作风！” 村长高兴地直拍大腿，那兴奋劲儿比他自己拔赢了比赛还夸张。</p>
+<p>老头把优化后的对阵表往怀里一揣，乐呵呵地走了。临出门又回头喊了一嗓子，“省下来的钱，回头给你加个鸡腿！我先去排兵布阵，下午预赛，记得来操场看拔河！”</p>
+<p>门关上，我把拨火棍往锅炉边一靠，打开魔法书给 2574 也留了行记录：</p>
+<blockquote>
+<p><strong>2574 - 左右元素和的差值</strong>
+解法：total 推右边和，数学去冗余。一趟遍历原地修改，O(n) 时间，O(1) 额外空间
+心得：右边和不是独立信息，是派生值。用老勇者的话说——能现场算的，就别存。</p>
+</blockquote>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E9%A2%98%E8%A7%A3/">题解</a>
+        
+            <a href="/tags/%E6%95%85%E4%BA%8B/">故事</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-05/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3753：游乐园峰谷过山车II</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-04/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3751：游乐园峰谷过山车</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-03/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3635：游乐园正式服的挑战</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-02/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3633：游乐园大冒险</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="iCurious-D/icurious-d.github.io"
+    data-repo-id="R_kgDOSu3GEQ"
+    data-category="General"
+    data-category-id="DIC_kwDOSu3GEc4C-u1E"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 我的小站
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

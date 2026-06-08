@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 装备分拣：一行流的诱惑与分桶的正道 “小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——[9, 12, 5, 10, 14, 3, 10]。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”\n我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。\n正准备掏分桶代码，我脑子突然一抽：等等，Python 的 sort 不是稳定排序吗？Timsort 亲口承诺“相同键值保序”，那我直接用 key 函数把小于 pivot 的映射成 -1，等于的映射成 0，大于的映射成 1，然后排一遍不就行了？一行流，帅就完事。\nnums.sort(key=lambda x: (x &gt; pivot) - (x &lt; pivot)) 跑样例，输出完美。提交，AC 弹出。我往椅背上一靠，翘起二郎腿，心里已经开始给自己加戏——一行代码搞定装备分拣，村长直呼内行，精英团连夜给我加 Buff，仓库管理员感动得要把女儿许配给我。\n正美着，后脑勺“啪”地挨了一下。\n回头一看，老勇者叼着棒棒糖站在我身后，手指还保持着弹脑瓜崩的姿势。“你觉得这就算写完了？”\n“AC 了啊！”我捂着后脑勺，指着屏幕上的绿色大勾。\n“AC 不代表没毛病。”他点了点屏幕，“你这 sort，时间复杂度多少？”\n“O(n log n)……”我声音小了一半，后脑勺还隐隐作痛。\n”题目让你分组，不是让你排序。分组是 O(n) 的活——看一眼战力值，扔进对应的箱子，完事。你调 sort，等于雇了个全职排序师来当门卫。排序引擎不知道你只想分堆——它勤勤恳恳地比较、归并、插入，log n 层递归树跑满，就为了完成一个你早就知道答案的任务。而且 Timsort 底层 merge 要临时数组，额外空间也是 O(n)——你这一行流，时间复杂度输了，空间也没省。”\n他把棒棒糖往嘴角一叼：“一行流看着帅，语义不对。用排序引擎做分组，技术债，利息 O(n log n)。哪天副本掉了一百万件装备，Boss 都刷新两轮了你的代码还在排序，勇士团站门口干等，回头差评全写你名字。”\n">
+<title>leetcode2161 装备分拣：一行流的诱惑与分桶的正道</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-08/'>
+
+<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode2161 装备分拣：一行流的诱惑与分桶的正道">
+<meta property='og:description' content="🎮 装备分拣：一行流的诱惑与分桶的正道 “小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——[9, 12, 5, 10, 14, 3, 10]。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”\n我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。\n正准备掏分桶代码，我脑子突然一抽：等等，Python 的 sort 不是稳定排序吗？Timsort 亲口承诺“相同键值保序”，那我直接用 key 函数把小于 pivot 的映射成 -1，等于的映射成 0，大于的映射成 1，然后排一遍不就行了？一行流，帅就完事。\nnums.sort(key=lambda x: (x &gt; pivot) - (x &lt; pivot)) 跑样例，输出完美。提交，AC 弹出。我往椅背上一靠，翘起二郎腿，心里已经开始给自己加戏——一行代码搞定装备分拣，村长直呼内行，精英团连夜给我加 Buff，仓库管理员感动得要把女儿许配给我。\n正美着，后脑勺“啪”地挨了一下。\n回头一看，老勇者叼着棒棒糖站在我身后，手指还保持着弹脑瓜崩的姿势。“你觉得这就算写完了？”\n“AC 了啊！”我捂着后脑勺，指着屏幕上的绿色大勾。\n“AC 不代表没毛病。”他点了点屏幕，“你这 sort，时间复杂度多少？”\n“O(n log n)……”我声音小了一半，后脑勺还隐隐作痛。\n”题目让你分组，不是让你排序。分组是 O(n) 的活——看一眼战力值，扔进对应的箱子，完事。你调 sort，等于雇了个全职排序师来当门卫。排序引擎不知道你只想分堆——它勤勤恳恳地比较、归并、插入，log n 层递归树跑满，就为了完成一个你早就知道答案的任务。而且 Timsort 底层 merge 要临时数组，额外空间也是 O(n)——你这一行流，时间复杂度输了，空间也没省。”\n他把棒棒糖往嘴角一叼：“一行流看着帅，语义不对。用排序引擎做分组，技术债，利息 O(n log n)。哪天副本掉了一百万件装备，Boss 都刷新两轮了你的代码还在排序，勇士团站门口干等，回头差评全写你名字。”\n">
+<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-08/'>
+<meta property='og:site_name' content='我的小站'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-08T12:47:26&#43;08:00'/><meta property='article:modified_time' content='2026-06-08T12:47:26&#43;08:00'/>
+<meta name="twitter:title" content="leetcode2161 装备分拣：一行流的诱惑与分桶的正道">
+<meta name="twitter:description" content="🎮 装备分拣：一行流的诱惑与分桶的正道 “小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——[9, 12, 5, 10, 14, 3, 10]。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”\n我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。\n正准备掏分桶代码，我脑子突然一抽：等等，Python 的 sort 不是稳定排序吗？Timsort 亲口承诺“相同键值保序”，那我直接用 key 函数把小于 pivot 的映射成 -1，等于的映射成 0，大于的映射成 1，然后排一遍不就行了？一行流，帅就完事。\nnums.sort(key=lambda x: (x &gt; pivot) - (x &lt; pivot)) 跑样例，输出完美。提交，AC 弹出。我往椅背上一靠，翘起二郎腿，心里已经开始给自己加戏——一行代码搞定装备分拣，村长直呼内行，精英团连夜给我加 Buff，仓库管理员感动得要把女儿许配给我。\n正美着，后脑勺“啪”地挨了一下。\n回头一看，老勇者叼着棒棒糖站在我身后，手指还保持着弹脑瓜崩的姿势。“你觉得这就算写完了？”\n“AC 了啊！”我捂着后脑勺，指着屏幕上的绿色大勾。\n“AC 不代表没毛病。”他点了点屏幕，“你这 sort，时间复杂度多少？”\n“O(n log n)……”我声音小了一半，后脑勺还隐隐作痛。\n”题目让你分组，不是让你排序。分组是 O(n) 的活——看一眼战力值，扔进对应的箱子，完事。你调 sort，等于雇了个全职排序师来当门卫。排序引擎不知道你只想分堆——它勤勤恳恳地比较、归并、插入，log n 层递归树跑满，就为了完成一个你早就知道答案的任务。而且 Timsort 底层 merge 要临时数组，额外空间也是 O(n)——你这一行流，时间复杂度输了，空间也没省。”\n他把棒棒糖往嘴角一叼：“一行流看着帅，语义不对。用排序引擎做分组，技术债，利息 O(n log n)。哪天副本掉了一百万件装备，Boss 都刷新两轮了你的代码还在排序，勇士团站门口干等，回头差评全写你名字。”\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_ff27af45f451325d.jpg" width="300"
+                            height="397" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">✏️</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">我的小站</a></h1>
+            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/iCurious-D'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <!--
+tags: [logo, website, hosting, project, programming, software, development]
+category: Brand
+version: "1.18"
+unicode: "ec1c"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <!--
+category: Buildings
+tags: [apple, devices, connection, link, wifi, bluetooth]
+version: "1.20"
+unicode: "ecde"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M19 8.71l-5.333 -4.148a2.666 2.666 0 0 0 -3.274 0l-5.334 4.148a2.665 2.665 0 0 0 -1.029 2.105v7.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-7.2c0 -.823 -.38 -1.6 -1.03 -2.105" />
+  <path d="M16 15c-2.21 1.333 -5.792 1.333 -8 0" />
+</svg>
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/posts/' >
+                
+                
+                
+                    <!--
+tags: [news, newspaper, media, blog]
+version: "1.69"
+unicode: "f1e2"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+  <path d="M7 8h10" />
+  <path d="M7 12h10" />
+  <path d="M7 16h10" />
+</svg>
+
+                
+                <span>文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <!--
+category: System
+tags: [tick, person, account, role]
+version: "1.0"
+unicode: "eb49"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+  <path d="M15 19l2 2l4 -4" />
+</svg>
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#-装备分拣一行流的诱惑与分桶的正道">🎮 装备分拣：一行流的诱惑与分桶的正道</a></li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
+                Leetcode题解故事
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/leetcode_stories/26-06-08/">leetcode2161 装备分拣：一行流的诱惑与分桶的正道</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-06-08T12:47:26&#43;08:00'>6月 08, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="-装备分拣一行流的诱惑与分桶的正道">🎮 装备分拣：一行流的诱惑与分桶的正道
+</h2><p>“小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——<code>[9, 12, 5, 10, 14, 3, 10]</code>。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”</p>
+<p>我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。</p>
+<p>正准备掏分桶代码，我脑子突然一抽：等等，Python 的 <code>sort</code> 不是稳定排序吗？Timsort 亲口承诺“相同键值保序”，那我直接用 <code>key</code> 函数把小于 pivot 的映射成 -1，等于的映射成 0，大于的映射成 1，然后排一遍不就行了？一行流，帅就完事。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>nums<span style="color:#f92672">.</span>sort(key<span style="color:#f92672">=</span><span style="color:#66d9ef">lambda</span> x: (x <span style="color:#f92672">&gt;</span> pivot) <span style="color:#f92672">-</span> (x <span style="color:#f92672">&lt;</span> pivot))
+</span></span></code></pre></div><p>跑样例，输出完美。提交，AC 弹出。我往椅背上一靠，翘起二郎腿，心里已经开始给自己加戏——一行代码搞定装备分拣，村长直呼内行，精英团连夜给我加 Buff，仓库管理员感动得要把女儿许配给我。</p>
+<p>正美着，后脑勺“啪”地挨了一下。</p>
+<p>回头一看，老勇者叼着棒棒糖站在我身后，手指还保持着弹脑瓜崩的姿势。“你觉得这就算写完了？”</p>
+<p>“AC 了啊！”我捂着后脑勺，指着屏幕上的绿色大勾。</p>
+<p>“AC 不代表没毛病。”他点了点屏幕，“你这 <code>sort</code>，时间复杂度多少？”</p>
+<p>“O(n log n)……”我声音小了一半，后脑勺还隐隐作痛。</p>
+<p>”题目让你分组，不是让你排序。分组是 O(n) 的活——看一眼战力值，扔进对应的箱子，完事。你调 <code>sort</code>，等于雇了个全职排序师来当门卫。排序引擎不知道你只想分堆——它勤勤恳恳地比较、归并、插入，log n 层递归树跑满，就为了完成一个你早就知道答案的任务。而且 Timsort 底层 merge 要临时数组，额外空间也是 O(n)——你这一行流，时间复杂度输了，空间也没省。”</p>
+<p>他把棒棒糖往嘴角一叼：“一行流看着帅，语义不对。用排序引擎做分组，技术债，利息 O(n log n)。哪天副本掉了一百万件装备，Boss 都刷新两轮了你的代码还在排序，勇士团站门口干等，回头差评全写你名字。”</p>
+<p>我脸上的得意全部转移到了脚趾上。我默默地把那一行流注释掉，老老实实掏出了分桶三数组的写法：</p>
+<p>遍历整个装备列表，比<code>pivot</code>弱的扔进 <code>left</code> 箱发往新手村；相等的扔进 <code>mid</code> 箱存仓库；比<code>pivot</code>强的扔进 <code>right</code> 箱送精英团。因为是从左往右按掉落顺序依次遍历的，每个箱子里的装备天然保持了原来的先后顺序，最后把三个箱子的装备按顺序拼接，分拣完毕：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">pivotArray</span>(self, nums: List[int], pivot: int) <span style="color:#f92672">-&gt;</span> List[int]:
+</span></span><span style="display:flex;"><span>    left, mid, right <span style="color:#f92672">=</span> [], [], []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> nums:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> x <span style="color:#f92672">&lt;</span> pivot:
+</span></span><span style="display:flex;"><span>            left<span style="color:#f92672">.</span>append(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">elif</span> x <span style="color:#f92672">==</span> pivot:
+</span></span><span style="display:flex;"><span>            mid<span style="color:#f92672">.</span>append(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            right<span style="color:#f92672">.</span>append(x)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> left <span style="color:#f92672">+</span> mid <span style="color:#f92672">+</span> right
+</span></span></code></pre></div><p>O(n) 时间，O(n) 额外空间，语义清晰，逻辑直白。村长看了眼分好的三箱装备，满意地点点头，抱着箱子去仓库贴标签了。</p>
+<p>老勇者看着我把分桶版本提交上去，这次没弹脑瓜崩，点了点头：“记住，一行流能 AC 不代表它是最优解。<code>sort</code> 是通用排序，它不知道你只想分堆。能现场分组的，就别排序。”</p>
+<p>我揉着后脑勺，默默记下了。但盯着那三个桶，还是忍不住追问了一句：“空间复杂度有没有优化空间？”</p>
+<p>老勇者瞥了我一眼：“你愿意拿时间换，就可以。”</p>
+<p>“原地交换加插入排序，能压到 O(1) 空间——每遇到一个元素，先判断它该去哪边，再用位移操作把它挪到对应位置，保证组内顺序不变。但每次挪位置都是 O(n)，总复杂度 O(n²)。O(1) 空间换 O(n²) 时间，等于徒手搬一百趟装备省一个空间戒指，血亏。”</p>
+<p>他把棒棒糖往嘴里一叼，拍了拍我肩膀：“编程跟打副本一个道理——理解机制比硬刚更重要。稳定分区必须付出代价，要么付空间，要么付时间。n ≤ 10⁵ 的数据量，O(n) 空间换 O(n) 时间是血赚。省空间的念头，留着对付那些不要求稳定性的题——那才是原地交换大展拳脚的地方。”</p>
+<p>窗外，勇士团扛着新到货的装备箱浩浩荡荡走过，村长跟在后面一路小跑，手里还抱着我分好的三摞清单。我把魔法书翻到今天这一页，在旁边批了三行：能分组的，就别排序。稳定分区，空间换时间是正道。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E9%A2%98%E8%A7%A3/">题解</a>
+        
+            <a href="/tags/%E6%95%85%E4%BA%8B/">故事</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-07/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-06/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode2574：空间复杂度O(1)？村长说这是节俭美德！</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-05/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3753：游乐园峰谷过山车II</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-04/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3751：游乐园峰谷过山车</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-03/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3635：游乐园正式服的挑战</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="iCurious-D/icurious-d.github.io"
+    data-repo-id="R_kgDOSu3GEQ"
+    data-category="General"
+    data-category-id="DIC_kwDOSu3GEc4C-u1E"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 我的小站
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

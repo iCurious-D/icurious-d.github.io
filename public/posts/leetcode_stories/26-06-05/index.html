@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 游乐园峰谷过山车 II：当数据量膨胀到万亿级 “来了。”\n我靠窗坐着，魔法书摊在膝上，手边一杯茶冒着热气。窗外传来熟悉的脚步声——不是那种出大事的急匆匆跑法，而是不紧不慢、带着“ 我要来吓唬你了但我其实很期待看你反应 ” 的节奏。上次游乐园试运营、正式服连着来的时候，也是这个步调。如果把村长的每次出场录下来做傅里叶变换，峰值频率大概在“焦虑”和“幸灾乐祸”之间。\n门被一脚踹开。“小白！游乐园又来任务了！”他手里挥着一封烫金信封，脸上的表情比上次更兴奋。\n我接过信封，没急着拆。“村长，让我猜猜——波动值 II，规则一个字没改，数据量加了一串零。对吗？”\n村长愣了一下，显然没料到我预判了他的预判。我把信封拆开，果然：\n3753 - 范围内总波动值 II 规则：同 3751 数据范围：1 ≤ num1 ≤ num2 ≤ 10¹⁵\n10¹⁵，十五位数。上次 3751 是 10⁵，六位数，暴力法直接遍历，几十万次操作，眨眼就跑完了。这次如果用同样的暴力对付 10¹⁵，遍历次数得用“万亿”做单位——从几十万到万亿，差了整整十个数量级。上次几十万次耗时不到 0.1 秒，这次暴力能跑到地老天荒。\n但我没有慌，甚至有点小得意。因为昨天的我在老勇者敲烟斗的节奏里，已经把数位 DP 的核心思想刻入脑海了。不光学会了“怎么搜”，还搞懂了“怎么记”——限制状态和计算状态分家，波动值从行李升级成战报。而那两个版本的代码，昨天就躺进我的魔法书里了，一字一句，墨迹都还没褪色。\n“村长，”我把茶杯放下，翻开魔法书到那两页代码，“你看，昨天老勇者教了我两种数位 DP 写法。第一种‘行李版’，把 waviness 放在参数里一路扛下去——最符合直觉，填完所有位直接返回累加好的成绩单。第二种‘战报版’，把 waviness 踢出参数表，变成返回值的一部分，每个子树统一上报 (子树波动值总和, 子树合法数字个数)。”\n我用手指点了点代码里的核心差异，继续解释：“说句公道话，今天这数据量，两种其实都能跑。10¹⁵ 是十五位数，状态总数也就几万个，行李版的缓存虽然会漏掉一些命中，但状态空间本身不大，硬跑也能过——顶多比战报版多喘两口气，不至于升天。”\n“但你猜我选哪个？”我把魔法书往他面前推了推，指着第二种写法旁边昨天重重划下的那行下划线——波动值是战报，不是行李。“行李版今天能过，但如果数据量换到 10¹⁸ 呢？换到 10¹⁰⁰ 呢？行李扛一路，缓存命中率随数据量一路下滑；战报往上交，数据涨到天上去也没关系。既然昨天已经想明白了，今天就没必要退回去走老路。”\n我把战报版代码原封不动贴进提交框，一个字符都没改，点了提交。绿色大勾弹出来的时候，村长正在喝我给他倒的茶。他看了看屏幕上的 Accepted，又看了看耗时——表情从“我要看你翻车”变成了“你怎么又不翻车”，嘴唇抖了三抖，最后只憋出一句：“就这？”\n“就这。”我把魔法书翻到昨天写的那条批注——“波动值是战报，不是行李”——在下面补了一行新记录：\n3753 - 范围内总波动值 II 解法：同 3751 数位 DP 战报版，O(位数 × 状态数)，代码零改动 数据范围：num2 ≤ 10¹⁵，位数从 6 涨到 16，状态数几乎没变 心得体会：行李版今天也能过，但既然学会了看战报，就没必要再扛行李。好的状态设计，不惧数据膨胀——昨天多想十分钟，今天省下十个数量级，连代码都不用改一行。\n">
+<title>leetcode3753：游乐园峰谷过山车II</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-05/'>
+
+<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode3753：游乐园峰谷过山车II">
+<meta property='og:description' content="🎮 游乐园峰谷过山车 II：当数据量膨胀到万亿级 “来了。”\n我靠窗坐着，魔法书摊在膝上，手边一杯茶冒着热气。窗外传来熟悉的脚步声——不是那种出大事的急匆匆跑法，而是不紧不慢、带着“ 我要来吓唬你了但我其实很期待看你反应 ” 的节奏。上次游乐园试运营、正式服连着来的时候，也是这个步调。如果把村长的每次出场录下来做傅里叶变换，峰值频率大概在“焦虑”和“幸灾乐祸”之间。\n门被一脚踹开。“小白！游乐园又来任务了！”他手里挥着一封烫金信封，脸上的表情比上次更兴奋。\n我接过信封，没急着拆。“村长，让我猜猜——波动值 II，规则一个字没改，数据量加了一串零。对吗？”\n村长愣了一下，显然没料到我预判了他的预判。我把信封拆开，果然：\n3753 - 范围内总波动值 II 规则：同 3751 数据范围：1 ≤ num1 ≤ num2 ≤ 10¹⁵\n10¹⁵，十五位数。上次 3751 是 10⁵，六位数，暴力法直接遍历，几十万次操作，眨眼就跑完了。这次如果用同样的暴力对付 10¹⁵，遍历次数得用“万亿”做单位——从几十万到万亿，差了整整十个数量级。上次几十万次耗时不到 0.1 秒，这次暴力能跑到地老天荒。\n但我没有慌，甚至有点小得意。因为昨天的我在老勇者敲烟斗的节奏里，已经把数位 DP 的核心思想刻入脑海了。不光学会了“怎么搜”，还搞懂了“怎么记”——限制状态和计算状态分家，波动值从行李升级成战报。而那两个版本的代码，昨天就躺进我的魔法书里了，一字一句，墨迹都还没褪色。\n“村长，”我把茶杯放下，翻开魔法书到那两页代码，“你看，昨天老勇者教了我两种数位 DP 写法。第一种‘行李版’，把 waviness 放在参数里一路扛下去——最符合直觉，填完所有位直接返回累加好的成绩单。第二种‘战报版’，把 waviness 踢出参数表，变成返回值的一部分，每个子树统一上报 (子树波动值总和, 子树合法数字个数)。”\n我用手指点了点代码里的核心差异，继续解释：“说句公道话，今天这数据量，两种其实都能跑。10¹⁵ 是十五位数，状态总数也就几万个，行李版的缓存虽然会漏掉一些命中，但状态空间本身不大，硬跑也能过——顶多比战报版多喘两口气，不至于升天。”\n“但你猜我选哪个？”我把魔法书往他面前推了推，指着第二种写法旁边昨天重重划下的那行下划线——波动值是战报，不是行李。“行李版今天能过，但如果数据量换到 10¹⁸ 呢？换到 10¹⁰⁰ 呢？行李扛一路，缓存命中率随数据量一路下滑；战报往上交，数据涨到天上去也没关系。既然昨天已经想明白了，今天就没必要退回去走老路。”\n我把战报版代码原封不动贴进提交框，一个字符都没改，点了提交。绿色大勾弹出来的时候，村长正在喝我给他倒的茶。他看了看屏幕上的 Accepted，又看了看耗时——表情从“我要看你翻车”变成了“你怎么又不翻车”，嘴唇抖了三抖，最后只憋出一句：“就这？”\n“就这。”我把魔法书翻到昨天写的那条批注——“波动值是战报，不是行李”——在下面补了一行新记录：\n3753 - 范围内总波动值 II 解法：同 3751 数位 DP 战报版，O(位数 × 状态数)，代码零改动 数据范围：num2 ≤ 10¹⁵，位数从 6 涨到 16，状态数几乎没变 心得体会：行李版今天也能过，但既然学会了看战报，就没必要再扛行李。好的状态设计，不惧数据膨胀——昨天多想十分钟，今天省下十个数量级，连代码都不用改一行。\n">
+<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-05/'>
+<meta property='og:site_name' content='我的小站'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-05T11:12:16&#43;08:00'/><meta property='article:modified_time' content='2026-06-05T11:12:16&#43;08:00'/>
+<meta name="twitter:title" content="leetcode3753：游乐园峰谷过山车II">
+<meta name="twitter:description" content="🎮 游乐园峰谷过山车 II：当数据量膨胀到万亿级 “来了。”\n我靠窗坐着，魔法书摊在膝上，手边一杯茶冒着热气。窗外传来熟悉的脚步声——不是那种出大事的急匆匆跑法，而是不紧不慢、带着“ 我要来吓唬你了但我其实很期待看你反应 ” 的节奏。上次游乐园试运营、正式服连着来的时候，也是这个步调。如果把村长的每次出场录下来做傅里叶变换，峰值频率大概在“焦虑”和“幸灾乐祸”之间。\n门被一脚踹开。“小白！游乐园又来任务了！”他手里挥着一封烫金信封，脸上的表情比上次更兴奋。\n我接过信封，没急着拆。“村长，让我猜猜——波动值 II，规则一个字没改，数据量加了一串零。对吗？”\n村长愣了一下，显然没料到我预判了他的预判。我把信封拆开，果然：\n3753 - 范围内总波动值 II 规则：同 3751 数据范围：1 ≤ num1 ≤ num2 ≤ 10¹⁵\n10¹⁵，十五位数。上次 3751 是 10⁵，六位数，暴力法直接遍历，几十万次操作，眨眼就跑完了。这次如果用同样的暴力对付 10¹⁵，遍历次数得用“万亿”做单位——从几十万到万亿，差了整整十个数量级。上次几十万次耗时不到 0.1 秒，这次暴力能跑到地老天荒。\n但我没有慌，甚至有点小得意。因为昨天的我在老勇者敲烟斗的节奏里，已经把数位 DP 的核心思想刻入脑海了。不光学会了“怎么搜”，还搞懂了“怎么记”——限制状态和计算状态分家，波动值从行李升级成战报。而那两个版本的代码，昨天就躺进我的魔法书里了，一字一句，墨迹都还没褪色。\n“村长，”我把茶杯放下，翻开魔法书到那两页代码，“你看，昨天老勇者教了我两种数位 DP 写法。第一种‘行李版’，把 waviness 放在参数里一路扛下去——最符合直觉，填完所有位直接返回累加好的成绩单。第二种‘战报版’，把 waviness 踢出参数表，变成返回值的一部分，每个子树统一上报 (子树波动值总和, 子树合法数字个数)。”\n我用手指点了点代码里的核心差异，继续解释：“说句公道话，今天这数据量，两种其实都能跑。10¹⁵ 是十五位数，状态总数也就几万个，行李版的缓存虽然会漏掉一些命中，但状态空间本身不大，硬跑也能过——顶多比战报版多喘两口气，不至于升天。”\n“但你猜我选哪个？”我把魔法书往他面前推了推，指着第二种写法旁边昨天重重划下的那行下划线——波动值是战报，不是行李。“行李版今天能过，但如果数据量换到 10¹⁸ 呢？换到 10¹⁰⁰ 呢？行李扛一路，缓存命中率随数据量一路下滑；战报往上交，数据涨到天上去也没关系。既然昨天已经想明白了，今天就没必要退回去走老路。”\n我把战报版代码原封不动贴进提交框，一个字符都没改，点了提交。绿色大勾弹出来的时候，村长正在喝我给他倒的茶。他看了看屏幕上的 Accepted，又看了看耗时——表情从“我要看你翻车”变成了“你怎么又不翻车”，嘴唇抖了三抖，最后只憋出一句：“就这？”\n“就这。”我把魔法书翻到昨天写的那条批注——“波动值是战报，不是行李”——在下面补了一行新记录：\n3753 - 范围内总波动值 II 解法：同 3751 数位 DP 战报版，O(位数 × 状态数)，代码零改动 数据范围：num2 ≤ 10¹⁵，位数从 6 涨到 16，状态数几乎没变 心得体会：行李版今天也能过，但既然学会了看战报，就没必要再扛行李。好的状态设计，不惧数据膨胀——昨天多想十分钟，今天省下十个数量级，连代码都不用改一行。\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_ff27af45f451325d.jpg" width="300"
+                            height="397" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">✏️</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">我的小站</a></h1>
+            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/iCurious-D'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <!--
+tags: [logo, website, hosting, project, programming, software, development]
+category: Brand
+version: "1.18"
+unicode: "ec1c"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <!--
+category: Buildings
+tags: [apple, devices, connection, link, wifi, bluetooth]
+version: "1.20"
+unicode: "ecde"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M19 8.71l-5.333 -4.148a2.666 2.666 0 0 0 -3.274 0l-5.334 4.148a2.665 2.665 0 0 0 -1.029 2.105v7.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-7.2c0 -.823 -.38 -1.6 -1.03 -2.105" />
+  <path d="M16 15c-2.21 1.333 -5.792 1.333 -8 0" />
+</svg>
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/posts/' >
+                
+                
+                
+                    <!--
+tags: [news, newspaper, media, blog]
+version: "1.69"
+unicode: "f1e2"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+  <path d="M7 8h10" />
+  <path d="M7 12h10" />
+  <path d="M7 16h10" />
+</svg>
+
+                
+                <span>文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <!--
+category: System
+tags: [tick, person, account, role]
+version: "1.0"
+unicode: "eb49"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+  <path d="M15 19l2 2l4 -4" />
+</svg>
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#-游乐园峰谷过山车-ii当数据量膨胀到万亿级">🎮 游乐园峰谷过山车 II：当数据量膨胀到万亿级</a></li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
+                Leetcode题解故事
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/leetcode_stories/26-06-05/">leetcode3753：游乐园峰谷过山车II</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-06-05T11:12:16&#43;08:00'>6月 05, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="-游乐园峰谷过山车-ii当数据量膨胀到万亿级">🎮 游乐园峰谷过山车 II：当数据量膨胀到万亿级
+</h2><p>“来了。”</p>
+<p>我靠窗坐着，魔法书摊在膝上，手边一杯茶冒着热气。窗外传来熟悉的脚步声——不是那种出大事的急匆匆跑法，而是不紧不慢、带着“ 我要来吓唬你了但我其实很期待看你反应 ” 的节奏。上次游乐园试运营、正式服连着来的时候，也是这个步调。如果把村长的每次出场录下来做傅里叶变换，峰值频率大概在“焦虑”和“幸灾乐祸”之间。</p>
+<p>门被一脚踹开。“小白！游乐园又来任务了！”他手里挥着一封烫金信封，脸上的表情比上次更兴奋。</p>
+<p>我接过信封，没急着拆。“村长，让我猜猜——波动值 II，规则一个字没改，数据量加了一串零。对吗？”</p>
+<p>村长愣了一下，显然没料到我预判了他的预判。我把信封拆开，果然：</p>
+<blockquote>
+<p><strong>3753 - 范围内总波动值 II</strong>
+规则：同 3751
+数据范围：1 ≤ num1 ≤ num2 ≤ 10¹⁵</p>
+</blockquote>
+<p>10¹⁵，十五位数。上次 3751 是 10⁵，六位数，暴力法直接遍历，几十万次操作，眨眼就跑完了。这次如果用同样的暴力对付 10¹⁵，遍历次数得用“万亿”做单位——从几十万到万亿，差了整整十个数量级。上次几十万次耗时不到 0.1 秒，这次暴力能跑到地老天荒。</p>
+<p>但我没有慌，甚至有点小得意。因为昨天的我在老勇者敲烟斗的节奏里，已经把数位 DP 的核心思想刻入脑海了。不光学会了“怎么搜”，还搞懂了“怎么记”——限制状态和计算状态分家，波动值从行李升级成战报。而那两个版本的代码，昨天就躺进我的魔法书里了，一字一句，墨迹都还没褪色。</p>
+<p>“村长，”我把茶杯放下，翻开魔法书到那两页代码，“你看，昨天老勇者教了我两种数位 DP 写法。第一种‘行李版’，把 <code>waviness</code> 放在参数里一路扛下去——最符合直觉，填完所有位直接返回累加好的成绩单。第二种‘战报版’，把 <code>waviness</code> 踢出参数表，变成返回值的一部分，每个子树统一上报 <code>(子树波动值总和, 子树合法数字个数)</code>。”</p>
+<p>我用手指点了点代码里的核心差异，继续解释：“说句公道话，今天这数据量，两种其实都能跑。10¹⁵ 是十五位数，状态总数也就几万个，行李版的缓存虽然会漏掉一些命中，但状态空间本身不大，硬跑也能过——顶多比战报版多喘两口气，不至于升天。”</p>
+<p>“但你猜我选哪个？”我把魔法书往他面前推了推，指着第二种写法旁边昨天重重划下的那行下划线——<strong>波动值是战报，不是行李</strong>。“行李版今天能过，但如果数据量换到 10¹⁸ 呢？换到 10¹⁰⁰ 呢？行李扛一路，缓存命中率随数据量一路下滑；战报往上交，数据涨到天上去也没关系。既然昨天已经想明白了，今天就没必要退回去走老路。”</p>
+<p>我把战报版代码原封不动贴进提交框，一个字符都没改，点了提交。绿色大勾弹出来的时候，村长正在喝我给他倒的茶。他看了看屏幕上的 Accepted，又看了看耗时——表情从“我要看你翻车”变成了“你怎么又不翻车”，嘴唇抖了三抖，最后只憋出一句：“就这？”</p>
+<p>“就这。”我把魔法书翻到昨天写的那条批注——“波动值是战报，不是行李”——在下面补了一行新记录：</p>
+<blockquote>
+<p><strong>3753 - 范围内总波动值 II</strong>
+解法：同 3751 数位 DP 战报版，O(位数 × 状态数)，代码零改动
+数据范围：num2 ≤ 10¹⁵，位数从 6 涨到 16，状态数几乎没变
+心得体会：行李版今天也能过，但既然学会了看战报，就没必要再扛行李。好的状态设计，不惧数据膨胀——昨天多想十分钟，今天省下十个数量级，连代码都不用改一行。</p>
+</blockquote>
+<p>村长看了看我魔法书上的批注，默默喝完了杯里的茶。他站起来走到门口，顿了顿，没回头：“下次要是再来个 III，范围扩到 10¹⁰⁰——你还这么稳？”</p>
+<p>“理论上，”我重新拿起拨火棍，往锅炉里又添了根柴，“位数再涨十倍，状态数也就多个零。只要问题本质没变，战报永远管用。”</p>
+<p>村长哼了一声，推开门的瞬间，风把他半句话吹了进来：“……你小子，学了点东西。”</p>
+<p>门关上。我靠在椅背上，火苗在锅炉里欢快地蹿着。魔法书摊在膝上，两行批注一上一下——3751 教会我怎么写数位 DP，3753 教会我一个更重要的道理——最好的代码不是跑得最快的，而是数据量涨一百亿倍也不用改一行的。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E9%A2%98%E8%A7%A3/">题解</a>
+        
+            <a href="/tags/%E6%95%85%E4%BA%8B/">故事</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-04/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3751：游乐园峰谷过山车</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-03/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3635：游乐园正式服的挑战</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-02/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3633：游乐园大冒险</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="iCurious-D/icurious-d.github.io"
+    data-repo-id="R_kgDOSu3GEQ"
+    data-category="General"
+    data-category-id="DIC_kwDOSu3GEc4C-u1E"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 我的小站
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

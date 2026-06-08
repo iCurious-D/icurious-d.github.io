@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 树根猎人：从一堆父子关系里揪出老祖宗 一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&ldquo;邻村要建棵树，你帮忙看看。&rdquo;\n&ldquo;建树？&ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：[parent, child, isLeft]。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。\n&ldquo;清官难断家务事，&ldquo;我把字条往桌上一拍，露出职业性的微笑，&ldquo;但算法能解父子局。&rdquo;\n说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：\n第一步：补全亲属关系网\n对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。\n第二步：找出老祖宗\n那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 child 位置上出现的都是娃，而只有老祖宗——那个从来没当过子女的人——永远不会出现在 child 位置上。所以策略很简单：把所有出现过的 child 收集到一个集合里，再遍历所有节点，哪个不在 child 集合里，哪个就是根。\n“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”\n我搓搓手，开始落代码，先准备两样东西：\n一个哈希表 nodes：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。 一个集合 children：专门登记所有当过娃的节点，用来筛根。这就是我们的&quot;有爹人士名单&rdquo;。 nodes = {} children = set() 接着，遍历 descriptions 里的每一条 [parent, child, isLeft]。对于 parent 和 child，先去 nodes 里查一下：没有就当场 new 一个 TreeNode 塞进去。然后，根据 isLeft 把 child 挂到 parent 左边或右边，父子关系定下来。最后把 child 扔进 children 集合，留个案底，证明这孩子有爹。\nfor parent, child, is_left in descriptions: if parent not in nodes: nodes[parent] = TreeNode(parent) if child not in nodes: nodes[child] = TreeNode(child) if is_left: nodes[parent].left = nodes[child] else: nodes[parent].right = nodes[child] children.add(child) 遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 children 集合里的人：\n">
+<title>leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-07/'>
+
+<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗">
+<meta property='og:description' content="🎮 树根猎人：从一堆父子关系里揪出老祖宗 一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&ldquo;邻村要建棵树，你帮忙看看。&rdquo;\n&ldquo;建树？&ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：[parent, child, isLeft]。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。\n&ldquo;清官难断家务事，&ldquo;我把字条往桌上一拍，露出职业性的微笑，&ldquo;但算法能解父子局。&rdquo;\n说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：\n第一步：补全亲属关系网\n对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。\n第二步：找出老祖宗\n那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 child 位置上出现的都是娃，而只有老祖宗——那个从来没当过子女的人——永远不会出现在 child 位置上。所以策略很简单：把所有出现过的 child 收集到一个集合里，再遍历所有节点，哪个不在 child 集合里，哪个就是根。\n“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”\n我搓搓手，开始落代码，先准备两样东西：\n一个哈希表 nodes：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。 一个集合 children：专门登记所有当过娃的节点，用来筛根。这就是我们的&quot;有爹人士名单&rdquo;。 nodes = {} children = set() 接着，遍历 descriptions 里的每一条 [parent, child, isLeft]。对于 parent 和 child，先去 nodes 里查一下：没有就当场 new 一个 TreeNode 塞进去。然后，根据 isLeft 把 child 挂到 parent 左边或右边，父子关系定下来。最后把 child 扔进 children 集合，留个案底，证明这孩子有爹。\nfor parent, child, is_left in descriptions: if parent not in nodes: nodes[parent] = TreeNode(parent) if child not in nodes: nodes[child] = TreeNode(child) if is_left: nodes[parent].left = nodes[child] else: nodes[parent].right = nodes[child] children.add(child) 遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 children 集合里的人：\n">
+<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-07/'>
+<meta property='og:site_name' content='我的小站'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-07T22:40:48&#43;08:00'/><meta property='article:modified_time' content='2026-06-07T22:40:48&#43;08:00'/>
+<meta name="twitter:title" content="leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗">
+<meta name="twitter:description" content="🎮 树根猎人：从一堆父子关系里揪出老祖宗 一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&ldquo;邻村要建棵树，你帮忙看看。&rdquo;\n&ldquo;建树？&ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：[parent, child, isLeft]。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。\n&ldquo;清官难断家务事，&ldquo;我把字条往桌上一拍，露出职业性的微笑，&ldquo;但算法能解父子局。&rdquo;\n说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：\n第一步：补全亲属关系网\n对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。\n第二步：找出老祖宗\n那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 child 位置上出现的都是娃，而只有老祖宗——那个从来没当过子女的人——永远不会出现在 child 位置上。所以策略很简单：把所有出现过的 child 收集到一个集合里，再遍历所有节点，哪个不在 child 集合里，哪个就是根。\n“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”\n我搓搓手，开始落代码，先准备两样东西：\n一个哈希表 nodes：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。 一个集合 children：专门登记所有当过娃的节点，用来筛根。这就是我们的&quot;有爹人士名单&rdquo;。 nodes = {} children = set() 接着，遍历 descriptions 里的每一条 [parent, child, isLeft]。对于 parent 和 child，先去 nodes 里查一下：没有就当场 new 一个 TreeNode 塞进去。然后，根据 isLeft 把 child 挂到 parent 左边或右边，父子关系定下来。最后把 child 扔进 children 集合，留个案底，证明这孩子有爹。\nfor parent, child, is_left in descriptions: if parent not in nodes: nodes[parent] = TreeNode(parent) if child not in nodes: nodes[child] = TreeNode(child) if is_left: nodes[parent].left = nodes[child] else: nodes[parent].right = nodes[child] children.add(child) 遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 children 集合里的人：\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_ff27af45f451325d.jpg" width="300"
+                            height="397" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">✏️</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">我的小站</a></h1>
+            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/iCurious-D'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <!--
+tags: [logo, website, hosting, project, programming, software, development]
+category: Brand
+version: "1.18"
+unicode: "ec1c"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <!--
+category: Buildings
+tags: [apple, devices, connection, link, wifi, bluetooth]
+version: "1.20"
+unicode: "ecde"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M19 8.71l-5.333 -4.148a2.666 2.666 0 0 0 -3.274 0l-5.334 4.148a2.665 2.665 0 0 0 -1.029 2.105v7.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-7.2c0 -.823 -.38 -1.6 -1.03 -2.105" />
+  <path d="M16 15c-2.21 1.333 -5.792 1.333 -8 0" />
+</svg>
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/posts/' >
+                
+                
+                
+                    <!--
+tags: [news, newspaper, media, blog]
+version: "1.69"
+unicode: "f1e2"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+  <path d="M7 8h10" />
+  <path d="M7 12h10" />
+  <path d="M7 16h10" />
+</svg>
+
+                
+                <span>文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <!--
+category: System
+tags: [tick, person, account, role]
+version: "1.0"
+unicode: "eb49"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+  <path d="M15 19l2 2l4 -4" />
+</svg>
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#-树根猎人从一堆父子关系里揪出老祖宗">🎮 树根猎人：从一堆父子关系里揪出老祖宗</a></li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
+                Leetcode题解故事
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/leetcode_stories/26-06-07/">leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-06-07T22:40:48&#43;08:00'>6月 07, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="-树根猎人从一堆父子关系里揪出老祖宗">🎮 树根猎人：从一堆父子关系里揪出老祖宗
+</h2><p>一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&ldquo;邻村要建棵树，你帮忙看看。&rdquo;</p>
+<p>&ldquo;建树？&ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：<code>[parent, child, isLeft]</code>。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。</p>
+<p>&ldquo;清官难断家务事，&ldquo;我把字条往桌上一拍，露出职业性的微笑，&ldquo;但算法能解父子局。&rdquo;</p>
+<p>说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：</p>
+<p><strong>第一步：补全亲属关系网</strong><br>
+对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。</p>
+<p><strong>第二步：找出老祖宗</strong><br>
+那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 <code>child</code> 位置上出现的都是娃，而只有<strong>老祖宗</strong>——那个从来没当过子女的人——永远不会出现在 <code>child</code> 位置上。所以策略很简单：把所有出现过的 <code>child</code> 收集到一个集合里，再遍历所有节点，哪个不在 <code>child</code> 集合里，哪个就是根。</p>
+<p>“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”</p>
+<p>我搓搓手，开始落代码，先准备两样东西：</p>
+<ol>
+<li>一个哈希表 <code>nodes</code>：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。</li>
+<li>一个集合 <code>children</code>：专门登记所有当过娃的节点，用来筛根。这就是我们的&quot;有爹人士名单&rdquo;。</li>
+</ol>
+<pre tabindex="0"><code>nodes = {}   
+children = set()
+</code></pre><p>接着，遍历 <code>descriptions</code> 里的每一条 <code>[parent, child, isLeft]</code>。对于 <code>parent</code> 和 <code>child</code>，先去 <code>nodes</code> 里查一下：没有就当场 <code>new</code> 一个 <code>TreeNode</code> 塞进去。然后，根据 <code>isLeft</code> 把 <code>child</code> 挂到 <code>parent</code> 左边或右边，父子关系定下来。最后把 <code>child</code> 扔进 <code>children</code> 集合，留个案底，证明这孩子有爹。</p>
+<pre tabindex="0"><code>for parent, child, is_left in descriptions:
+    if parent not in nodes:
+        nodes[parent] = TreeNode(parent)
+    if child not in nodes:
+        nodes[child] = TreeNode(child)
+    if is_left:
+        nodes[parent].left = nodes[child]
+    else:
+        nodes[parent].right = nodes[child]
+    children.add(child)
+</code></pre><p>遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 <code>children</code> 集合里的人：</p>
+<pre tabindex="0"><code>for x, node in nodes.items():
+    if x not in children:
+        return node
+</code></pre><p>一趟主循环把建节点、挂关系、登记子女全部搞定，最后再来一趟小循环抓老祖。总复杂度 O(n)，线性扫描，丝滑流畅。</p>
+<p>村长很快就过来要结果了。他戴着老花镜，眯着眼扫了下代码，点了点头：&ldquo;哈希表挂节点这种基操就不夸你了——能想到把找根的线索嵌在建节点的同一个循环里，边建边登记，最后差集一把梭，说明你开始有‘数据处理流水线’的意识了。&rdquo;</p>
+<p>他把字条翻了个面，确认背面没有隐藏附加条件，满意地往怀里一揣：&ldquo;行了，邻村还等着这棵树回去祭祖呢。对了，他们说要感谢你，送了你一袋土豆。&rdquo;</p>
+<p>&ldquo;……土豆？&rdquo;</p>
+<p>&ldquo;嗯，说是自家种的，纯天然无污染。&rdquo;</p>
+<p>我看了看桌上那碗被信鸽毁掉的方便面，又想了想这趟委托的收入，叹了口气。算了，至少不是 Bug。</p>
+<p>送走村长后，我拆开那袋土豆，发现下面还压着一张小纸条：</p>
+<p><em>&ldquo;多谢相助。另：如果你愿意帮我们优化一下农田灌溉系统的最短路径算法，报酬是十袋土豆。&rdquo;</em></p>
+<p>我一把抓起纸条，搓成一团，扔了出去。</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E9%A2%98%E8%A7%A3/">题解</a>
+        
+            <a href="/tags/%E6%95%85%E4%BA%8B/">故事</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-06/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode2574：空间复杂度O(1)？村长说这是节俭美德！</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-05/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3753：游乐园峰谷过山车II</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-04/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3751：游乐园峰谷过山车</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-03/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3635：游乐园正式服的挑战</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-02/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3633：游乐园大冒险</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="iCurious-D/icurious-d.github.io"
+    data-repo-id="R_kgDOSu3GEQ"
+    data-category="General"
+    data-category-id="DIC_kwDOSu3GEc4C-u1E"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 我的小站
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

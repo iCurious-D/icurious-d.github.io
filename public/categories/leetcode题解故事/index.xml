@@ -6,7 +6,332 @@
         <description>Recent content in Leetcode题解故事 on 我的小站</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh</language>
-        <lastBuildDate>Wed, 03 Jun 2026 10:39:17 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 08 Jun 2026 12:47:26 +0800</lastBuildDate><atom:link href="http://localhost:1313/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>leetcode2161 装备分拣：一行流的诱惑与分桶的正道</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-08/</link>
+        <pubDate>Mon, 08 Jun 2026 12:47:26 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-08/</guid>
+        <description>&lt;h2 id=&#34;-装备分拣一行流的诱惑与分桶的正道&#34;&gt;🎮 装备分拣：一行流的诱惑与分桶的正道
+&lt;/h2&gt;&lt;p&gt;“小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——&lt;code&gt;[9, 12, 5, 10, 14, 3, 10]&lt;/code&gt;。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”&lt;/p&gt;
+&lt;p&gt;我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。&lt;/p&gt;
+&lt;p&gt;正准备掏分桶代码，我脑子突然一抽：等等，Python 的 &lt;code&gt;sort&lt;/code&gt; 不是稳定排序吗？Timsort 亲口承诺“相同键值保序”，那我直接用 &lt;code&gt;key&lt;/code&gt; 函数把小于 pivot 的映射成 -1，等于的映射成 0，大于的映射成 1，然后排一遍不就行了？一行流，帅就完事。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nums&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sort(key&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;lambda&lt;/span&gt; x: (x &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; pivot) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; (x &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; pivot))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;跑样例，输出完美。提交，AC 弹出。我往椅背上一靠，翘起二郎腿，心里已经开始给自己加戏——一行代码搞定装备分拣，村长直呼内行，精英团连夜给我加 Buff，仓库管理员感动得要把女儿许配给我。&lt;/p&gt;
+&lt;p&gt;正美着，后脑勺“啪”地挨了一下。&lt;/p&gt;
+&lt;p&gt;回头一看，老勇者叼着棒棒糖站在我身后，手指还保持着弹脑瓜崩的姿势。“你觉得这就算写完了？”&lt;/p&gt;
+&lt;p&gt;“AC 了啊！”我捂着后脑勺，指着屏幕上的绿色大勾。&lt;/p&gt;
+&lt;p&gt;“AC 不代表没毛病。”他点了点屏幕，“你这 &lt;code&gt;sort&lt;/code&gt;，时间复杂度多少？”&lt;/p&gt;
+&lt;p&gt;“O(n log n)……”我声音小了一半，后脑勺还隐隐作痛。&lt;/p&gt;
+&lt;p&gt;”题目让你分组，不是让你排序。分组是 O(n) 的活——看一眼战力值，扔进对应的箱子，完事。你调 &lt;code&gt;sort&lt;/code&gt;，等于雇了个全职排序师来当门卫。排序引擎不知道你只想分堆——它勤勤恳恳地比较、归并、插入，log n 层递归树跑满，就为了完成一个你早就知道答案的任务。而且 Timsort 底层 merge 要临时数组，额外空间也是 O(n)——你这一行流，时间复杂度输了，空间也没省。”&lt;/p&gt;
+&lt;p&gt;他把棒棒糖往嘴角一叼：“一行流看着帅，语义不对。用排序引擎做分组，技术债，利息 O(n log n)。哪天副本掉了一百万件装备，Boss 都刷新两轮了你的代码还在排序，勇士团站门口干等，回头差评全写你名字。”&lt;/p&gt;
+&lt;p&gt;我脸上的得意全部转移到了脚趾上。我默默地把那一行流注释掉，老老实实掏出了分桶三数组的写法：&lt;/p&gt;
+&lt;p&gt;遍历整个装备列表，比&lt;code&gt;pivot&lt;/code&gt;弱的扔进 &lt;code&gt;left&lt;/code&gt; 箱发往新手村；相等的扔进 &lt;code&gt;mid&lt;/code&gt; 箱存仓库；比&lt;code&gt;pivot&lt;/code&gt;强的扔进 &lt;code&gt;right&lt;/code&gt; 箱送精英团。因为是从左往右按掉落顺序依次遍历的，每个箱子里的装备天然保持了原来的先后顺序，最后把三个箱子的装备按顺序拼接，分拣完毕：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pivotArray&lt;/span&gt;(self, nums: List[int], pivot: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; List[int]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left, mid, right &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [], [], []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; nums:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; pivot:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            left&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; pivot:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            mid&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            right&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; left &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; mid &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; right
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;O(n) 时间，O(n) 额外空间，语义清晰，逻辑直白。村长看了眼分好的三箱装备，满意地点点头，抱着箱子去仓库贴标签了。&lt;/p&gt;
+&lt;p&gt;老勇者看着我把分桶版本提交上去，这次没弹脑瓜崩，点了点头：“记住，一行流能 AC 不代表它是最优解。&lt;code&gt;sort&lt;/code&gt; 是通用排序，它不知道你只想分堆。能现场分组的，就别排序。”&lt;/p&gt;
+&lt;p&gt;我揉着后脑勺，默默记下了。但盯着那三个桶，还是忍不住追问了一句：“空间复杂度有没有优化空间？”&lt;/p&gt;
+&lt;p&gt;老勇者瞥了我一眼：“你愿意拿时间换，就可以。”&lt;/p&gt;
+&lt;p&gt;“原地交换加插入排序，能压到 O(1) 空间——每遇到一个元素，先判断它该去哪边，再用位移操作把它挪到对应位置，保证组内顺序不变。但每次挪位置都是 O(n)，总复杂度 O(n²)。O(1) 空间换 O(n²) 时间，等于徒手搬一百趟装备省一个空间戒指，血亏。”&lt;/p&gt;
+&lt;p&gt;他把棒棒糖往嘴里一叼，拍了拍我肩膀：“编程跟打副本一个道理——理解机制比硬刚更重要。稳定分区必须付出代价，要么付空间，要么付时间。n ≤ 10⁵ 的数据量，O(n) 空间换 O(n) 时间是血赚。省空间的念头，留着对付那些不要求稳定性的题——那才是原地交换大展拳脚的地方。”&lt;/p&gt;
+&lt;p&gt;窗外，勇士团扛着新到货的装备箱浩浩荡荡走过，村长跟在后面一路小跑，手里还抱着我分好的三摞清单。我把魔法书翻到今天这一页，在旁边批了三行：能分组的，就别排序。稳定分区，空间换时间是正道。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-07/</link>
+        <pubDate>Sun, 07 Jun 2026 22:40:48 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-07/</guid>
+        <description>&lt;h2 id=&#34;-树根猎人从一堆父子关系里揪出老祖宗&#34;&gt;🎮 树根猎人：从一堆父子关系里揪出老祖宗
+&lt;/h2&gt;&lt;p&gt;一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&amp;ldquo;邻村要建棵树，你帮忙看看。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;建树？&amp;ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：&lt;code&gt;[parent, child, isLeft]&lt;/code&gt;。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;清官难断家务事，&amp;ldquo;我把字条往桌上一拍，露出职业性的微笑，&amp;ldquo;但算法能解父子局。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第一步：补全亲属关系网&lt;/strong&gt;&lt;br&gt;
+对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二步：找出老祖宗&lt;/strong&gt;&lt;br&gt;
+那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 &lt;code&gt;child&lt;/code&gt; 位置上出现的都是娃，而只有&lt;strong&gt;老祖宗&lt;/strong&gt;——那个从来没当过子女的人——永远不会出现在 &lt;code&gt;child&lt;/code&gt; 位置上。所以策略很简单：把所有出现过的 &lt;code&gt;child&lt;/code&gt; 收集到一个集合里，再遍历所有节点，哪个不在 &lt;code&gt;child&lt;/code&gt; 集合里，哪个就是根。&lt;/p&gt;
+&lt;p&gt;“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”&lt;/p&gt;
+&lt;p&gt;我搓搓手，开始落代码，先准备两样东西：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;一个哈希表 &lt;code&gt;nodes&lt;/code&gt;：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。&lt;/li&gt;
+&lt;li&gt;一个集合 &lt;code&gt;children&lt;/code&gt;：专门登记所有当过娃的节点，用来筛根。这就是我们的&amp;quot;有爹人士名单&amp;rdquo;。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;nodes = {}   
+children = set()
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;接着，遍历 &lt;code&gt;descriptions&lt;/code&gt; 里的每一条 &lt;code&gt;[parent, child, isLeft]&lt;/code&gt;。对于 &lt;code&gt;parent&lt;/code&gt; 和 &lt;code&gt;child&lt;/code&gt;，先去 &lt;code&gt;nodes&lt;/code&gt; 里查一下：没有就当场 &lt;code&gt;new&lt;/code&gt; 一个 &lt;code&gt;TreeNode&lt;/code&gt; 塞进去。然后，根据 &lt;code&gt;isLeft&lt;/code&gt; 把 &lt;code&gt;child&lt;/code&gt; 挂到 &lt;code&gt;parent&lt;/code&gt; 左边或右边，父子关系定下来。最后把 &lt;code&gt;child&lt;/code&gt; 扔进 &lt;code&gt;children&lt;/code&gt; 集合，留个案底，证明这孩子有爹。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;for parent, child, is_left in descriptions:
+    if parent not in nodes:
+        nodes[parent] = TreeNode(parent)
+    if child not in nodes:
+        nodes[child] = TreeNode(child)
+    if is_left:
+        nodes[parent].left = nodes[child]
+    else:
+        nodes[parent].right = nodes[child]
+    children.add(child)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 &lt;code&gt;children&lt;/code&gt; 集合里的人：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;for x, node in nodes.items():
+    if x not in children:
+        return node
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;一趟主循环把建节点、挂关系、登记子女全部搞定，最后再来一趟小循环抓老祖。总复杂度 O(n)，线性扫描，丝滑流畅。&lt;/p&gt;
+&lt;p&gt;村长很快就过来要结果了。他戴着老花镜，眯着眼扫了下代码，点了点头：&amp;ldquo;哈希表挂节点这种基操就不夸你了——能想到把找根的线索嵌在建节点的同一个循环里，边建边登记，最后差集一把梭，说明你开始有‘数据处理流水线’的意识了。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他把字条翻了个面，确认背面没有隐藏附加条件，满意地往怀里一揣：&amp;ldquo;行了，邻村还等着这棵树回去祭祖呢。对了，他们说要感谢你，送了你一袋土豆。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;……土豆？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;嗯，说是自家种的，纯天然无污染。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我看了看桌上那碗被信鸽毁掉的方便面，又想了想这趟委托的收入，叹了口气。算了，至少不是 Bug。&lt;/p&gt;
+&lt;p&gt;送走村长后，我拆开那袋土豆，发现下面还压着一张小纸条：&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&amp;ldquo;多谢相助。另：如果你愿意帮我们优化一下农田灌溉系统的最短路径算法，报酬是十袋土豆。&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;我一把抓起纸条，搓成一团，扔了出去。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode2574：空间复杂度O(1)？村长说这是节俭美德！</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-06/</link>
+        <pubDate>Sat, 06 Jun 2026 12:36:25 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-06/</guid>
+        <description>&lt;p&gt;🎮 空间复杂度O(1)？村长说这是节俭美德！&lt;/p&gt;
+&lt;p&gt;“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：&lt;code&gt;[10, 4, 8, 3]&lt;/code&gt;，“你看，这是咱村拔河比赛的对阵表！”&lt;/p&gt;
+&lt;p&gt;我定睛一看，“这……不就是个数组吗？”&lt;/p&gt;
+&lt;p&gt;“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”&lt;/p&gt;
+&lt;p&gt;我挠挠头：“&amp;hellip;&amp;hellip;求每个位置的 &lt;code&gt;|leftSum - rightSum|&lt;/code&gt; ？”&lt;/p&gt;
+&lt;p&gt;“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”&lt;/p&gt;
+&lt;p&gt;我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;leftRightDifference&lt;/span&gt;(nums):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(nums)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left_sum &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; n
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    right_sum &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; n
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 从左到右，计算每个位置的左侧总和&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, n):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        left_sum[i] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; left_sum[i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; nums[i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 从右到左，计算每个位置的右侧总和&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        right_sum[i] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; right_sum[i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; nums[i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 计算差值的绝对值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        answer[i] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; abs(left_sum[i] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; right_sum[i])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; answer
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。&lt;/p&gt;
+&lt;p&gt;“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——&lt;code&gt;left_sum&lt;/code&gt; 、&lt;code&gt;right_sum&lt;/code&gt; 、&lt;code&gt;answer&lt;/code&gt; ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”&lt;/p&gt;
+&lt;p&gt;我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。&lt;/p&gt;
+&lt;p&gt;“节省……”我咬着笔杆，盯着那三个数组开始琢磨。&lt;code&gt;left_sum&lt;/code&gt; 好办——用一个 &lt;code&gt;left&lt;/code&gt; 变量一路滚到底就行。从最左边往右走，走哪儿加哪儿，根本不用开数组，一个变量搞定。但 &lt;code&gt;right_sum&lt;/code&gt; 怎么办？右边队员的体重和，在从左往右走的时候是未知的——还没走到右边呢，怎么知道右边那群人加起来多重？除非我先算一遍总和。&lt;/p&gt;
+&lt;p&gt;总和！我一个激灵，在草稿纸上划拉起来：设全队总重 &lt;code&gt;total = sum(nums)&lt;/code&gt;，对于位置 i，左边的体重和是 &lt;code&gt;left&lt;/code&gt;，当前这个人自己的体重是 &lt;code&gt;nums[i]&lt;/code&gt;，那右边的和&lt;code&gt;right&lt;/code&gt;不就是 &lt;code&gt;total - left - nums[i]&lt;/code&gt; 吗？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;answer[i] = |left - right|&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;right = total - left - nums[i]&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;answer[i] = |left - (total - left - nums[i])| = |2 * left + nums[i] - total|&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我整理了下思路：&lt;code&gt;left_sum&lt;/code&gt; 用一个滚动的变量 &lt;code&gt;left&lt;/code&gt; 取代，&lt;code&gt;right_sum&lt;/code&gt; 用 &lt;code&gt;total - left - nums[i]&lt;/code&gt; 表达式消解，&lt;code&gt;answer&lt;/code&gt; 干脆直接写回原数组 &lt;code&gt;nums&lt;/code&gt;，连额外空间都省了。代码从三循环三数组，缩成一趟遍历原地修改：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;def leftRightDifference(nums):
+    total = sum(nums)       # 全队总体重
+    left = 0                # 左边已经算过的人总体重，初始为 0
+    for i, num in enumerate(nums):      
+        nums[i] = abs(left * 2 + num - total)  # 计算差值，直接写回原数组
+        left += num         # 把当前人算到左边的队伍里
+    return nums
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;时间复杂度 O(n)，空间复杂度 O(1)（不算答案数组的话），是真正的&amp;quot;原地算法&amp;quot;！&lt;/p&gt;
+&lt;p&gt;“三张表变零张，好啊！连草纸钱都省了！这才是咱们村的作风！” 村长高兴地直拍大腿，那兴奋劲儿比他自己拔赢了比赛还夸张。&lt;/p&gt;
+&lt;p&gt;老头把优化后的对阵表往怀里一揣，乐呵呵地走了。临出门又回头喊了一嗓子，“省下来的钱，回头给你加个鸡腿！我先去排兵布阵，下午预赛，记得来操场看拔河！”&lt;/p&gt;
+&lt;p&gt;门关上，我把拨火棍往锅炉边一靠，打开魔法书给 2574 也留了行记录：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;2574 - 左右元素和的差值&lt;/strong&gt;
+解法：total 推右边和，数学去冗余。一趟遍历原地修改，O(n) 时间，O(1) 额外空间
+心得：右边和不是独立信息，是派生值。用老勇者的话说——能现场算的，就别存。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3753：游乐园峰谷过山车II</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-05/</link>
+        <pubDate>Fri, 05 Jun 2026 11:12:16 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-05/</guid>
+        <description>&lt;h2 id=&#34;-游乐园峰谷过山车-ii当数据量膨胀到万亿级&#34;&gt;🎮 游乐园峰谷过山车 II：当数据量膨胀到万亿级
+&lt;/h2&gt;&lt;p&gt;“来了。”&lt;/p&gt;
+&lt;p&gt;我靠窗坐着，魔法书摊在膝上，手边一杯茶冒着热气。窗外传来熟悉的脚步声——不是那种出大事的急匆匆跑法，而是不紧不慢、带着“ 我要来吓唬你了但我其实很期待看你反应 ” 的节奏。上次游乐园试运营、正式服连着来的时候，也是这个步调。如果把村长的每次出场录下来做傅里叶变换，峰值频率大概在“焦虑”和“幸灾乐祸”之间。&lt;/p&gt;
+&lt;p&gt;门被一脚踹开。“小白！游乐园又来任务了！”他手里挥着一封烫金信封，脸上的表情比上次更兴奋。&lt;/p&gt;
+&lt;p&gt;我接过信封，没急着拆。“村长，让我猜猜——波动值 II，规则一个字没改，数据量加了一串零。对吗？”&lt;/p&gt;
+&lt;p&gt;村长愣了一下，显然没料到我预判了他的预判。我把信封拆开，果然：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;3753 - 范围内总波动值 II&lt;/strong&gt;
+规则：同 3751
+数据范围：1 ≤ num1 ≤ num2 ≤ 10¹⁵&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;10¹⁵，十五位数。上次 3751 是 10⁵，六位数，暴力法直接遍历，几十万次操作，眨眼就跑完了。这次如果用同样的暴力对付 10¹⁵，遍历次数得用“万亿”做单位——从几十万到万亿，差了整整十个数量级。上次几十万次耗时不到 0.1 秒，这次暴力能跑到地老天荒。&lt;/p&gt;
+&lt;p&gt;但我没有慌，甚至有点小得意。因为昨天的我在老勇者敲烟斗的节奏里，已经把数位 DP 的核心思想刻入脑海了。不光学会了“怎么搜”，还搞懂了“怎么记”——限制状态和计算状态分家，波动值从行李升级成战报。而那两个版本的代码，昨天就躺进我的魔法书里了，一字一句，墨迹都还没褪色。&lt;/p&gt;
+&lt;p&gt;“村长，”我把茶杯放下，翻开魔法书到那两页代码，“你看，昨天老勇者教了我两种数位 DP 写法。第一种‘行李版’，把 &lt;code&gt;waviness&lt;/code&gt; 放在参数里一路扛下去——最符合直觉，填完所有位直接返回累加好的成绩单。第二种‘战报版’，把 &lt;code&gt;waviness&lt;/code&gt; 踢出参数表，变成返回值的一部分，每个子树统一上报 &lt;code&gt;(子树波动值总和, 子树合法数字个数)&lt;/code&gt;。”&lt;/p&gt;
+&lt;p&gt;我用手指点了点代码里的核心差异，继续解释：“说句公道话，今天这数据量，两种其实都能跑。10¹⁵ 是十五位数，状态总数也就几万个，行李版的缓存虽然会漏掉一些命中，但状态空间本身不大，硬跑也能过——顶多比战报版多喘两口气，不至于升天。”&lt;/p&gt;
+&lt;p&gt;“但你猜我选哪个？”我把魔法书往他面前推了推，指着第二种写法旁边昨天重重划下的那行下划线——&lt;strong&gt;波动值是战报，不是行李&lt;/strong&gt;。“行李版今天能过，但如果数据量换到 10¹⁸ 呢？换到 10¹⁰⁰ 呢？行李扛一路，缓存命中率随数据量一路下滑；战报往上交，数据涨到天上去也没关系。既然昨天已经想明白了，今天就没必要退回去走老路。”&lt;/p&gt;
+&lt;p&gt;我把战报版代码原封不动贴进提交框，一个字符都没改，点了提交。绿色大勾弹出来的时候，村长正在喝我给他倒的茶。他看了看屏幕上的 Accepted，又看了看耗时——表情从“我要看你翻车”变成了“你怎么又不翻车”，嘴唇抖了三抖，最后只憋出一句：“就这？”&lt;/p&gt;
+&lt;p&gt;“就这。”我把魔法书翻到昨天写的那条批注——“波动值是战报，不是行李”——在下面补了一行新记录：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;3753 - 范围内总波动值 II&lt;/strong&gt;
+解法：同 3751 数位 DP 战报版，O(位数 × 状态数)，代码零改动
+数据范围：num2 ≤ 10¹⁵，位数从 6 涨到 16，状态数几乎没变
+心得体会：行李版今天也能过，但既然学会了看战报，就没必要再扛行李。好的状态设计，不惧数据膨胀——昨天多想十分钟，今天省下十个数量级，连代码都不用改一行。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;村长看了看我魔法书上的批注，默默喝完了杯里的茶。他站起来走到门口，顿了顿，没回头：“下次要是再来个 III，范围扩到 10¹⁰⁰——你还这么稳？”&lt;/p&gt;
+&lt;p&gt;“理论上，”我重新拿起拨火棍，往锅炉里又添了根柴，“位数再涨十倍，状态数也就多个零。只要问题本质没变，战报永远管用。”&lt;/p&gt;
+&lt;p&gt;村长哼了一声，推开门的瞬间，风把他半句话吹了进来：“……你小子，学了点东西。”&lt;/p&gt;
+&lt;p&gt;门关上。我靠在椅背上，火苗在锅炉里欢快地蹿着。魔法书摊在膝上，两行批注一上一下——3751 教会我怎么写数位 DP，3753 教会我一个更重要的道理——最好的代码不是跑得最快的，而是数据量涨一百亿倍也不用改一行的。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3751：游乐园峰谷过山车</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-04/</link>
+        <pubDate>Thu, 04 Jun 2026 16:50:01 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-04/</guid>
+        <description>&lt;h2 id=&#34;-游乐园峰谷过山车数位dp的修行&#34;&gt;🎮 游乐园峰谷过山车：数位DP的修行
+&lt;/h2&gt;&lt;h4 id=&#34;第一章村长的新任务&#34;&gt;第一章：村长的新任务
+&lt;/h4&gt;&lt;p&gt;&amp;ldquo;小白！别睡了！有新任务了！&amp;rdquo; 村长一脚踹开我家大门，手里挥舞着一份皱巴巴的羊皮卷轴。我一个激灵从床上弹起来，下意识就去摸魔法书——这开场白我太熟了，每次村长用这个句式，后面铁定跟着一道新题。&lt;/p&gt;
+&lt;p&gt;“还记得算法乐园那个没设 base case 的‘递归过山车’吗？”他把卷轴拍在我桌上，“乐园那边连夜开了事故复盘会，紧急关停了项目，总算把老爷爷从轨道上救下来了。他们痛定思痛，在旁边新建了个项目，叫‘数位过山车’。”&lt;/p&gt;
+&lt;p&gt;我拿起卷轴，村长继续解释：“ 这次项目上线前要做安全评估，再不敢直接莽了。新过山车的轨道由数字构成——每个数字就是一段铁轨，每一位是铁轨上的一个连接点。如果某一段连接点比两边都高，就是‘峰’；比两边都低，就是‘谷’。峰和谷太多意味着轨道起伏太剧烈，车开上去乘客容易被动升天，重蹈爷爷的覆辙。所以他们需要计算**‘波动值’**——也就是峰和谷的总数——来评估轨道安全性，决定安全带是用两根还是五根。”&lt;/p&gt;
+&lt;p&gt;我瞅了眼卷轴，上面写着波动值的定义：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;峰&lt;/strong&gt;：某一位数字严格大于左右两边——像山峰一样凸起来，在上面一览众山小。
+&lt;strong&gt;谷&lt;/strong&gt;：某一位数字严格小于左右两边——像山谷一样凹下去，在里头抬头望星空。
+首尾两位不能算峰或谷——边界保护，毕竟第一个和最后一个连邻居都凑不齐。
+少于3位的数字波动值为0——太短了没法波动&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;“你的任务，” 村长用指关节敲了敲卷轴，“是计算区间 [num1, num2] 内所有数字的波动值之和。乐园那边要拿着这个数据去申请保险。”&lt;/p&gt;
+&lt;p&gt;我盯着卷轴看了三秒，突然笑出声：“这不就是遍历每个数字，拿字符串滑窗检查一下峰和谷嘛。&lt;code&gt;zip(s, s[1:], s[2:])&lt;/code&gt; 三连滑窗，峰谷一眼扫完，比在游戏里开扫描模式还快。村长你是不是又在放水？”&lt;/p&gt;
+&lt;p&gt;村长冷笑一声。那种笑容我见过——上次他给我推游乐园正式服 5×10⁴ 数据的时候，也是这副表情，像一个提前看过剧透的副本 Boss。“数据范围 num2 ≤ 10⁵，暴力当然能过。但我先给你打个预防针——说不定哪天范围就扩到 10¹⁸ 了呢？”&lt;/p&gt;
+&lt;p&gt;说完，村长便甩袖而去。我透过窗户望了一眼算法乐园的方向，那座“数位过山车”的轨道已经在晨光中闪闪发亮——10⁵ 嘛，先暴力 AC 了再说。至于 10¹⁸……到时候再想呗，未来的我肯定有办法。实在不行，不还有老勇者嘛。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第二章暴力枚举三连-zip-横扫千军&#34;&gt;第二章：暴力枚举——三连 zip 横扫千军
+&lt;/h4&gt;&lt;p&gt;直接暴力：从 num1 一路遍历到 num2，每个数字转成字符串，然后掏出 Python 的 &lt;code&gt;zip(s, s[1:], s[2:])&lt;/code&gt; 三连滑窗，把连续三位 a、b、c 一次性拎出来。如果 &lt;code&gt;a &amp;gt; b &amp;lt; c&lt;/code&gt;，说明 b 是个谷，轨道在这里砸了一个坑；如果 &lt;code&gt;a &amp;lt; b &amp;gt; c&lt;/code&gt;，说明 b 是个峰，轨道在这里顶出一个包。每发现一个峰或谷，计数器加一。遍历完所有数字，返回总数完事。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;totalWaviness&lt;/span&gt;(num1: int, num2: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    res &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(num1, num2 &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):  &lt;span style=&#34;color:#75715e&#34;&gt;# 遍历区间内每个数字&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; str(i)  &lt;span style=&#34;color:#75715e&#34;&gt;# 转成字符串方便逐位访问&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; a, b, c &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; zip(s, s[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:], s[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;:]):  &lt;span style=&#34;color:#75715e&#34;&gt;# 滑动窗口取连续三位&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; a &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; c:  &lt;span style=&#34;color:#75715e&#34;&gt;# 谷&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                res &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; a &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; c:  &lt;span style=&#34;color:#75715e&#34;&gt;# 峰&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                res &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; res
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;写完一跑，秒出AC。&lt;code&gt;zip(s, s[1:], s[2:])&lt;/code&gt; 这个三连滑窗真是比德芙还丝滑——&lt;code&gt;s&lt;/code&gt; 是原字符串，&lt;code&gt;s[1:]&lt;/code&gt; 是从第二位开始的字符串，&lt;code&gt;s[2:]&lt;/code&gt; 是从第三位开始的字符串，三个错位排列的字符串往 &lt;code&gt;zip&lt;/code&gt; 里一塞，直接吐出所有连续三位的组合。时间复杂度 O(N·L)，N 是区间长度，L 是数字平均位数。10⁵ 个数字，每个最多六七位，总操作量撑死几十万次。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第三章小白的-数位dp-困境&#34;&gt;第三章：小白的 数位DP 困境
+&lt;/h4&gt;&lt;p&gt;提交完暴力代码，我靠在椅背上准备摸鱼，脑子里却自动回放起村长临走时的那个冷笑——“如果哪天范围扩到 10¹⁸&amp;hellip;&amp;hellip;”，我越想越不是滋味。村长的嘴，骗人的鬼，但村长的预言，比 stack trace 还准。上次他说“以后会有大数据版本”，隔天正式服就砸脸上了。这次他特意打个预防针，八成是在给我提前剧透。&lt;/p&gt;
+&lt;p&gt;10¹⁸ 意味着什么？意味着如果我还用暴力遍历，评测机怕是要甩我个TLE。我必须想一个不依赖区间长度的解法。&lt;/p&gt;
+&lt;p&gt;我在魔法书里翻来翻去，目光落在一页标注着“数位 DP”的章节上。那是老勇者上次去邻村之前塞给我的，说是“有空看看，以后用得上”。我当时翻了前两页，看到满眼的 &lt;code&gt;dfs(i, is_limit, is_num)&lt;/code&gt; 就觉得脑壳疼，随手一合当枕头用了。现在想想，真是书到用时方恨少，码到跑时方觉糙。&lt;/p&gt;
+&lt;p&gt;“数位 DP……”我喃喃自语，“ 核心思想应该是按位搜索——把数字一位一位填出来，在填的过程中统计波动值。这样就不用枚举每一个完整的数字，而是枚举每一位可能的取值。相当于把十亿个数字压缩成几十个状态，用记忆化搜索代替暴力遍历。”&lt;/p&gt;
+&lt;p&gt;思路大概是——从最高位开始，逐位尝试 0 到 9——每填一个新的数字 d，我需要知道它和前一位 &lt;code&gt;last_digit&lt;/code&gt; 的关系——变大了、变小了，还是持平。但峰和谷的判断需要三位数字。要判断前一位是不是峰，我得同时知道前一位的数字、更前一位的数字、以及当前位 d。也就是说，当我填下 d 的时候，才能回头判定前一位是不是峰或谷。“那我该记录什么状态？”我拿笔在草稿纸上乱画。&lt;/p&gt;
+&lt;p&gt;首先肯定要有 &lt;code&gt;i&lt;/code&gt;，表示当前填到第几位，这是数位 DP 的标配，用来判断递归什么时候到头。然后得有 &lt;code&gt;last_digit&lt;/code&gt;，记录上一位填的是什么数字，不然没法算当前位是升还是降。还得搞个 &lt;code&gt;last_cmp&lt;/code&gt;，记录上一位和更前一位的比较趋势——上升记 1，下降记 -1，持平记 0。这样当上一位与当前位的新趋势 &lt;code&gt;c&lt;/code&gt; 算出来之后，如果 &lt;code&gt;c * last_cmp &amp;lt; 0&lt;/code&gt;，就说明趋势反转了，前一位要么是峰要么是谷，波动值加一。&lt;/p&gt;
+&lt;p&gt;“等等，” 我咬着笔杆皱起眉头，“还有上下界的问题。我只能在 num1 到 num2 之间搜，不能搜出范围外。需要 &lt;code&gt;limit_low&lt;/code&gt; 和 &lt;code&gt;limit_high&lt;/code&gt; 两个布尔值，分别标记当前是否要受下界和上界的约束。另外，如果 num1 和 num2 位数不同，比如num1=1，num2=100，数位对齐后数字 5 实际上是 ‘005’，前两个零不能参与峰谷判断，得想办法标记前面是否已经填过非零数字，没开始之前趋势 c 直接设成 0。”&lt;/p&gt;
+&lt;p&gt;我盯着纸上列出的状态参数——&lt;code&gt;i&lt;/code&gt;、&lt;code&gt;last_cmp&lt;/code&gt;、&lt;code&gt;last_digit&lt;/code&gt;、&lt;code&gt;limit_low&lt;/code&gt;、&lt;code&gt;limit_high&lt;/code&gt;——光参数就已经五个了，还没算上前导零的判断。但更让我卡住的还不是参数多，而是另一个根本性的问题。&lt;/p&gt;
+&lt;p&gt;“返回值怎么设计？” 这是我最困惑的地方。之前学数位 DP 的时候，最常见的套路是“统计满足条件的数字个数”——dfs 返回从当前状态开始能构造出多少个合法数字，最后调用 &lt;code&gt;dfs(0, true, true)&lt;/code&gt; 就是答案。还有一种是“统计权值和”——比如求所有数字的数位和之和，返回值是从当前状态开始所有数字的某个属性累加值。&lt;/p&gt;
+&lt;p&gt;但这道题既不是数个数，也不是简单的权值和。我要的是“波动值之和”——先算每个数字的波动值，再把所有数字的波动值加起来。波动值本身是一个数字内部峰和谷的计数，它在填数字的过程中动态累加，不是一个静态的属性。那么问题来了，我到底应该把波动值当成状态参数 &lt;code&gt;waviness&lt;/code&gt; 一路传下去，到了底层直接返回？还是应该把它当成返回值的一部分，让每层递归把后续所有数字的波动值之和汇总上来？&lt;/p&gt;
+&lt;p&gt;我越想越乱，草稿纸上画满了状态转移图，又全划掉了。我盯着天花板上被锅炉熏出的水渍，第一次觉得数位 DP 比递归过山车还难。递归过山车好歹只有一个问题——没设 base case；而数位 DP 有一百个问题，每一个都在问我：“你这个状态设计对了吗？”参数怎么分、返回值怎么定、记忆化怎么开、前导零怎么处理，全搅在一起，像极了一个没有封装的单体应用——牵一发而动全身。&lt;/p&gt;
+&lt;p&gt;正在我纠结要不要干脆放弃治疗、等正式服上线再说的时候，门口传来一阵慢悠悠的脚步声，伴随着打火机点烟斗的“咔嗒”声——老勇者从邻村回来了。&lt;/p&gt;
+&lt;p&gt;“怎么，数位 DP 把你难住了？”他倚在门框上，慢悠悠地吐出一口烟圈。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第四章老勇者的-数位-dp-锦囊&#34;&gt;第四章：老勇者的 数位 DP 锦囊
+&lt;/h4&gt;&lt;p&gt;老勇者没急着进屋，先在门口磕了磕烟斗里的灰，然后慢悠悠地踱到我桌前，低头扫了一眼我那画满又划掉的草稿纸。他看了足足五秒钟，表情就像在 code review 里看到了一坨没有注释的祖传代码。&lt;/p&gt;
+&lt;p&gt;“状态设计全写在纸上了，但你没把它们分清楚。”他把烟斗往桌角一敲，指着纸上那几个被我圈了又圈的参数，“数位 DP 的参数分两类——一类叫‘限制状态’，管的是‘你能填什么’；一类叫‘计算状态’，管的是‘你填完之后发生了什么’。你把它们全搅在一起，自然觉得脑子里的栈要溢出了。”&lt;/p&gt;
+&lt;p&gt;他在纸上画了一道线，左边写“限制”，右边写“计算”：&lt;/p&gt;
+&lt;p&gt;“限制状态有两个：&lt;code&gt;limit_low&lt;/code&gt; 和 &lt;code&gt;limit_high&lt;/code&gt;。它们只做一件事——卡死当前位能填的数字范围。如果 &lt;code&gt;limit_high&lt;/code&gt; 为 true，说明前面每一位都死死贴着上界，当前位绝对不能超过 &lt;code&gt;high_s[i]&lt;/code&gt;；一旦某一位填了一个比上界小的数字，后面的 &lt;code&gt;limit_high&lt;/code&gt; 就永久变成 false，所有位直接解放，0 到 9 随便填。&lt;code&gt;limit_low&lt;/code&gt; 同理，只不过方向相反——一旦某一位填了一个比下界大的数字，后面就再也不用看下界的脸色了。这两个参数就是数字世界里的边界门卫。”&lt;/p&gt;
+&lt;p&gt;“计算状态也有两个：&lt;code&gt;last_digit&lt;/code&gt; 和 &lt;code&gt;last_cmp&lt;/code&gt;。它们只做一件事——判断峰和谷。&lt;code&gt;last_digit&lt;/code&gt; 是上一位的数字，&lt;code&gt;last_cmp&lt;/code&gt; 是上一位和更前一位的趋势关系，1 是上升，-1 是下降，0 是持平。当你填下当前位 d 时，先算出新的趋势—— &lt;code&gt;c = (d &amp;gt; last_digit) - (d &amp;lt; last_digit)&lt;/code&gt;，一个表达式同时处理大于、小于、等于三种情况，然后看一眼 &lt;code&gt;c * last_cmp &lt;/code&gt;：峰和谷本质都是方向改变，在数学上就是乘积为负，也就是说如果&lt;code&gt;&amp;lt; 0&lt;/code&gt;，说明趋势反转，上一位要么是峰要么是谷，波动值加一。这两个参数完全不关心上下界，只关心数字之间的相对大小。”&lt;/p&gt;
+&lt;p&gt;“至于前导零——用 &lt;code&gt;last_cmp == 0&lt;/code&gt; 就能兼顾。还没填有效数字之前，趋势保持为零，&lt;code&gt;c * last_cmp&lt;/code&gt; 永远是 0，永远不会触发峰谷判断。把前导零的三个虚拟零拆开看，它们之间全是持平，趋势变化为零，自然不会有峰谷误判。”&lt;/p&gt;
+&lt;p&gt;他在两个区域之间又画了一根线，在计算状态那边补了一个参数：“至于波动值 &lt;code&gt;waviness&lt;/code&gt;，它既不是限制也不是计算，它是你最终要交的答案本身。这个东西的处理方式，有两种流派：一种把它当行李一路扛下去，一种把它当战报一层层报上来。看好了，我两个都写给你。”&lt;/p&gt;
+&lt;p&gt;他在纸上写下第一种写法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;low_s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(map(int, str(num1)))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;high_s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(map(int, str(num2)))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(high_s)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;diff_lh &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; len(low_s)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@cache&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dfs&lt;/span&gt;(i, waviness, last_cmp, last_digit, limit_low, limit_high):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; n:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; waviness
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    lo &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; low_s[i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; diff_lh] &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; limit_low &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; diff_lh &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    hi &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; high_s[i] &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; limit_high &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    res &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    is_num &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; limit_low &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; diff_lh
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; d &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(lo, hi &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        c &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (d &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; last_digit) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; (d &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; last_digit) &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; is_num &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        w &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; waviness
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; last_cmp &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            w &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        res &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; dfs(i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, w, c, d,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                   limit_low &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; d &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; lo,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                   limit_high &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; d &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; hi)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; res
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; dfs(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;“这个版本最符合直觉——波动值放在参数里，顺着递归一路带到底。每发现一个峰或谷，就 &lt;code&gt;w += 1&lt;/code&gt;，最后叶子节点把累加好的结果交上去。就像你拎着一个行李袋，每经过一个峰或谷就往袋子里扔一颗石子，到了终点直接把袋子倒出来数。状态设计也一目了然：&lt;code&gt;limit_low&lt;/code&gt; 和 &lt;code&gt;limit_high&lt;/code&gt; 是门卫，卡取值范围；&lt;code&gt;last_digit&lt;/code&gt; 和 &lt;code&gt;last_cmp&lt;/code&gt; 是轨道设计师，管峰谷判断；&lt;code&gt;waviness&lt;/code&gt; 是最终成绩单，一路传到底。”&lt;/p&gt;
+&lt;p&gt;“但是，”他把烟斗往桌角一敲，“这个版本藏着一个坑——&lt;code&gt;@cache&lt;/code&gt; 会把所有参数都当成缓存 key，包括 &lt;code&gt;waviness&lt;/code&gt;——问题来了：到达同一个 &lt;code&gt;(i, last_cmp, last_digit, limit_low, limit_high)&lt;/code&gt; 状态时，&lt;code&gt;waviness&lt;/code&gt; 可能完全不一样，因为 &lt;code&gt;waviness&lt;/code&gt; 不同，缓存会直接把它们当成了两个不同的状态，各算各的。等于你给每一条搜索路径都建了一个独立的缓存项，记忆化名存实亡，退化成了带 &lt;code&gt;@cache&lt;/code&gt; 装饰器的暴力回溯。”&lt;/p&gt;
+&lt;p&gt;我盯着代码里那个被 &lt;code&gt;@cache&lt;/code&gt; 包裹的 &lt;code&gt;dfs&lt;/code&gt;，参数表里 &lt;code&gt;waviness&lt;/code&gt; 赫然在列——每次峰谷累加，它就变一次，等于每条搜索路径都有一个独一无二的缓存 key——“那怎么改？”我追问。&lt;/p&gt;
+&lt;p&gt;“把 &lt;code&gt;waviness&lt;/code&gt; 从参数里踢出去，让它变成返回值的一部分。行李别自己扛了，让每个子树统一上报战报。”他在纸上写下第二种写法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;low_s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(map(int, str(num1)))  
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;high_s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(map(int, str(num2)))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(high_s)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;diff_lh &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; len(low_s)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# dfs 返回两个数：子树波动值总和，子树合法数字个数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@cache&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dfs&lt;/span&gt;(i, last_cmp, last_digit, limit_low, limit_high):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; n:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 能递归到终点的都是合法数字&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    lo &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; low_s[i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; diff_lh] &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; limit_low &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; diff_lh &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    hi &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; high_s[i] &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; limit_high &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    waviness_sum &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; num_cnt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    is_num &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; limit_low &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; diff_lh  &lt;span style=&#34;color:#75715e&#34;&gt;# 前面是否填过数字&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; d &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(lo, hi &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 当前填的数不是最高位，c 才有意义&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        c &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (d &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; last_digit) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; (d &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; last_digit) &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; is_num &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sub_waviness_sum, sub_num_cnt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dfs(i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, c, d, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                            limit_low &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; d &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; lo, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                            limit_high &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; d &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; hi)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        waviness_sum &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; sub_waviness_sum  &lt;span style=&#34;color:#75715e&#34;&gt;# 累加子树的波动值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        num_cnt &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; sub_num_cnt            &lt;span style=&#34;color:#75715e&#34;&gt;# 累加子树的合法数字个数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; last_cmp &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:  &lt;span style=&#34;color:#75715e&#34;&gt;# 形成了一个峰或谷&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            waviness_sum &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; sub_num_cnt  &lt;span style=&#34;color:#75715e&#34;&gt;# 这个峰谷会出现在 sub_num_cnt 个数字中&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; waviness_sum, num_cnt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; dfs(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;“注意看，这个版本的返回值是一个元组——&lt;code&gt;(子树波动值总和, 子树合法数字个数)&lt;/code&gt;。每个节点不从上面接收任何波动值，只向上汇报两件事：我这棵子树里所有完整数字的波动值加起来是多少，以及我这棵子树里一共有多少个合法数字。“ 他指着核心逻辑，继续解释道：“当发现当前位形成峰或谷时——也就是 &lt;code&gt;c * last_cmp &amp;lt; 0&lt;/code&gt; 时，不是 &lt;code&gt;+1&lt;/code&gt;，而是 &lt;code&gt;+ sub_num_cnt&lt;/code&gt;——因为当前位形成的这个峰或谷，不是只影响一个数字，而是会影响从这条路走到底的&lt;strong&gt;每一个&lt;/strong&gt;合法数字。相当于你这个峰或谷不能只给自己加一分，而是要给从你这儿毕业的所有合法数字各加一分。”&lt;/p&gt;
+&lt;p&gt;他顿了顿，举了个例子：“假设处理数字范围 [100, 999]，当递归到第2位时：
+第一种写法：路径 1→2→? 和 1→3→? 会因为 &lt;code&gt;waviness&lt;/code&gt; 不同而分别计算，即使它们在第2位之后的子树结构完全相同，缓存也命中不了，各算各的。
+第二种解法：对于相同的&lt;code&gt; (i=2, last_cmp, last_digit, limit_low, limit_high)&lt;/code&gt; 状态，子树返回的 &lt;code&gt;(波动值总和, 数字个数)&lt;/code&gt; 永远一模一样——因为波动值不再是你自己扛的行李，而是子树统一上交的战报。不管之前的历史路径是什么，只要这五个参数相同，缓存直接命中，子树不用重新算。如果当前位恰好形成了峰或谷，直接 &lt;code&gt;+ sub_num_cnt&lt;/code&gt;，把贡献批量加上去，一步到位。”&lt;/p&gt;
+&lt;p&gt;我盯着两个版本来回看了好几遍，恍然大悟：“ 所以第一种是把波动值当‘个人行李’，每个搜索路径自己拎着走，但拎的东西不一样就没法共享存储柜。第二种是把波动值当‘团队战报’，每个子树统一汇总上报，相同的搜索状态无论从哪条路进来，返回的战报完全一样，共用储物柜。波动值从‘自己扛’变成了‘向上报’，&lt;code&gt;waviness&lt;/code&gt; 从参数里消失，&lt;code&gt;@cache&lt;/code&gt;  缓存命中率直接拉满。”&lt;/p&gt;
+&lt;p&gt;老勇者满意地点点头，把烟斗往嘴里一叼：“ 把波动值当行李扛下去，看似符合直觉，但每个搜索路径的行李内容都不一样，相同状态永远无法共享缓存——这是典型的“有后效性”，历史路径影响了当前决策，记忆化形同虚设。而把波动值当战报报上来，让每个子树返回一个与历史无关的元组 &lt;code&gt;(子树波动值总和, 子树合法数字个数)&lt;/code&gt;，当前位的峰谷贡献通过 &lt;code&gt;+ sub_num_cnt&lt;/code&gt; 批量结算，五个参数锁死缓存 key，无后效性完美满足——这才是 DP 该有的样子。”&lt;/p&gt;
+&lt;p&gt;他站起身朝门口走去，快到门边时回头补了一句，“数位 DP 的精髓，不是怎么搜，而是怎么设计状态和返回值，让记忆化从装饰品变成核武器。波动值是行李还是战报，决定了你的缓存命中率是趋近于零还是接近一百。”&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第五章数位-dp-复盘从行李到战报的进化&#34;&gt;第五章：数位 DP 复盘——从行李到战报的进化
+&lt;/h4&gt;&lt;p&gt;锅炉里的火苗噼啪响了两声，像极了我脑袋开窍的声音。&lt;/p&gt;
+&lt;p&gt;回看这一整天的折腾，从暴力滑窗到数位 DP，我踩的坑差不多能写一本短篇小说，名字都想好了，叫《数位 DP 从入门到放弃再到真香》。状态列不全，不知道谁该进参数、谁该进返回值，像个出门旅行把所有家当全攥在手里却找不到行李箱的焦虑旅客，最后还被缓存命中率敲打了一番，数位 DP 的门槛从来不在“能不能搜”，而在“搜完之后能不能记住”，而能不能记住，取决于状态设计有没有做到无后效性。&lt;/p&gt;
+&lt;p&gt;我把魔法书翻到“数位 DP”那一章，把两个版本工工整整地贴上去：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;3751 - 范围内总波动值 I&lt;/strong&gt;
+暴力解法：&lt;code&gt;zip&lt;/code&gt; 三连滑窗，O(N·L)，数据 10⁵ 时秒出
+数位 DP 解法：记忆化搜索，O(位数 × 状态数)
+核心收获：波动值是战报，不是行李。限制状态和计算状态分开，记忆化才能真正发威。&lt;code&gt;c * last_cmp &amp;lt; 0&lt;/code&gt; 一行统一峰谷判断。峰谷贡献不是 &lt;code&gt;+1&lt;/code&gt;，是 &lt;code&gt;+ sub_num_cnt&lt;/code&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我在“波动值是战报，不是行李”下面又重重划了道下划线。靠在椅背上，我透过窗户望了一眼算法乐园的方向，天边那座数位过山车的轨道在夕阳下闪闪发亮。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>leetcode3635：游乐园正式服的挑战</title>
         <link>http://localhost:1313/posts/leetcode_stories/26-06-03/</link>
         <pubDate>Wed, 03 Jun 2026 10:39:17 +0800</pubDate>

@@ -61,6 +61,30 @@ params:
   mainSections:
     - posts
 
+  comments:
+    enabled: true
+    provider: giscus
+    giscus:
+      repo: iCurious-D/icurious-d.github.io
+      repoID: R_kgDOSu3GEQ
+      category: General
+      categoryID: DIC_kwDOSu3GEc4C-u1E
+      mapping: pathname
+      reactionsEnabled: 1        # 注意这里不要加引号，用数字
+      emitMetadata: 0
+      inputPosition: bottom
+      lang: zh-CN
+      lightTheme: light
+      darkTheme: dark
+#      loading: lazy
+  #    enabled: true
+#    provider: utterances
+#    utterances:
+#      repo: iCurious-D/myblog
+#      issueTerm: pathname
+#      label: comment
+#      theme: preferred-color-scheme
+
   # 侧边栏配置
   widgets:
     homepage:
