@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>生活学习笔记 on 我的小站</title>
+        <link>http://localhost:1313/notes/</link>
+        <description>Recent content in 生活学习笔记 on 我的小站</description>
+        <generator>Hugo -- gohugo.io</generator>
+        <language>zh</language>
+        <lastBuildDate>Mon, 08 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/notes/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Git 常用命令备忘</title>
+        <link>http://localhost:1313/notes/git_tips/</link>
+        <pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/notes/git_tips/</guid>
+        <description>&lt;h2 id=&#34;撤销操作&#34;&gt;撤销操作
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;撤销工作区修改：&lt;code&gt;git checkout -- &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;撤销暂存区：&lt;code&gt;git reset HEAD &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;分支&#34;&gt;分支
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;创建并切换：&lt;code&gt;git checkout -b new-branch&lt;/code&gt;
+&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        
+    </channel>
+</rss>

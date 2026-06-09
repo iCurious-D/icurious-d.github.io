@@ -6,7 +6,38 @@
         <description>Recent content on 我的小站</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh</language>
-        <lastBuildDate>Mon, 08 Jun 2026 12:47:26 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 08 Jun 2026 14:04:38 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>每日随机一句话</title>
+        <link>http://localhost:1313/tools/daily_quote/</link>
+        <pubDate>Mon, 08 Jun 2026 14:04:38 +0800</pubDate>
+        
+        <guid>http://localhost:1313/tools/daily_quote/</guid>
+        <description>&lt;p&gt;点击按钮，获取一句随机名言。&lt;/p&gt;
+&lt;div style=&#34;text-align:center; margin: 2rem 0;&#34;&gt;
+  &lt;p id=&#34;quote&#34; style=&#34;font-size: 1.2rem; font-style: italic; min-height: 3rem;&#34;&gt;✨ 等待你的点击 ✨&lt;/p&gt;
+  &lt;button id=&#34;btn&#34; onclick=&#34;newQuote()&#34; style=&#34;padding: 0.5rem 1.5rem; cursor: pointer;&#34;&gt;换一句&lt;/button&gt;
+&lt;/div&gt;
+&lt;script&gt;
+const quotes = [
+  &#34;别想，去行动。&#34;,
+  &#34;种一棵树最好的时间是十年前，其次是现在。&#34;,
+  &#34;完美是优秀的敌人。&#34;,
+  &#34;简单比复杂更难，你必须努力让你的思维变得清晰。&#34;,
+  &#34;你的时间有限，不要浪费在重复别人的生活上。&#34;
+];
+function newQuote() {
+  const random = Math.floor(Math.random() * quotes.length);
+  document.getElementById(&#39;quote&#39;).innerText = quotes[random];
+}
+// 页面加载时随机显示一句
+window.onload = newQuote;
+&lt;/script&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;关于这个小工具&#34;&gt;关于这个小工具
+&lt;/h3&gt;&lt;p&gt;用原生 JavaScript 写的一个简单随机语句生成器，未来可以升级成调用 API 的版本。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>leetcode2161 装备分拣：一行流的诱惑与分桶的正道</title>
         <link>http://localhost:1313/posts/leetcode_stories/26-06-08/</link>
         <pubDate>Mon, 08 Jun 2026 12:47:26 +0800</pubDate>
@@ -44,6 +75,24 @@
 &lt;p&gt;“原地交换加插入排序，能压到 O(1) 空间——每遇到一个元素，先判断它该去哪边，再用位移操作把它挪到对应位置，保证组内顺序不变。但每次挪位置都是 O(n)，总复杂度 O(n²)。O(1) 空间换 O(n²) 时间，等于徒手搬一百趟装备省一个空间戒指，血亏。”&lt;/p&gt;
 &lt;p&gt;他把棒棒糖往嘴里一叼，拍了拍我肩膀：“编程跟打副本一个道理——理解机制比硬刚更重要。稳定分区必须付出代价，要么付空间，要么付时间。n ≤ 10⁵ 的数据量，O(n) 空间换 O(n) 时间是血赚。省空间的念头，留着对付那些不要求稳定性的题——那才是原地交换大展拳脚的地方。”&lt;/p&gt;
 &lt;p&gt;窗外，勇士团扛着新到货的装备箱浩浩荡荡走过，村长跟在后面一路小跑，手里还抱着我分好的三摞清单。我把魔法书翻到今天这一页，在旁边批了三行：能分组的，就别排序。稳定分区，空间换时间是正道。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Git 常用命令备忘</title>
+        <link>http://localhost:1313/notes/git_tips/</link>
+        <pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate>
+        
+        <guid>http://localhost:1313/notes/git_tips/</guid>
+        <description>&lt;h2 id=&#34;撤销操作&#34;&gt;撤销操作
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;撤销工作区修改：&lt;code&gt;git checkout -- &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;撤销暂存区：&lt;code&gt;git reset HEAD &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;分支&#34;&gt;分支
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;创建并切换：&lt;code&gt;git checkout -b new-branch&lt;/code&gt;
+&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
         </item>
         <item>

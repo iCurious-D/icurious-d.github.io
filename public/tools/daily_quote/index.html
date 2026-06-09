@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh" dir="ltr">
     <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="喜欢讲故事的咕咕咕">
-<title>关于我</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="点击按钮，获取一句随机名言。\n✨ 等待你的点击 ✨\n换一句 关于这个小工具 用原生 JavaScript 写的一个简单随机语句生成器，未来可以升级成调用 API 的版本。\n">
+<title>每日随机一句话</title>
 
-<link rel='canonical' href='http://localhost:1313/about/'>
+<link rel='canonical' href='http://localhost:1313/tools/daily_quote/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="关于我">
-<meta property='og:description' content="喜欢讲故事的咕咕咕">
-<meta property='og:url' content='http://localhost:1313/about/'>
+<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="每日随机一句话">
+<meta property='og:description' content="点击按钮，获取一句随机名言。\n✨ 等待你的点击 ✨\n换一句 关于这个小工具 用原生 JavaScript 写的一个简单随机语句生成器，未来可以升级成调用 API 的版本。\n">
+<meta property='og:url' content='http://localhost:1313/tools/daily_quote/'>
 <meta property='og:site_name' content='我的小站'>
-<meta property='og:type' content='website'><meta property='og:updated_time' content=' 2026-06-08T14:16:52&#43;08:00 '/>
-<meta name="twitter:title" content="关于我">
-<meta name="twitter:description" content="喜欢讲故事的咕咕咕"><link rel="alternate" type="application/rss&#43;xml" href="http://localhost:1313/about/index.xml">
+<meta property='og:type' content='article'><meta property='article:section' content='Tools' /><meta property='article:published_time' content='2026-06-08T14:04:38&#43;08:00'/><meta property='article:modified_time' content='2026-06-08T14:04:38&#43;08:00'/>
+<meta name="twitter:title" content="每日随机一句话">
+<meta name="twitter:description" content="点击按钮，获取一句随机名言。\n✨ 等待你的点击 ✨\n换一句 关于这个小工具 用原生 JavaScript 写的一个简单随机语句生成器，未来可以升级成调用 API 的版本。\n">
     </head>
     <body class="
     article-page
@@ -242,7 +242,7 @@ unicode: "eb96"
         </li>
         
         
-        <li  class='current' >
+        <li >
             <a href='/about/' >
                 
                 
@@ -303,7 +303,42 @@ unicode: "eb49"
     </ol>
 </aside>
 
-    
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#关于这个小工具">关于这个小工具</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
 
             <main class="main full-width">
     <article class="main-article">
@@ -314,7 +349,7 @@ unicode: "eb49"
 
     <div class="article-title-wrapper">
         <h2 class="article-title">
-            <a href="/about/">关于我</a>
+            <a href="/tools/daily_quote/">每日随机一句话</a>
         </h2>
     
         
@@ -336,7 +371,7 @@ unicode: "eb49"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-06-02T16:30:07&#43;08:00'>6月 02, 2026</time>
+                <time class="article-time--published" datetime='2026-06-08T14:04:38&#43;08:00'>6月 08, 2026</time>
             </div>
         
 
@@ -366,8 +401,29 @@ unicode: "eb49"
     <section class="article-content">
     
     
-    <p>你好，我是gugugu。</p>
-<p>这里是我的个人博客。  我喜欢探索技术、写作和摄影，这个网站会记录我的思考和成长。</p>
+    <p>点击按钮，获取一句随机名言。</p>
+<div style="text-align:center; margin: 2rem 0;">
+  <p id="quote" style="font-size: 1.2rem; font-style: italic; min-height: 3rem;">✨ 等待你的点击 ✨</p>
+  <button id="btn" onclick="newQuote()" style="padding: 0.5rem 1.5rem; cursor: pointer;">换一句</button>
+</div>
+<script>
+const quotes = [
+  "别想，去行动。",
+  "种一棵树最好的时间是十年前，其次是现在。",
+  "完美是优秀的敌人。",
+  "简单比复杂更难，你必须努力让你的思维变得清晰。",
+  "你的时间有限，不要浪费在重复别人的生活上。"
+];
+function newQuote() {
+  const random = Math.floor(Math.random() * quotes.length);
+  document.getElementById('quote').innerText = quotes[random];
+}
+// 页面加载时随机显示一句
+window.onload = newQuote;
+</script>
+<hr>
+<h3 id="关于这个小工具">关于这个小工具
+</h3><p>用原生 JavaScript 写的一个简单随机语句生成器，未来可以升级成调用 API 的版本。</p>
 
 </section>
 

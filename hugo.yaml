@@ -31,10 +31,22 @@ menu:
       weight: 20
       params:
         icon: "article"       # 文章图标
+    - identifier: "tools"
+      name: "工具"
+      url: "/tools"
+      weight: 30
+      params:
+        icon: "tools"
+    - identifier: "notes"
+      name: "笔记"
+      url: "/notes"
+      weight: 40
+      params:
+        icon: "notes"
     - identifier: "about"
       name: "关于我"
       url: "/about/"
-      weight: 30
+      weight: 50
       params:
         icon: "user"          # 用户图标
 
@@ -105,3 +117,7 @@ params:
     #   - type: toc
     #   - type: related-posts
 
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
