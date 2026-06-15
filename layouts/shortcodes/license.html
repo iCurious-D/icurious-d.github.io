@@ -1,0 +1,25 @@
+{{ $license := .Get 0 | default "by" }}
+{{ $licenseName := "知识共享署名 4.0 国际许可协议" }}
+{{ $licenseUrl := "https://creativecommons.org/licenses/by/4.0/" }}
+{{ $licenseImage := "https://i.creativecommons.org/l/by/4.0/80x15.png" }}
+
+{{ if eq $license "by-nc-sa" }}
+  {{ $licenseName = "知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议" }}
+  {{ $licenseUrl = "https://creativecommons.org/licenses/by-nc-sa/4.0/" }}
+  {{ $licenseImage = "https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" }}
+{{ else if eq $license "by-nc" }}
+  {{ $licenseName = "知识共享署名-非商业性使用 4.0 国际许可协议" }}
+  {{ $licenseUrl = "https://creativecommons.org/licenses/by-nc/4.0/" }}
+  {{ $licenseImage = "https://i.creativecommons.org/l/by-nc/4.0/80x15.png" }}
+{{ end }}
+
+<p>
+  <a rel="license" href="{{ $licenseUrl }}">
+    <img alt="知识共享许可协议" style="border-width:0" src="{{ $licenseImage }}" />
+  </a>
+  <br />
+  本作品采用
+  <a rel="license" href="{{ $licenseUrl }}">
+    {{ $licenseName }}
+  </a> 进行许可。
+</p>
