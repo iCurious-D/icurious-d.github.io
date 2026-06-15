@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 对称性的觉醒：当奇数和偶数平分天下 听说村长最近沉迷于一款叫《技能树大亨》的RPG游戏——我怀疑这老头把省下来的钱全充了Steam余额，账号时长怕不是比我刷题还多。今天一大早，我正蹲在锅炉边添柴，电脑屏幕突然弹出老头的远程协助请求。点下接受，村长的游戏画面直接投屏过来——他的人物正卡在技能树界面，鼠标在一棵枝繁叶茂的树状图上疯狂画圈，技能节点之间的连线旁还标注着&quot;普通升级: 1点&quot;和&quot;强化升级: 2点&quot;。\n&ldquo;小白！我的隐藏成就卡住了！&ldquo;村长的声音从屏幕那头炸出来，急得像是副本门口等着拉人的团长，&ldquo;从根技能1号出发，每条连线可以选普通升级花1点，或者强化升级花2点。隐藏成就叫&rsquo;奇数流大师&rsquo;，要求算出有多少种加点法能使到达最深那个终极技能的总消耗是奇数！”\n我盯着屏幕，扫到成就描述末尾一行不起眼的小字——&ldquo;忽略从根到最深节点路径外的所有边&rdquo;。这不就把一棵树压缩成一条链吗？只有从根到最深节点的那条路径算数，其他枝丫全是气氛组，约等于RPG里站桩喊固定台词的NPC。问题瞬缩成两件事：第一，最深那层在哪儿——也就是最大深度k是多少；第二，这k条边上各赋1或2，总和为奇数的组合数是多少。\n第一步：找深度是DFS的肌肉记忆 题目给的是无向树——边[1,2]表示1和2互通，虽然根定在1，但遍历必须双向通行，否则DFS 会困在叶子节点，剩下的分支全遍历不到。所以建邻接表时必须每条边两头都加——1的邻居里有2，2的邻居里也有1，双向车道全登记，DFS才能想去哪去哪。\n但双向建图有一个经典坑——不记父节点的话，DFS会在父子之间来回横跳，像喝醉的勇者在两个房间之间来回读条，直到栈溢出教我做人。所以递归时带个fa参数当“防回退机制”——告诉DFS“你刚从你爸那儿过来，别再回去了”\nMOD = 1_000_000_007 n = len(edges) + 1 g = [[] for _ in range(n + 1)] for x, y in edges: g[x].append(y) g[y].append(x) def dfs(x: int, fa: int) -&gt; int: d = 0 for y in g[x]: if y != fa: # 不递归到父节点，防止无限循环 d = max(d, dfs(y, x) + 1) return d k = dfs(1, 0) 双向建图 + fa过滤 = 无向图当有向树遍历。叶子节点没有非父邻居，直接返回0；自底向上逐层加一，max取最大深度。这套组合拳打过无数次的DFS模板——就像RPG里的基础连招。\n深度k到手。\n第二步：奇偶性的对称美学 接下来是核心——k条边，每条1或2，总和为奇数的方案数。\n1是奇数，2是偶数，总和为奇数等价于路径上有奇数个1。枚举C(k,1) + C(k,3) + C(k,5) + &hellip;？我数学早就连本带利还给老师了，组合数求和公式长啥样都忘了，更别说还要取模。\n等等——换个思路：如果前k-1条边的和是偶数，最后一条只能选1把总和扳成奇数；前k-1条边的和是奇数，最后一条必须选2把总和保持奇数。\n也就是说，前k-1条边可以自由发挥，最后一条边只能被迫营业——有且仅有一种选择能救场。所以总方案数就是前k-1条边的任意组合数——前k-1条每条自由选1或2，总共2^{k-1}种。\n再往深层想的话，这可以说是奇偶对称性的必然结果：对于任意k≥1，在所有2^k种赋值中，权重和为奇数和偶数的方案数永远平分天下，各占一半。\n这不是什么巧合，是奇偶性天生的对称：把最后一条边从1翻成2，奇偶就翻转，所有方案两两配对，恰好一半奇一半偶。所以答案=2^k / 2 = 2^{k-1}。不用枚举，不用求和，一行对称性直接秒杀。\n">
+<title>leetcode3558：对称性的觉醒：当奇数和偶数平分天下</title>
+
+<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-11/'>
+
+<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode3558：对称性的觉醒：当奇数和偶数平分天下">
+<meta property='og:description' content="🎮 对称性的觉醒：当奇数和偶数平分天下 听说村长最近沉迷于一款叫《技能树大亨》的RPG游戏——我怀疑这老头把省下来的钱全充了Steam余额，账号时长怕不是比我刷题还多。今天一大早，我正蹲在锅炉边添柴，电脑屏幕突然弹出老头的远程协助请求。点下接受，村长的游戏画面直接投屏过来——他的人物正卡在技能树界面，鼠标在一棵枝繁叶茂的树状图上疯狂画圈，技能节点之间的连线旁还标注着&quot;普通升级: 1点&quot;和&quot;强化升级: 2点&quot;。\n&ldquo;小白！我的隐藏成就卡住了！&ldquo;村长的声音从屏幕那头炸出来，急得像是副本门口等着拉人的团长，&ldquo;从根技能1号出发，每条连线可以选普通升级花1点，或者强化升级花2点。隐藏成就叫&rsquo;奇数流大师&rsquo;，要求算出有多少种加点法能使到达最深那个终极技能的总消耗是奇数！”\n我盯着屏幕，扫到成就描述末尾一行不起眼的小字——&ldquo;忽略从根到最深节点路径外的所有边&rdquo;。这不就把一棵树压缩成一条链吗？只有从根到最深节点的那条路径算数，其他枝丫全是气氛组，约等于RPG里站桩喊固定台词的NPC。问题瞬缩成两件事：第一，最深那层在哪儿——也就是最大深度k是多少；第二，这k条边上各赋1或2，总和为奇数的组合数是多少。\n第一步：找深度是DFS的肌肉记忆 题目给的是无向树——边[1,2]表示1和2互通，虽然根定在1，但遍历必须双向通行，否则DFS 会困在叶子节点，剩下的分支全遍历不到。所以建邻接表时必须每条边两头都加——1的邻居里有2，2的邻居里也有1，双向车道全登记，DFS才能想去哪去哪。\n但双向建图有一个经典坑——不记父节点的话，DFS会在父子之间来回横跳，像喝醉的勇者在两个房间之间来回读条，直到栈溢出教我做人。所以递归时带个fa参数当“防回退机制”——告诉DFS“你刚从你爸那儿过来，别再回去了”\nMOD = 1_000_000_007 n = len(edges) + 1 g = [[] for _ in range(n + 1)] for x, y in edges: g[x].append(y) g[y].append(x) def dfs(x: int, fa: int) -&gt; int: d = 0 for y in g[x]: if y != fa: # 不递归到父节点，防止无限循环 d = max(d, dfs(y, x) + 1) return d k = dfs(1, 0) 双向建图 + fa过滤 = 无向图当有向树遍历。叶子节点没有非父邻居，直接返回0；自底向上逐层加一，max取最大深度。这套组合拳打过无数次的DFS模板——就像RPG里的基础连招。\n深度k到手。\n第二步：奇偶性的对称美学 接下来是核心——k条边，每条1或2，总和为奇数的方案数。\n1是奇数，2是偶数，总和为奇数等价于路径上有奇数个1。枚举C(k,1) + C(k,3) + C(k,5) + &hellip;？我数学早就连本带利还给老师了，组合数求和公式长啥样都忘了，更别说还要取模。\n等等——换个思路：如果前k-1条边的和是偶数，最后一条只能选1把总和扳成奇数；前k-1条边的和是奇数，最后一条必须选2把总和保持奇数。\n也就是说，前k-1条边可以自由发挥，最后一条边只能被迫营业——有且仅有一种选择能救场。所以总方案数就是前k-1条边的任意组合数——前k-1条每条自由选1或2，总共2^{k-1}种。\n再往深层想的话，这可以说是奇偶对称性的必然结果：对于任意k≥1，在所有2^k种赋值中，权重和为奇数和偶数的方案数永远平分天下，各占一半。\n这不是什么巧合，是奇偶性天生的对称：把最后一条边从1翻成2，奇偶就翻转，所有方案两两配对，恰好一半奇一半偶。所以答案=2^k / 2 = 2^{k-1}。不用枚举，不用求和，一行对称性直接秒杀。\n">
+<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-11/'>
+<meta property='og:site_name' content='我的小站'>
+<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-11T13:00:38&#43;08:00'/><meta property='article:modified_time' content='2026-06-11T13:00:38&#43;08:00'/>
+<meta name="twitter:title" content="leetcode3558：对称性的觉醒：当奇数和偶数平分天下">
+<meta name="twitter:description" content="🎮 对称性的觉醒：当奇数和偶数平分天下 听说村长最近沉迷于一款叫《技能树大亨》的RPG游戏——我怀疑这老头把省下来的钱全充了Steam余额，账号时长怕不是比我刷题还多。今天一大早，我正蹲在锅炉边添柴，电脑屏幕突然弹出老头的远程协助请求。点下接受，村长的游戏画面直接投屏过来——他的人物正卡在技能树界面，鼠标在一棵枝繁叶茂的树状图上疯狂画圈，技能节点之间的连线旁还标注着&quot;普通升级: 1点&quot;和&quot;强化升级: 2点&quot;。\n&ldquo;小白！我的隐藏成就卡住了！&ldquo;村长的声音从屏幕那头炸出来，急得像是副本门口等着拉人的团长，&ldquo;从根技能1号出发，每条连线可以选普通升级花1点，或者强化升级花2点。隐藏成就叫&rsquo;奇数流大师&rsquo;，要求算出有多少种加点法能使到达最深那个终极技能的总消耗是奇数！”\n我盯着屏幕，扫到成就描述末尾一行不起眼的小字——&ldquo;忽略从根到最深节点路径外的所有边&rdquo;。这不就把一棵树压缩成一条链吗？只有从根到最深节点的那条路径算数，其他枝丫全是气氛组，约等于RPG里站桩喊固定台词的NPC。问题瞬缩成两件事：第一，最深那层在哪儿——也就是最大深度k是多少；第二，这k条边上各赋1或2，总和为奇数的组合数是多少。\n第一步：找深度是DFS的肌肉记忆 题目给的是无向树——边[1,2]表示1和2互通，虽然根定在1，但遍历必须双向通行，否则DFS 会困在叶子节点，剩下的分支全遍历不到。所以建邻接表时必须每条边两头都加——1的邻居里有2，2的邻居里也有1，双向车道全登记，DFS才能想去哪去哪。\n但双向建图有一个经典坑——不记父节点的话，DFS会在父子之间来回横跳，像喝醉的勇者在两个房间之间来回读条，直到栈溢出教我做人。所以递归时带个fa参数当“防回退机制”——告诉DFS“你刚从你爸那儿过来，别再回去了”\nMOD = 1_000_000_007 n = len(edges) + 1 g = [[] for _ in range(n + 1)] for x, y in edges: g[x].append(y) g[y].append(x) def dfs(x: int, fa: int) -&gt; int: d = 0 for y in g[x]: if y != fa: # 不递归到父节点，防止无限循环 d = max(d, dfs(y, x) + 1) return d k = dfs(1, 0) 双向建图 + fa过滤 = 无向图当有向树遍历。叶子节点没有非父邻居，直接返回0；自底向上逐层加一，max取最大深度。这套组合拳打过无数次的DFS模板——就像RPG里的基础连招。\n深度k到手。\n第二步：奇偶性的对称美学 接下来是核心——k条边，每条1或2，总和为奇数的方案数。\n1是奇数，2是偶数，总和为奇数等价于路径上有奇数个1。枚举C(k,1) + C(k,3) + C(k,5) + &hellip;？我数学早就连本带利还给老师了，组合数求和公式长啥样都忘了，更别说还要取模。\n等等——换个思路：如果前k-1条边的和是偶数，最后一条只能选1把总和扳成奇数；前k-1条边的和是奇数，最后一条必须选2把总和保持奇数。\n也就是说，前k-1条边可以自由发挥，最后一条边只能被迫营业——有且仅有一种选择能救场。所以总方案数就是前k-1条边的任意组合数——前k-1条每条自由选1或2，总共2^{k-1}种。\n再往深层想的话，这可以说是奇偶对称性的必然结果：对于任意k≥1，在所有2^k种赋值中，权重和为奇数和偶数的方案数永远平分天下，各占一半。\n这不是什么巧合，是奇偶性天生的对称：把最后一条边从1翻成2，奇偶就翻转，所有方案两两配对，恰好一半奇一半偶。所以答案=2^k / 2 = 2^{k-1}。不用枚举，不用求和，一行对称性直接秒杀。\n">
+    </head>
+    <body class="
+    article-page
+    ">
+    <script>
+        (function() {
+            const colorSchemeKey = 'StackColorScheme';
+            if(!localStorage.getItem(colorSchemeKey)){
+                localStorage.setItem(colorSchemeKey, "auto");
+            }
+        })();
+    </script><script>
+    (function() {
+        const colorSchemeKey = 'StackColorScheme';
+        const colorSchemeItem = localStorage.getItem(colorSchemeKey);
+        const supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+
+        if (colorSchemeItem == 'dark' || colorSchemeItem === 'auto' && supportDarkMode) {
+            
+
+            document.documentElement.dataset.scheme = 'dark';
+        } else {
+            document.documentElement.dataset.scheme = 'light';
+        }
+    })();
+</script>
+<div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+        <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+        </span>
+    </button>
+
+    <header>
+        
+            
+            <figure class="site-avatar">
+                <a href="/">
+                
+                    
+                    
+                    
+                        
+                        <img src="/img/avatar_hu_ff27af45f451325d.jpg" width="300"
+                            height="397" class="site-logo" loading="lazy" alt="Avatar">
+                    
+                
+                </a>
+                
+                    <span class="emoji">✏️</span>
+                
+            </figure>
+            
+        
+        
+        <div class="site-meta">
+            <h1 class="site-name"><a href="/">我的小站</a></h1>
+            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+        </div>
+    </header><ol class="menu-social">
+            
+                <li>
+                    <a 
+                        href='https://github.com/iCurious-D'
+                        target="_blank"
+                        title="GitHub"
+                        rel="me"
+                    >
+                        
+                        
+                            <!--
+tags: [logo, website, hosting, project, programming, software, development]
+category: Brand
+version: "1.18"
+unicode: "ec1c"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
+</svg>
+
+                        
+                    </a>
+                </li>
+            
+        </ol><ol class="menu" id="main-menu">
+        
+        
+        
+        <li >
+            <a href='/' >
+                
+                
+                
+                    <!--
+category: Buildings
+tags: [apple, devices, connection, link, wifi, bluetooth]
+version: "1.20"
+unicode: "ecde"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M19 8.71l-5.333 -4.148a2.666 2.666 0 0 0 -3.274 0l-5.334 4.148a2.665 2.665 0 0 0 -1.029 2.105v7.2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-7.2c0 -.823 -.38 -1.6 -1.03 -2.105" />
+  <path d="M16 15c-2.21 1.333 -5.792 1.333 -8 0" />
+</svg>
+
+                
+                <span>主页</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/posts/' >
+                
+                
+                
+                    <!--
+tags: [news, newspaper, media, blog]
+version: "1.69"
+unicode: "f1e2"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 4m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z" />
+  <path d="M7 8h10" />
+  <path d="M7 12h10" />
+  <path d="M7 16h10" />
+</svg>
+
+                
+                <span>文章</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/tools' >
+                
+                
+                
+                    <!--
+tags: [cube, app, application, package, container]
+version: "1.0"
+unicode: "ea45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+  <path d="M12 12l8 -4.5" />
+  <path d="M12 12l0 9" />
+  <path d="M12 12l-8 -4.5" />
+</svg>
+
+                
+                <span>工具</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/notes' >
+                
+                
+                
+                    <!--
+category: Document
+tags: [study, learn, diary, write, journal, page, paper, jot down]
+version: "1.3"
+unicode: "eb96"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />
+  <path d="M13 8l2 0" />
+  <path d="M13 12l2 0" />
+</svg>
+
+                
+                <span>笔记</span>
+            </a>
+        </li>
+        
+        
+        <li >
+            <a href='/about/' >
+                
+                
+                
+                    <!--
+category: System
+tags: [tick, person, account, role]
+version: "1.0"
+unicode: "eb49"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
+  <path d="M15 19l2 2l4 -4" />
+</svg>
+
+                
+                <span>关于我</span>
+            </a>
+        </li>
+        
+        <li class="menu-bottom-section">
+            <ol class="menu">
+
+                
+                    <li id="dark-mode-toggle">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="8" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="16" cy="12" r="2" />
+  <rect x="2" y="6" width="20" height="12" rx="6" />
+</svg>
+
+
+
+                        <span>Dark Mode</span>
+                    </li>
+                
+            </ol>
+        </li>
+    </ol>
+</aside>
+
+    <aside class="sidebar right-sidebar sticky">
+        
+            
+                
+    <section class="widget archives">
+        <div class="widget-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <line x1="5" y1="9" x2="19" y2="9" />
+  <line x1="5" y1="15" x2="19" y2="15" />
+  <line x1="11" y1="4" x2="7" y2="20" />
+  <line x1="17" y1="4" x2="13" y2="20" />
+</svg>
+
+
+
+        </div>
+        <h2 class="widget-title section-title">Table of contents</h2>
+        
+        <div class="widget--toc">
+            <nav id="TableOfContents">
+  <ul>
+    <li><a href="#-对称性的觉醒当奇数和偶数平分天下">🎮 对称性的觉醒：当奇数和偶数平分天下</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+        </div>
+    </section>
+
+            
+        
+    </aside>
+
+
+            <main class="main full-width">
+    <article class="main-article">
+    <header class="article-header">
+
+    <div class="article-details">
+    
+    <header class="article-category">
+        
+            
+            
+            
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
+                Leetcode题解故事
+            </a>
+        
+    </header>
+    
+
+    <div class="article-title-wrapper">
+        <h2 class="article-title">
+            <a href="/posts/leetcode_stories/26-06-11/">leetcode3558：对称性的觉醒：当奇数和偶数平分天下</a>
+        </h2>
+    
+        
+    </div>
+
+    
+    
+    
+    
+    <footer class="article-time">
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" />
+  <circle cx="18" cy="18" r="4" />
+  <path d="M15 3v4" />
+  <path d="M7 3v4" />
+  <path d="M3 11h16" />
+  <path d="M18 16.496v1.504l1 1" />
+</svg>
+                <time class="article-time--published" datetime='2026-06-11T13:00:38&#43;08:00'>6月 11, 2026</time>
+            </div>
+        
+
+        
+            <div>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z"/>
+  <circle cx="12" cy="12" r="9" />
+  <polyline points="12 7 12 12 15 15" />
+</svg>
+
+
+
+                <time class="article-time--reading">
+                    1 minute read
+                </time>
+            </div>
+        
+    </footer>
+    
+
+    
+</div>
+
+</header>
+
+    <section class="article-content">
+    
+    
+    <h2 id="-对称性的觉醒当奇数和偶数平分天下">🎮 对称性的觉醒：当奇数和偶数平分天下
+</h2><p>听说村长最近沉迷于一款叫《技能树大亨》的RPG游戏——我怀疑这老头把省下来的钱全充了Steam余额，账号时长怕不是比我刷题还多。今天一大早，我正蹲在锅炉边添柴，电脑屏幕突然弹出老头的远程协助请求。点下接受，村长的游戏画面直接投屏过来——他的人物正卡在技能树界面，鼠标在一棵枝繁叶茂的树状图上疯狂画圈，技能节点之间的连线旁还标注着&quot;普通升级: 1点&quot;和&quot;强化升级: 2点&quot;。</p>
+<p>&ldquo;小白！我的隐藏成就卡住了！&ldquo;村长的声音从屏幕那头炸出来，急得像是副本门口等着拉人的团长，&ldquo;从根技能1号出发，每条连线可以选普通升级花1点，或者强化升级花2点。隐藏成就叫&rsquo;奇数流大师&rsquo;，要求算出有多少种加点法能使到达最深那个终极技能的总消耗是奇数！”</p>
+<p>我盯着屏幕，扫到成就描述末尾一行不起眼的小字——&ldquo;忽略从根到最深节点路径外的所有边&rdquo;。这不就把一棵树压缩成一条链吗？只有从根到最深节点的那条路径算数，其他枝丫全是气氛组，约等于RPG里站桩喊固定台词的NPC。问题瞬缩成两件事：第一，最深那层在哪儿——也就是最大深度k是多少；第二，这k条边上各赋1或2，总和为奇数的组合数是多少。</p>
+<hr>
+<h4 id="第一步找深度是dfs的肌肉记忆">第一步：找深度是DFS的肌肉记忆
+</h4><p>题目给的是无向树——边[1,2]表示1和2互通，虽然根定在1，但遍历必须双向通行，否则DFS 会困在叶子节点，剩下的分支全遍历不到。所以建邻接表时必须每条边两头都加——1的邻居里有2，2的邻居里也有1，双向车道全登记，DFS才能想去哪去哪。</p>
+<p>但双向建图有一个经典坑——不记父节点的话，DFS会在父子之间来回横跳，像喝醉的勇者在两个房间之间来回读条，直到栈溢出教我做人。所以递归时带个fa参数当“防回退机制”——告诉DFS“你刚从你爸那儿过来，别再回去了”</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>MOD <span style="color:#f92672">=</span> <span style="color:#ae81ff">1_000_000_007</span> 
+</span></span><span style="display:flex;"><span>n <span style="color:#f92672">=</span> len(edges) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> 
+</span></span><span style="display:flex;"><span>g <span style="color:#f92672">=</span> [[] <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(n <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)]
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> x, y <span style="color:#f92672">in</span> edges: 
+</span></span><span style="display:flex;"><span>    g[x]<span style="color:#f92672">.</span>append(y) 
+</span></span><span style="display:flex;"><span>    g[y]<span style="color:#f92672">.</span>append(x)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dfs</span>(x: int, fa: int) <span style="color:#f92672">-&gt;</span> int:
+</span></span><span style="display:flex;"><span>    d <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> g[x]:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> y <span style="color:#f92672">!=</span> fa:  <span style="color:#75715e"># 不递归到父节点，防止无限循环</span>
+</span></span><span style="display:flex;"><span>            d <span style="color:#f92672">=</span> max(d, dfs(y, x) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> d
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>k <span style="color:#f92672">=</span> dfs(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>)
+</span></span></code></pre></div><p>双向建图 + fa过滤 = 无向图当有向树遍历。叶子节点没有非父邻居，直接返回0；自底向上逐层加一，max取最大深度。这套组合拳打过无数次的DFS模板——就像RPG里的基础连招。</p>
+<p>深度k到手。</p>
+<hr>
+<h4 id="第二步奇偶性的对称美学">第二步：奇偶性的对称美学
+</h4><p>接下来是核心——k条边，每条1或2，总和为奇数的方案数。</p>
+<p>1是奇数，2是偶数，总和为奇数等价于路径上有奇数个1。枚举C(k,1) + C(k,3) + C(k,5) + &hellip;？我数学早就连本带利还给老师了，组合数求和公式长啥样都忘了，更别说还要取模。</p>
+<p>等等——换个思路：<strong>如果前k-1条边的和是偶数，最后一条只能选1把总和扳成奇数；前k-1条边的和是奇数，最后一条必须选2把总和保持奇数。</strong></p>
+<p>也就是说，前k-1条边可以自由发挥，最后一条边只能被迫营业——有且仅有一种选择能救场。所以总方案数就是前k-1条边的任意组合数——<strong>前k-1条每条自由选1或2，总共2^{k-1}种</strong>。</p>
+<p>再往深层想的话，这可以说是奇偶对称性的必然结果：<strong>对于任意k≥1，在所有2^k种赋值中，权重和为奇数和偶数的方案数永远平分天下，各占一半</strong>。</p>
+<p>这不是什么巧合，是奇偶性天生的对称：把最后一条边从1翻成2，奇偶就翻转，所有方案两两配对，恰好一半奇一半偶。所以答案=<strong>2^k / 2 = 2^{k-1}</strong>。不用枚举，不用求和，一行对称性直接秒杀。</p>
+<pre tabindex="0"><code>return pow(2, k - 1, MOD)
+</code></pre><p><code>pow(base, exp, mod)</code>快速幂，底层用二分指数，O(log k)搞定，属实是标准库里的隐藏神器。</p>
+<hr>
+<h4 id="收工">收工？
+</h4><p>我敲下回车，屏幕那头村长的隐藏成就图标“叮”地一声亮了，金色光芒闪得他差点把电脑抱起来转圈。“拿到了！奇数流大师！我就知道找你是对的！” 村长的声音兴奋得像刚抽到SSR。</p>
+<p>我刚想谦虚两句，突然看到游戏界面上弹出一个新的成就预告——&ldquo;奇数流宗师：应对任意两个技能节点之间的路径，计算奇偶方案数，解锁终极加点方案&rdquo;。</p>
+<p>我心里咯噔一下。任意两个节点之间的路径？那可不是今天这种“从根到最深叶子”的单条快车道了——查询可能从任意节点出发，到任意节点结束，路径长度各不相同，有些说不定还会往上走到公共祖先再拐下去。奇偶对称性的核心没变，路径上有k条边，方案数还是2^{k-1}，但每条查询的k都不一样，怎么快速找出任意两点之间的距离？</p>
+<p>我感觉自己的后背开始冒汗。</p>
+<p>村长还在屏幕那头兴奋地嚷嚷：&ldquo;小白，你看这个&rsquo;奇数流宗师&rsquo;成就，好像有点意思啊！要不你现在帮我看看……&rdquo;</p>
+<p>&ldquo;今、今天就算了吧！&ldquo;我慌忙打断他，&ldquo;我得去……去添柴！锅炉要熄了！&rdquo;</p>
+<p>说完，我果断切断了远程连接，瘫在椅子上长长地舒了一口气。</p>
+<p>明天的事，明天再说吧。</p>
+
+
+
+
+
+
+  
+  
+  
+
+
+<p>
+  <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+    <img alt="知识共享许可协议" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" />
+  </a>
+  <br />
+  本作品采用
+  <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  </a> 进行许可。
+</p>
+
+</section>
+
+
+    <footer class="article-footer">
+    
+    <section class="article-tags">
+        
+            <a href="/tags/%E6%8A%80%E6%9C%AF/">技术</a>
+        
+            <a href="/tags/%E9%A2%98%E8%A7%A3/">题解</a>
+        
+            <a href="/tags/%E6%95%85%E4%BA%8B/">故事</a>
+        
+    </section>
+
+
+    </footer>
+
+
+    
+</article>
+
+    
+
+    
+
+<aside class="related-content--wrapper">
+    <h2 class="section-title">Related content</h2>
+    <div class="related-content">
+        <div class="flex article-list--tile">
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-10/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3691从堆到树：一道题的两个平行宇宙</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-09/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode3689 贪心策略的两种命运：可重复选vs不可重复选</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-08/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode2161 装备分拣：一行流的诱惑与分桶的正道</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-07/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗</h2>
+        </div>
+    </a>
+</article>
+
+            
+                
+<article class="">
+    <a href="/posts/leetcode_stories/26-06-06/">
+        
+        
+
+        <div class="article-details">
+            <h2 class="article-title">leetcode2574：空间复杂度O(1)？村长说这是节俭美德！</h2>
+        </div>
+    </a>
+</article>
+
+            
+        </div>
+    </div>
+</aside>
+
+     
+    
+        
+    <script
+    src="https://giscus.app/client.js"
+    data-repo="iCurious-D/icurious-d.github.io"
+    data-repo-id="R_kgDOSu3GEQ"
+    data-category="General"
+    data-category-id="DIC_kwDOSu3GEc4C-u1E"
+    data-mapping="pathname"
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="light"
+    data-lang="zh-CN"
+    data-loading=""
+    crossorigin="anonymous"
+    async
+></script>
+<script>
+    function setGiscusTheme(theme) {
+        let giscus = document.querySelector("iframe.giscus-frame");
+        if (giscus) {
+            giscus.contentWindow.postMessage(
+                {
+                    giscus: {
+                        setConfig: {
+                            theme: theme,
+                        },
+                    },
+                },
+                "https://giscus.app"
+            );
+        }
+    }
+
+    (function () {
+        addEventListener("message", (e) => {
+            if (event.origin !== "https://giscus.app") return;
+            handler();
+        });
+        window.addEventListener("onColorSchemeChange", handler);
+
+        function handler() {
+            if (document.documentElement.dataset.scheme === "light") {
+                setGiscusTheme('light');
+            } else {
+                setGiscusTheme('dark');
+            }
+        }
+    })();
+</script>
+
+    
+
+    <footer class="site-footer">
+    <section class="copyright">
+        &copy; 
+        
+        2026 我的小站
+    </section>
+    
+    <section class="powerby">
+        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
+        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+    </section>
+</footer>
+
+
+    
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    
+    <div class="pswp__bg"></div>
+
+    
+    <div class="pswp__scroll-wrap">
+
+        
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                
+                
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo="crossorigin="anonymous"
+                defer
+                >
+            </script><script 
+                src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU="crossorigin="anonymous"
+                defer
+                >
+            </script><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css"crossorigin="anonymous"
+            ><link 
+                rel="stylesheet" 
+                href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css"crossorigin="anonymous"
+            >
+    
+
+            </main>
+        </div>
+        <script 
+                src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
+                
+                >
+            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+<script>
+    (function () {
+        const customFont = document.createElement('link');
+        customFont.href = "https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap";
+
+        customFont.type = "text/css";
+        customFont.rel = "stylesheet";
+
+        document.head.appendChild(customFont);
+    }());
+</script>
+
+    </body>
+</html>

@@ -6,7 +6,968 @@
         <description>Recent content on 我的小站</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh</language>
-        <lastBuildDate>Mon, 08 Jun 2026 14:04:38 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Mon, 15 Jun 2026 12:36:59 +0800</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>leetcode2095 快慢指针找前驱，虚拟节点消特判</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-15/</link>
+        <pubDate>Mon, 15 Jun 2026 12:36:59 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-15/</guid>
+        <description>&lt;h2 id=&#34;-快慢指针找前驱虚拟节点消特判&#34;&gt;🎮 快慢指针找前驱，虚拟节点消特判
+&lt;/h2&gt;&lt;p&gt;昨天村长把“对称之盾”爆出来后，乐得像个两百斤的傻子。听说他那 Steam Deck 的风扇嗡嗡转了一宿，隔着半堵墙都能听见装备界面循环播放的BGM。今天一大早，我正蹲在锅炉边添柴，寻思着要不要摸个鱼，院门“砰”地一声又被一脚踹开。&lt;/p&gt;
+&lt;p&gt;“小白！出Bug了！”村长冲进来，屏幕上还是昨天那条魔法项链，但这次画风突变——项链正中间的环正在疯狂闪烁刺眼的红光，还伴随着刺耳的警报声。&lt;/p&gt;
+&lt;p&gt;“你看！锻造台提示说，项链的能量回路必须重新平衡！”村长把屏幕怼到我脸上，唾沫星子差点喷我眼睛里，“要删掉正中间那个环！只有把它‘优化’掉，整条链子的对称性才能稳定，我的盾牌属性才能生效！”&lt;/p&gt;
+&lt;p&gt;我接过电脑，屏幕上那条项链依然排成一条直线，圆环之间用箭头连接。这次的任务不是求什么孪生和了，而是简单粗暴的物理超度——定位正中间的节点，把它从链上摘掉。如果节点数是奇数，中间只有一个；如果是偶数，中间有两个，取靠后的那个，也就是下标为 &lt;code&gt;⌊n/2⌋&lt;/code&gt; 的那个。&lt;/p&gt;
+&lt;p&gt;“村长，这不就是经典的&lt;strong&gt;删除链表中间节点&lt;/strong&gt;吗？快慢指针的老本行。”我撸起袖子，“只不过这次不是找中点本身，而是要找它的&lt;strong&gt;前驱节点&lt;/strong&gt;——毕竟单向链表只认 next 不认 prev，要删掉中点，得让前一个节点直接跳过它，指向它的下一个节点，完成物理断联。”&lt;/p&gt;
+&lt;h4 id=&#34;快慢指针找前驱&#34;&gt;快慢指针找前驱
+&lt;/h4&gt;&lt;p&gt;我抄起键盘，开始盘逻辑。对付这种单链表找位置的活儿，还得是快慢指针这对老搭档—— &lt;code&gt;fast&lt;/code&gt; 每次走两步，&lt;code&gt;slow&lt;/code&gt; 每次走一步，等 &lt;code&gt;fast&lt;/code&gt; 走到尽头，&lt;code&gt;slow&lt;/code&gt; 刚好站在中间节点上。&lt;/p&gt;
+&lt;p&gt;不过这次有个小细节：我们要删的恰好就是中间节点本身。单向链表是个无情的数据结构——每个节点只认 &lt;code&gt;next&lt;/code&gt;，不认 &lt;code&gt;prev&lt;/code&gt;，想删谁，得先找到它的前任。为了让 &lt;code&gt;slow&lt;/code&gt; 最终稳稳停在中间节点的前一个位置，我决定让 &lt;code&gt;fast&lt;/code&gt; 抢跑两步——等 &lt;code&gt;fast&lt;/code&gt; 跑到终点时，&lt;code&gt;slow&lt;/code&gt; 自然就卡在前驱的位置上了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;deleteMiddle&lt;/span&gt;(self, head: Optional[ListNode]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; Optional[ListNode]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 边界情况：只有一个节点，删掉后链表为空&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; head&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    slow, fast &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; head, head
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# fast 先走两步，让 slow 慢一拍，最终 slow 停在中间节点的前驱&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    fast &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fast&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; fast &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; fast&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        slow &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; slow&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        fast &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fast&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 物理断联：让前驱直接指向中间节点的下一个节点&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    slow&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; slow&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; head
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;提交，AC。我把屏幕转过去，正准备向村长邀功：“搞定！中间的红环已经被抠掉了！”&lt;/p&gt;
+&lt;p&gt;“啪。” 后脑勺突然挨了轻轻一下。老勇者不知何时又出现在我身后，盯着我的代码。&lt;/p&gt;
+&lt;p&gt;“快慢指针找前驱，O(N) 时间，O(1) 空间，逻辑没毛病。” 他抿了一口茶，慢条斯理地说道，“但是小白啊，你的边界条件处理得不够优雅。你看，为了处理只有一个节点的情况，你硬生生在函数开头打了一个&lt;code&gt;if&lt;/code&gt;补丁！这在架构设计里叫什么？这叫‘补丁式编程’！万一哪天需求变了，变成删倒数第二个节点，你是不是还得再打一排补丁？”&lt;/p&gt;
+&lt;p&gt;我愣在原地：“那……怎么改进？”&lt;/p&gt;
+&lt;p&gt;“&lt;strong&gt;虚拟头节点（Dummy Node）&lt;/strong&gt;。” 老勇者微微一笑，“Dummy Node，链表题里的万能站位符。”&lt;/p&gt;
+&lt;h4 id=&#34;虚拟节点消特判&#34;&gt;虚拟节点消特判
+&lt;/h4&gt;&lt;p&gt;“在链表最前面加一个哑节点 &lt;code&gt;dummy&lt;/code&gt;，不参与战斗，只负责站位。让 &lt;code&gt;slow&lt;/code&gt; 从 &lt;code&gt;dummy&lt;/code&gt; 出发，&lt;code&gt;fast&lt;/code&gt; 从真正的 &lt;code&gt;head&lt;/code&gt; 出发，同时走。这样一来，&lt;code&gt;slow&lt;/code&gt; 天然比 &lt;code&gt;fast&lt;/code&gt; 慢了一拍——不需要手动抢跑。而且不管要删的是不是真正的头节点，&lt;code&gt;slow&lt;/code&gt; 永远指着被删节点的前驱，连 &lt;code&gt;if not head.next&lt;/code&gt; 的特判都省了。最后返回 &lt;code&gt;dummy.next&lt;/code&gt;，完美。”&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;deleteMiddle&lt;/span&gt;(self, head: Optional[ListNode]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; Optional[ListNode]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 引入虚拟头节点，消灭边界特判&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dummy &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ListNode(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, head)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# slow从dummy出发，fast从head出发&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    slow, fast &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dummy, head    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; fast &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; fast&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        slow &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; slow&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        fast &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fast&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    slow&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; slow&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; dummy&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我思路瞬间清爽了，虚拟头结点就像一个站在队伍最前面的替补队员，不参与比赛，但保证排头有人。&lt;code&gt;slow&lt;/code&gt; 和 &lt;code&gt;fast&lt;/code&gt; 从不同起点同时出发，天然拉开了一拍的差距。原本那个让人头疼的‘头节点可能被删’或者‘单节点越界’的边界问题，全部被 &lt;code&gt;dummy&lt;/code&gt; 给消化掉——代码从八行缩到六行，特判抹除，逻辑一马平川。&lt;/p&gt;
+&lt;p&gt;“&lt;strong&gt;虚拟头结点是链表题的万能润滑剂&lt;/strong&gt;，” 老勇者拍了拍我的肩膀，“遇到删除操作，先想想能不能用 &lt;code&gt;dummy&lt;/code&gt; 把边界条件统一掉。记住一句话：能少写一行特判，就少埋一个 Bug。”&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;两套解法记心间村长大坑无尽头&#34;&gt;两套解法记心间，村长大坑无尽头
+&lt;/h4&gt;&lt;p&gt;村长那边，项链中间那个闪烁红光的环“咔嚓”一声碎裂消失，剩下两半自动接合，整条链子散发出稳定的蓝色光芒。对称之盾的属性面板刷新了——防御力后面多了一行金色小字：“已激活：链路平衡加成”。&lt;/p&gt;
+&lt;p&gt;老头激动得抱着机器原地蹦跶，“拿到了！平衡加成！我就知道删掉中间那个环管用！”&lt;/p&gt;
+&lt;p&gt;我靠在椅背上，端起茶杯。平心而论，“快指针抢跑 + 前驱定位” 的解法虽然多打了一个 &lt;code&gt;if&lt;/code&gt; 补丁，但逻辑清晰、稳如老狗，每一步都清清楚楚；而老勇者的 Dummy Node 技巧也确实把原本需要特殊处理的边界条件化于无形，代码更短，逻辑更纯粹。我把两种写法并排收进魔法书，记了一笔：快慢指针找前驱，虚拟节点消特判。&lt;/p&gt;
+&lt;p&gt;看着村长心满意足地溜达出门的背影，我忍不住在心里嘀咕：村长这条魔法项链的副本连打了两天，每天解锁一个新花样。不知道明天锻造台会不会又整出什么链表操作的新皮肤——也许是指定位置插入？也许是每隔 k 个删一个？照这个趋势下去，迟早有一天他会拿着一条带环的链表跑来问我：“小白啊，你看这链子它怎么自己咬住尾巴了？”&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode2130 快慢指针拆项链，递归回溯借东风</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-14/</link>
+        <pubDate>Sun, 14 Jun 2026 12:37:13 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-14/</guid>
+        <description>&lt;h2 id=&#34;快慢指针拆项链递归回溯借东风&#34;&gt;🎮快慢指针拆项链，递归回溯借东风
+&lt;/h2&gt;&lt;p&gt;今天我正蹲在锅炉边享受难得的清静，熟悉的Steam Deck风扇声又由远及近地碾了过来。村长捧着电脑冲了进来，屏幕上闪烁着一条由圆环串联而成的项链，每个环上标着数字，还散发着淡蓝色的魔法光芒。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;小白！游戏里掉落了一条神秘的项链！&amp;ldquo;村长的眼睛比项链还亮，&amp;ldquo;你看，这链子一共 &lt;code&gt;n&lt;/code&gt; 个环，&lt;code&gt;n&lt;/code&gt; 还是偶数！游戏提示说蕴含什么对称的力量——从两头往中间数，第 &lt;code&gt;i&lt;/code&gt; 个环和第 &lt;code&gt;n-1-i&lt;/code&gt; 个环叫‘孪生环’！每对孪生环放在一起会产生能量共鸣，共鸣值就是两个环上的数字之和！需要找出最强共鸣值提交给锻造台，才能解锁传说中的对称之盾！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我接过电脑，屏幕上那条项链排成一条直线，圆环之间用箭头连接——这不就是链表吗？偶数个节点，首尾对称配对，求最大孪生和。“村长，您直接把它塞进一个数组里，然后用个 &lt;code&gt;for&lt;/code&gt; 循环，左边一个指针右边一个指针往中间夹击不就行了？”&lt;/p&gt;
+&lt;p&gt;村长一听，胡子都翘起来了：“糊涂！数组是什么？那是连续内存！这链子这么长，万一中间断了，你还得重新分配一大块连续的内存空间来存它！我们村的魔法锅炉用的就是碎片化内存管理，最忌讳动不动就开大数组！最好是 O(1) 空间复杂度，原地解决！”&lt;/p&gt;
+&lt;p&gt;我叹了口气，行吧，那只能对链表本身进行物理改造了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;斩链刀反转术&#34;&gt;斩链刀·反转术
+&lt;/h4&gt;&lt;p&gt;梳理下思路：快慢指针找中点，反转后半段，然后前后同时遍历配对——正好是 O(n) 时间加 O(1) 空间。&lt;/p&gt;
+&lt;p&gt;我抄起键盘开干：快慢指针是老搭档了，&lt;code&gt;fast&lt;/code&gt; 每次走两步，&lt;code&gt;slow&lt;/code&gt; 每次走一步，当 &lt;code&gt;fast&lt;/code&gt; 跑到终点时，&lt;code&gt;slow&lt;/code&gt; 正好卡在中点。然后把后半段链表反转，让尾节点变成新头。最后前半段从原头出发，后半段从新头出发，一边走一边求和，&lt;code&gt;max&lt;/code&gt; 一路追最大值。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Solution&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;middleNode&lt;/span&gt;(self, head: Optional[ListNode]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; Optional[ListNode]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        slow &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fast &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; head
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; fast &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; fast&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            slow &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; slow&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            fast &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fast&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; slow
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;reverseList&lt;/span&gt;(self, head: Optional[ListNode]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; Optional[ListNode]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        pre, cur &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;, head
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; cur:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            nxt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; cur&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cur&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pre
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            pre &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; cur
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cur &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nxt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; pre
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pairSum&lt;/span&gt;(self, head: Optional[ListNode]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        mid_node &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;middleNode(head)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        second_head &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;reverseList(mid_node)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; second_head:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; max(ans, head&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; second_head&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            head &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; head&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            second_head &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; second_head&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; ans
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;提交，AC。“村长，这什么孪生环啊，分明是把链表反转加双指针的经典面试题穿上了魔法项链的皮肤！连‘对称之盾’这种道具名都起得跟算法术语似的。”我一边吐槽，一边我把计算出的最大孪生和报给村长：“是 10086！”&lt;/p&gt;
+&lt;p&gt;村长激动地一拍大腿：“好！我就知道这条项链大有玄机！你听听，10086——这数字多耳熟，我上个月充话费打的就是这个号！我得赶紧提交共鸣值，对称之盾在锻造台上已经冒金光了！”说罢，他便捧着电脑倒腾了起来。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;回溯剑递归道&#34;&gt;回溯剑·递归道
+&lt;/h4&gt;&lt;p&gt;“快慢指针加反转链表，O(n)时间，O(1)空间，写得不错。” 熟悉的声音从身后传来。&lt;/p&gt;
+&lt;p&gt;老勇者不知何时倚在了门框上，手里端着一杯枸杞茶，瞅着屏幕。他接着抿了一口茶，“但你有没有想过，你为了算个最大值，把人家好好的链表给拆了？这叫破坏性读取，懂不懂？”&lt;/p&gt;
+&lt;p&gt;我愣在原地：“可是村长说要 O(1) 空间……”&lt;/p&gt;
+&lt;p&gt;“O(1) 空间只是手段，不是目的。”老勇者放下茶杯，指尖在键盘上飞舞：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Solution&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pairSum&lt;/span&gt;(self, head: Optional[ListNode]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        left &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; head
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dfs&lt;/span&gt;(node):            
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; node:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;# 先递归到底，node走到链表尾部&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                dfs(node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 回溯时，node 从尾向头走，left 从头向尾走，两者天然形成孪生配对&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;nonlocal&lt;/span&gt; left, ans
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; max(ans, left&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            left &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; left&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;next 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dfs(head)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; ans
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我盯着那段代码，瞳孔地震：“等等……这是……”&lt;/p&gt;
+&lt;p&gt;“没错。”老勇者微微一笑，“&lt;strong&gt;递归回溯&lt;/strong&gt;。函数调用栈本身就是一条隐形的链表。利用调用栈天然的 LIFO 特性，当你一路递归到底再回溯上来时，&lt;code&gt;node&lt;/code&gt; 是从尾部往头部走的，而我的 &lt;code&gt;left&lt;/code&gt; 是从头部往尾部走的。两者在回溯过程中自然相遇——这不就是最完美的孪生配对吗？”&lt;/p&gt;
+&lt;p&gt;他顿了顿，悠悠地吐出一句：“不需要找中点，不需要反转链表，不需要手动维护三个指针。代码只有十几行，逻辑优雅得像首诗。”&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;确定vs优雅之辩&#34;&gt;确定vs优雅之辩
+&lt;/h4&gt;&lt;p&gt;村长凑过来，盯着老勇者的那段代码，眉头拧成了麻花：“递归？链表用递归？不怕爆栈？你这 &lt;code&gt;dfs(node.next)&lt;/code&gt; 一层套一层，万一这链子有十万个节点，一半也有五万层，到时候一个 &lt;code&gt;StackOverflowError&lt;/code&gt;，连个报错信息都来不及打就炸了！这叫优雅？这这叫给评测机递刀子，给生产环境埋炸弹！“&lt;/p&gt;
+&lt;p&gt;他气的胡子一翘一翘的：“我告诉你，真正的工程化思维是什么？是&lt;strong&gt;确定性&lt;/strong&gt;！是能跑在生产环境里不炸的稳定性！不是让你在这儿写什么‘回溯的诗’！诗能当饭吃吗？诗能让服务器不宕机吗？不能！”&lt;/p&gt;
+&lt;p&gt;面对村长唾沫横飞的“工程化”说教，老勇者连眼皮都没抬一下。他轻轻抿了口茶：“老村长啊，你只盯着爆栈的定时炸弹，却没看见迭代反转的副作用。小白那套快慢指针加反转链表的做法，原地把人家后半段链表的 &lt;code&gt;next&lt;/code&gt; 全拧反了。这在算法设计里叫什么？这叫‘破坏性副作用’！“&lt;/p&gt;
+&lt;p&gt;老勇者的声音不大，却字字诛心：”如果在生产环境里，另一个线程正在遍历这条链表——比如统计它的长度——小白这一刀切下去，那个线程当场就得给你抛出一个 &lt;code&gt;NullPointerException&lt;/code&gt;。递归虽然费栈，但它不修改原数据，是纯函数式的读操作，没有破坏性副作用。你管这叫定时炸弹，我倒觉得这是读写分离的架构美学。”&lt;/p&gt;
+&lt;p&gt;村长一听，胡子又翘了起来：“你跟我谈架构美学？我告诉你，在服务器机房里，内存就是命！你那一层层递归调用栈——五万层栈帧，每帧存局部变量和返回地址，空间开销是O(n)，比小白那O(1)的迭代反转多了一整个数量级！题目数据量小的时候你还能装优雅，数据量一上来，操作系统直接甩个 &lt;code&gt;SIGSEGV&lt;/code&gt; 送你回老家！”&lt;/p&gt;
+&lt;p&gt;老勇者也不恼，只是慢条斯理地吹了吹茶杯里的热气：“迭代反转O(1)额外空间不假，但那是在原地修改的前提下——它把原链表拆了重装。如果这道题要求保留原链表不变，你那一套就得先拷贝再反转，空间一样O(n)。递归的回溯本质上是在调用栈上隐式地维护了一个‘从尾到头’的遍历顺序，不需要显式修改任何指针。你说它费栈，我说它省心。哪套方案更优，取决于约束条件，不是一棍子打死的事。”&lt;/p&gt;
+&lt;p&gt;两人你一言我一语，一个坚持“爆栈风险不可控”，一个反驳“并发环境下数据完整性更重要”，唾沫星子横飞，简直比代码评审会上架构师和SRE吵架还激烈。&lt;/p&gt;
+&lt;p&gt;我呆呆地坐在角落里，看着这两位大佬争得面红耳赤。半晌，我弱弱地举起手，试图打破这剑拔弩张的气氛：“那个……两位前辈……”&lt;/p&gt;
+&lt;p&gt;两人同时转过头：“说！！”&lt;/p&gt;
+&lt;p&gt;我咽了口唾沫，小声说道：“其实……这题如果用 Python 写的话，直接把链表转成列表，然后双指针从两头往中间夹击求最大值……不仅不用反转链表，也不用递归爆栈，而且运行速度比你们俩都快……”&lt;/p&gt;
+&lt;p&gt;空气突然安静了。&lt;/p&gt;
+&lt;p&gt;村长和老勇者对视了一眼，同时冷哼一声，异口同声地骂道：“闭嘴！！”&lt;/p&gt;
+&lt;p&gt;说完，两人一甩袖子，各自背着手气呼呼地走了出去，只留我一个人在风中凌乱。&lt;/p&gt;
+&lt;p&gt;所以……我这算不算是凭一己之力，终结了一场史诗级的技术辩论？&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-13/</link>
+        <pubDate>Sat, 13 Jun 2026 22:13:24 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-13/</guid>
+        <description>&lt;h2 id=&#34;绝对防御手动hash与模运算的土豆级零信任协议&#34;&gt;🎮绝对防御！手动Hash与模运算的土豆级零信任协议
+&lt;/h2&gt;&lt;p&gt;今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。&lt;/p&gt;
+&lt;p&gt;“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”&lt;/p&gt;
+&lt;p&gt;我接过那张手绘的权重表，嘴角抽搐：“村长，这都2026年了，您还在用手动哈希？连个JWT都不用？咱村不是刚通了5G吗，隔壁勇者团都用上OAuth2.0了。”&lt;/p&gt;
+&lt;p&gt;村长捋了捋胡子，一脸高深莫测：“年轻人，这叫复古硬核加密。万一哪天基站被炸了，云计算挂了，咱村的秘密指令还得靠这张纸传。再说了，我这算法密钥只有咱俩知道——绝无第三方持有，零信任架构懂不懂？少废话，赶紧算！”&lt;/p&gt;
+&lt;p&gt;我翻开手册，开头就写了三条让人血压飙升的规则：&lt;/p&gt;
+&lt;p&gt;第一条，每个单词的“密码值”= 单词里每个字母在权重表中对应值的总和。&lt;/p&gt;
+&lt;p&gt;我心中暗想，说得跟什么上古魔法似的，小学二年级的加法运算也敢叫加密。瞥了眼村长，他正自顾自地捋着胡子，仿佛这真的是什么惊天动地的黑科技。&lt;/p&gt;
+&lt;p&gt;第二条，把总和对 26 取模，得到一个 0~25 的数字。&lt;/p&gt;
+&lt;p&gt;我叹了口气，经典 &lt;code&gt;% 26&lt;/code&gt;，取模压缩。村长您是不是觉得26个字母刚好能塞进一个byte的低5位？内存优化强迫症是吧？&lt;/p&gt;
+&lt;p&gt;第三条，倒序映射： 0 → &amp;lsquo;z&amp;rsquo;, 1 → &amp;lsquo;y&amp;rsquo;, &amp;hellip;, 25 → &amp;lsquo;a&amp;rsquo;。&lt;/p&gt;
+&lt;p&gt;我盯着这行规则看了足足五秒钟，终于绷不住了：&amp;ldquo;等等！正常人不都是 0→&amp;lsquo;a&amp;rsquo; 吗？为什么这里是反的？村长你是不是把ASCII表贴反了？还是说这是为了防止我们用 &lt;code&gt;char + &#39;a&#39;&lt;/code&gt; 一行搞定而故意加的debuff？！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;村长在旁边嘿嘿一笑：&amp;ldquo;哦，那个啊……因为我觉得从z开始数比较有仪式感。你想啊，z是字母表的终点，从终点往起点映射，有一种‘落叶归根’的哲学意味。怎么，有意见？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我深吸一口气，把到嘴边的吐槽硬生生咽了回去：&amp;ldquo;没意见，您说了算。我写还不行吗。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;既然规则已经明确到这种程度，那还有什么好犹豫的？直接模拟就完事了！&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Solution&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mapWordWeight&lt;/span&gt;(self, words: List[str], weights: List[int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; str:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ord_a &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ord(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ord_z &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ord(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;z&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; word &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; words:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            weight &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sum(weights[ord(c) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; ord_a] &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; word) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;26&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ans&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(chr(ord_z &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; weight))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;join(ans)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;提交，AC，一气呵成。我把翻译出来的指令条递给村长——上面赫然写着：&amp;ldquo;下午三点村口开会讨论秋季土豆种植计划。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;村长接过指令条，满意地点点头：“好！解密成功！这套算法果然只有你能驾驭！” 说完，他背着手，迈着那种“绝世高手下山”的六亲不认步伐，慢悠悠地踱出了院子，甚至还哼起了不知名的小曲儿。&lt;/p&gt;
+&lt;p&gt;我呆立在原地，瞅着村长那逐渐远去的背影，感觉自己的CPU温度正在飙升。这老头……搞了权重累加、取模压缩、倒序映射三层加密，连‘落叶归根’的哲学都用上了，就为了保护土豆种植计划？！他到底在防谁啊？防隔壁村的猪吗？！再说了，谁家好人会把最高机密写在一本皱巴巴的手册上啊？要是来场暴雨，或者被哪只不长眼的乌鸦当成筑巢材料叼走，咱村的零信任架构直接物理层面崩了好吗！&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3559 二进制传送门觉醒：当每个节点都能瞬间跳跃</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-12/</link>
+        <pubDate>Fri, 12 Jun 2026 15:25:32 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-12/</guid>
+        <description>&lt;h2 id=&#34;二进制传送门觉醒当每个节点都能瞬间跳跃&#34;&gt;🎮二进制传送门觉醒：当每个节点都能瞬间跳跃
+&lt;/h2&gt;&lt;p&gt;今天一大早，我刚推开村口锅炉房的门，就看见村长蹲在那儿，顶着两个黑眼圈，怀里抱着笔记本电脑，屏幕上&amp;rsquo;&amp;lsquo;奇数流宗师&amp;rsquo;&amp;lsquo;几个烫金大字一闪一闪的，后面跟着密密麻麻的查询列表，滚动条缩成了一个小点。墨菲定律诚不欺我——怕什么来什么。&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;lsquo;小白！&amp;lsquo;&amp;lsquo;村长看到我，像装了雷达一样从地上弹起来，&amp;lsquo;&amp;lsquo;这个成就太难了！你看，宗师成就要求处理任意两个节点之间的路径查询，不是只有根到叶子那么简单！&amp;lsquo;&amp;lsquo;他疯狂划拉屏幕，&amp;lsquo;&amp;lsquo;查询可能是从1号到5号，从3号到7号，从8号到2号……我把昨天你那套压扁成链的代码套进去，跑的我风扇狂转，Steam Deck差点起飞——结果还没跑完！&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;我心里一沉。昨天那是从根到最深叶子，路径只有一条，深度k固定，一行快速幂秒杀。今天是&lt;strong&gt;任意两点之间的路径&lt;/strong&gt;——每条查询的起点终点都不一样，路径长度k各不相同。昨天的对称性trick倒是还能用——路径上有k条边，方案数还是2^{k-1}。但问题变成了：&lt;strong&gt;怎么快速算出任意两点间的路径长度&lt;/strong&gt;？&lt;/p&gt;
+&lt;p&gt;我在草稿纸上开始画树。假设查询节点4和节点5，路径是4→3→5，长度是2，查询节点2和节点5，路径是2→1→3→5，长度是3。关键藏在这些路径的交汇处——它们不是一条直线冲到底的，而是先往上爬到某个公共祖先，再拐弯往下。那个&amp;rsquo;&amp;lsquo;分叉点&amp;rsquo;&amp;lsquo;就是&lt;strong&gt;最近公共祖先，LCA&lt;/strong&gt;。那么，对于每个查询(u, v)，路径长度 &lt;code&gt;k = depth[u] + depth[v] - 2*depth[LCA]&lt;/code&gt;。有了k，对称性trick照旧——方案数还是2^{k-1}。&lt;/p&gt;
+&lt;p&gt;关键在于，&lt;strong&gt;怎么快速找到LCA&lt;/strong&gt;？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;遇事不决先暴力&#34;&gt;遇事不决先暴力？
+&lt;/h4&gt;&lt;p&gt;既然LCA的定义是两个节点往上爬、第一个相遇的祖先，那最朴素的做法就是模拟这个爬树过程：从u一路爬到根，把沿途所有节点记下来；再从v一路爬到根，看哪个节点最先出现在u的路径里。&lt;/p&gt;
+&lt;p&gt;对于查询(u, v)，分别爬树记录路径，暴力比对找第一个共同节点： &lt;code&gt;find_path(node)&lt;/code&gt; 函数记录从node到根节点的路径，&lt;code&gt;find_lca_brute_force(u, v)&lt;/code&gt;函数暴力找u和v的最近公共祖先(LCA)。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 暴力LCA解法：通过爬树找最近公共祖先       &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;assignEdgeWeights&lt;/span&gt;(edges: List[List[int]], queries: List[List[int]]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; List[int]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	MOD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1_000_000_007&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(edges) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [[] &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x, y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; edges:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		g[x]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		g[y]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 预处理父节点和深度&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	parent &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (n &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# parent[i]表示节点i的父节点&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	depth &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (n &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)   &lt;span style=&#34;color:#75715e&#34;&gt;# depth[i]表示节点i的深度   &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dfs&lt;/span&gt;(x: int, fa: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        parent[x] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fa
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; g[x]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; fa:  &lt;span style=&#34;color:#75715e&#34;&gt;# 避免回溯到父节点&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                depth[y] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; depth[x] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                dfs(y, x)     
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dfs(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# 从根节点1开始DFS，根节点的父节点设为0（虚拟节点）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 记录从node到根节点的路径列表（包含node和根节点）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;find_path_to_root&lt;/span&gt;(node: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; list:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        path &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        current &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; node
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; current &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:  &lt;span style=&#34;color:#75715e&#34;&gt;# 一直爬到根节点的父节点（虚拟节点0）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            path&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(current)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            current &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; parent[current]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; path
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 暴力找u和v的最近公共祖先(LCA)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;find_lca_brute_force&lt;/span&gt;(u: int, v: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        path_u &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; find_path_to_root(u)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        path_v &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; find_path_to_root(v)       
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        path_u_set &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; set(path_u)  &lt;span style=&#34;color:#75715e&#34;&gt;# 将path_u转为集合，方便快速查找            &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 从v的路径往上找，第一个在u路径中的节点就是LCA&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; node &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_v:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; node &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; path_u_set:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; node         
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 理论上不会到这里，因为根节点一定是公共祖先&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 计算u到v的路径长度k = depth[u] + depth[v] - 2*depth[LCA]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get_distance&lt;/span&gt;(u: int, v: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        lca &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; find_lca_brute_force(u, v)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; depth[u] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; depth[v] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; depth[lca]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 计算k条边的赋值方案中，使总和为奇数的方案数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;count_odd_ways&lt;/span&gt;(k: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; pow(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, k &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, MOD) &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; k &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 处理每个查询&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    answer &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x, y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; queries:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; y:  &lt;span style=&#34;color:#75715e&#34;&gt;# 同一点，路径长度为0，方案数为0            &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            answer&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 计算路径长度&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            path_length &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; get_distance(x, y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 计算方案数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            answer&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(count_odd_ways(path_length))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; answer
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我默默算了笔账：查询数量十万，每次暴力找LCA——&lt;code&gt;find_path&lt;/code&gt; 爬树最坏O(n)，&lt;code&gt;node in path_v&lt;/code&gt; 又是O(n)，总复杂度O(q*n)，十万乘十万，评测机不弹TLE才怪。&lt;/p&gt;
+&lt;p&gt;正一筹莫展，后脑勺挨了轻轻一下——力道依旧精准。老勇者的声音从背后传来：&amp;ldquo;又在暴力枚举？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我捂着后脑勺，感觉救星到了。老勇者瞄了一眼屏幕上的查询列表，又看了一眼我的那段爬树代码，叹了口气：&amp;ldquo;你啊，总是用O(n)的方法硬刚O(log n)能解决的问题。告诉我，你知道&lt;strong&gt;倍增法求LCA&lt;/strong&gt;吗？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我心虚地缩了缩脖子：&amp;ldquo;听说过，Binary Lifting&amp;hellip;&amp;hellip;但一直没学，总觉得二进制跳来跳去的有点玄乎……&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;&lt;strong&gt;二进制提升，求LCA的神器&lt;/strong&gt;。&amp;ldquo;老勇者打了个响指，&amp;ldquo;准备让暴力爬树法退役吧，你该学点真正的树上跳跃姿势了！&amp;rdquo;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;当lca遇上二进制提升&#34;&gt;当LCA遇上二进制提升！
+&lt;/h4&gt;&lt;p&gt;他在纸上画了一棵枝繁叶茂的大树，并在旁边写下几个大字——&amp;rsquo;&amp;rsquo;&lt;strong&gt;预处理 + 快速查询 = 降维打击&lt;/strong&gt;&amp;rsquo;&amp;rsquo;。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;暴力法的痛点在哪？&amp;ldquo;老勇者指向树上的一个节点，&amp;ldquo;每次查询都要从节点一步步往上爬，像蜗牛一样。如果树退化成一条链，爬一次就是O(n)。十万次查询就是O(nq)，评测机不TLE才是见鬼了。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;lsquo;不一步一步爬？&amp;lsquo;&amp;lsquo;我感到匪夷所思。毕竟在我的认知里，树只能沿着边往上走，要么dfs，要么bfs——就像RPG里爬塔，每层楼梯都得踩一遍，怎么可能跳过中间楼层直接到顶层？&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;rsquo;&lt;strong&gt;预处理&lt;/strong&gt;。&amp;lsquo;&amp;lsquo;老勇者吐出三个字，&amp;lsquo;&amp;lsquo;提前给每个节点装上 &amp;lsquo;快捷传送门&amp;rsquo;——不只存它的父节点，而是存它的第1级祖先、第2级祖先、第4级祖先、第8级祖先……直到第2^16级祖先。这样查询的时候，你就可以&amp;rsquo;跳着走&amp;rsquo;，而不是&amp;rsquo;爬着走&amp;rsquo;。这就是&lt;strong&gt;二进制提升&lt;/strong&gt;的名字由来——用2的幂次来加速跳跃。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我挠头：&amp;lsquo;&amp;lsquo;为什么偏偏是2的幂次？&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;lsquo;因为任何整数都可以拆成二进制。&amp;lsquo;&amp;lsquo;老勇者瞅了我一眼，&amp;lsquo;&amp;lsquo;比如13 = 8 + 4 + 1 = 2^3 + 2^2 + 2^0。如果你要往上跳13步，不用一步一步爬，只需要跳三次：先跳8步，再跳4步，最后跳1步。每次跳跃都是O(1)，总共O(log n)。从蜗牛进化成袋鼠，靠的就是二进制拆分。&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;他在纸上写下了核心定义：&lt;code&gt;pa[x][i] = x的第2^i级祖先&lt;/code&gt;，也就是节点x向上跳2^i步到达的祖先。&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;lsquo;哦——&amp;rsquo;&amp;rsquo; 我若有所思，&amp;lsquo;&amp;lsquo;提前处理好节点的2的幂次级祖先们？可是这要怎么算？每个节点都跳一遍不还是炸？”&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;rsquo;&lt;strong&gt;动态规划&lt;/strong&gt;。&amp;lsquo;&amp;lsquo;老勇者写下状态转移方程：&lt;code&gt;pa[x][i+1] = pa[pa[x][i]][i]&lt;/code&gt;，&amp;rsquo;&amp;rsquo; x的第2^{i+1}级祖先，等于x的第2^i级祖先再往上跳2^i步。&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;我感觉脑子有点转不过来：&amp;lsquo;&amp;lsquo;这不会跳错？套娃套得我头晕。&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;lsquo;不会。&amp;lsquo;&amp;lsquo;老勇者画了个示意图，&amp;lsquo;&amp;lsquo;假设x的第2级祖先是a，a的第2级祖先是b。x到a是2步，a到b也是2步，那x到b就是4步——所以b就是x的第4级祖先。这个递推的精髓在于：用已知的短距离跳跃，组合出未知的长距离跳跃。2^i级的祖先你已经在上一轮算好了，拿它再跳一次2^i，就是2^{i+1}级。倍增就是这么来的——每一步都建立在之前所有步的基础上，像盖楼一样一层一层往上搭。&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;DFS的时候，一边往下走一边顺手填。走到一个节点时，它的所有2的幂次祖先都已经在上层被算好了，你只需要用父节点的数据往上递推——&lt;code&gt;pa[x][0]&lt;/code&gt;是父节点，&lt;code&gt;pa[x][1]&lt;/code&gt;是爷爷，&lt;code&gt;pa[x][2]&lt;/code&gt;是爷爷的爷爷，以此类推。一棵树遍历完，&lt;strong&gt;每个节点都自带一套二进制传送门&lt;/strong&gt;，以后找LCA的时候，你就不需要再爬树了，直接让节点按二进制拆分往上层跳就行。&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;老勇者接着写下了完整的预处理代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;LcaBinaryLifting&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;__init__&lt;/span&gt;(self, edges: List[List[int]]):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(edges) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; n&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bit_length()  &lt;span style=&#34;color:#75715e&#34;&gt;# 计算需要多少层：log2(n)向上取整&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [[] &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n)]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x, y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; edges:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            x &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 节点编号从0开始（内部处理更方便）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            y &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            g[x]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            g[y]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# depth[i]: 节点i的深度（根节点深度为0）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        depth &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; n
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# pa[i][j]: 节点i的第2^j级祖先（-1表示不存在）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        pa &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; m &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n)]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dfs&lt;/span&gt;(x: int, fa: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            pa[x][&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; fa  &lt;span style=&#34;color:#75715e&#34;&gt;# 第2^0=1级祖先就是父节点&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; g[x]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; fa:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    depth[y] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; depth[x] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    dfs(y, x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dfs(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# 从根节点0开始DFS，根节点的父节点设为-1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 动态规划计算更高级的祖先，状态转移 pa[x][i+1] = pa[pa[x][i]][i]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (p &lt;span style=&#34;color:#f92672&#34;&gt;:=&lt;/span&gt; pa[x][i]) &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:  &lt;span style=&#34;color:#75715e&#34;&gt;# 如果2^i级祖先存在&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    pa[x][i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pa[p][i]  &lt;span style=&#34;color:#75715e&#34;&gt;# 计算2^(i+1)级祖先&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; depth
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pa &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pa
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&amp;ldquo;你看，&amp;ldquo;老勇者指着代码，&amp;ldquo;第一步，建图。第二步，DFS预处理每个节点的深度和直接父节点（pa[x] [0]）。第三步，动态规划计算更高级的祖先。外层循环 log n次，内层循环n次，总共n log n。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他打了个比方：&amp;ldquo;预处理一次性完成，之后每次查询都能直接享受红利——就好比副本开荒前先把全图传送点踩一遍，开荒的时候直接飞过去，不用每次都从新手村跑图。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我盯着代码看了一会，一拍大腿：&amp;ldquo;也就是说，预处理好了以后，找LCA就不需要一步一步爬树了，而是&lt;strong&gt;二进制跳跃&lt;/strong&gt;！因为LCA肯定是两个节点都能跳到的地方——先让深度大的那个跳到和另一个同一高度，然后两个一起往上蹦，只要跳完之后两人不在同一个节点，就说明还没跳到公共祖先，继续往上跳！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;是这个道理。&amp;rdquo; 老勇者竖起四根手指，&amp;ldquo;听好了，找LCA分四步——&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;第一步，&lt;strong&gt;对齐深度&lt;/strong&gt;。确保x在y上方（depth[x] ≤ depth[y]），如果x更深就交换。然后把y往上跳，跳到和x同一深度。怎么跳？把深度差拆成二进制，按位跳——差13层就先跳8层再跳4层再跳1层。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;第二步，&lt;strong&gt;来个判断&lt;/strong&gt;——如果跳完之后y == x，说明x本身就是y的祖先，直接返回x。这种情况比如x是y的爷爷，把y提到x的高度之后，发现两人站在同一个节点上，那LCA就是x。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;第三步，&lt;strong&gt;同时倍增跳跃&lt;/strong&gt;。让x和y从大到小尝试往上跳——从最大的步长（比如2^16）开始试。如果跳完之后x和y的祖先还不一样，说明LCA还在上面，那就跳；如果一样了，说明已经跳到LCA或LCA以上了，就不跳。循环走完，x和y会停在LCA的紧下方——也就是LCA的下一层。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;第四步，&lt;strong&gt;返回它们的父节点&lt;code&gt;pa[x][0]&lt;/code&gt;，就是LCA&lt;/strong&gt;。&amp;rdquo;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;LcaBinaryLifting&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;__init__&lt;/span&gt;(self, edges: List[List[int]]):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f92672&#34;&gt;......&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; depth
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pa &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; pa
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get_kth_ancestor&lt;/span&gt;(self, node: int, k: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(k&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bit_length()):  &lt;span style=&#34;color:#75715e&#34;&gt;# 遍历k的每一位二进制位&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; k &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;gt;&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;:  &lt;span style=&#34;color:#75715e&#34;&gt;# k 二进制从低到高第 i 位是 1；&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                node &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pa[node][i]  &lt;span style=&#34;color:#75715e&#34;&gt;# 往上跳2^i步&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; node
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get_lca&lt;/span&gt;(self, x: int, y: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth[x] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth[y]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            x, y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; y, x  &lt;span style=&#34;color:#75715e&#34;&gt;# 确保x的深度不大于y&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 1. 使y和x在同一深度&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_kth_ancestor(y, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth[y] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth[x])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 2. 检查是否重合&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; x:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x  &lt;span style=&#34;color:#75715e&#34;&gt;# x本身就是y的祖先&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 3. 倍增跳跃：从最大的步长开始尝试&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(len(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pa[x]) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            px, py &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pa[x][i], self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pa[y][i]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; px &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; py:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                x, y &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; px, py  &lt;span style=&#34;color:#75715e&#34;&gt;# 同时往上跳 2**i 步&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 4. 此时x和y的父节点就是LCA&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pa[x][&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我盯着那段&lt;code&gt;for i in range(len(self.pa[x]) - 1, -1, -1)&lt;/code&gt;的代码，有点困惑：&amp;ldquo;为什么要从大到小跳？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;&lt;strong&gt;因为要尽快接近LCA，但又不能跳过。&lt;/strong&gt;&amp;ldquo;老勇者打了个比方，&amp;ldquo;就像用砝码称重——先试最大的砝码，太重的就撤掉，刚好就留着，这样精度最高。从小到大跳的话，你跳完1步、2步、4步……到后面可能会跳过LCA，还得退回来，退回来又不知道退多少。&lt;strong&gt;从大到小是贪心，每次跳最大可能的步数，但保证不跳过LCA&lt;/strong&gt;——因为跳过的话 &lt;code&gt;pa[x][i] == pa[y][i]&lt;/code&gt;，说明这步太大了，LCA在下面，就不跳。这样就能保证每次都能最大程度地接近LCA，最终刚好卡在LCA正下方，再往上一步就是LCA。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我反应过来了：&amp;ldquo;所以最后返回&lt;code&gt;pa[x][0]&lt;/code&gt;——x的父节点——就是LCA？预处理O(n log n)，查询O(log n)，这就是二进制提升找LCA的威力？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;没错。&amp;ldquo;老勇者点点头，话锋一转，&amp;ldquo;来，LCA有了，路径长度怎么算？你之前推导过。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我愣了一下，脑子里迅速回放开始写的公式：&amp;ldquo;k = depth[u] + depth[v] - 2*depth[LCA]！&amp;ldquo;抄起键盘补上：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;LcaBinaryLifting&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;......&lt;/span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get_dis&lt;/span&gt;(self, x: int, y: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth[x] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth[y] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;depth[self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_lca(x, y)] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;老勇者满意地点点头：&amp;ldquo;LCA拿到，套公式算出k，再套昨天的对称性结论——方案数 = 2^{k-1}，这题就解决了。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他顺手补上主函数，一行列表推导式，对每个查询(x, y)，如果x == y，答案是0；否则答案是2^{路径长度减一}：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 预处理2的幂（用于快速计算方案数）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;MOD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1_000_000_007&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;POW2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;POW2[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, len(POW2)):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    POW2[i] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; POW2[i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; MOD
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Solution&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;assignEdgeWeights&lt;/span&gt;(self, edges: List[List[int]], queries: List[List[int]]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; List[int]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; LcaBinaryLifting(edges)  &lt;span style=&#34;color:#75715e&#34;&gt;# 初始化LCA结构&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            POW2[g&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get_dis(x &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, y &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; y &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x, y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; queries
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我盯着那段 POW2 数组：&amp;ldquo;为什么不直接用 pow(2, k-1, MOD)？Python内置的快速幂不是挺快吗？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;老勇者瞪了我一眼，恨铁不成钢地说：&amp;ldquo;还是预处理！pow 再快也是快速幂，十万次查询，每次O(log k)，就是十万乘十七，一百七十万次运算。但如果提前把2的幂打好表——&lt;code&gt;POW2[i] = 2^i mod MOD&lt;/code&gt;——预处理O(n)一次性搞定，之后每次查表O(1)。&lt;strong&gt;空间换时间，经典到不能再经典的套路&lt;/strong&gt;。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我这才醒悟过来，&amp;ldquo;哦——就像游戏里提前算好所有技能伤害表，战斗时直接查，不用现场按计算器！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;总算回过神了你。&amp;ldquo;老勇者点点头，&amp;ldquo;不过记住，预处理的数组大小要掐准数据范围。题目n ≤ 10^5，POW2开10^5就够。开小了查询越界，开大了浪费内存——这就是程序员的&amp;rsquo;度&amp;rsquo;。&amp;rdquo;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;终章&#34;&gt;终章
+&lt;/h4&gt;&lt;p&gt;我把整套代码拼起来，提交。屏幕上的查询列表飞速滚动，一个一个&lt;code&gt;2^{k-1}&lt;/code&gt;弹出来，快得像是开了倍速——村长的Steam Deck传来一声清脆的 &amp;lsquo;叮&amp;rsquo;——&amp;lsquo;&amp;lsquo;奇数流宗师&amp;rsquo;&amp;lsquo;成就图标从灰色变成金色，再从金色变成带粒子特效的彩虹色，老头激动得差点把电脑举过头顶，&amp;ldquo;拿到了！宗师！双层成就！我就知道找你是对的！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我靠在椅背上，盯着那串 &lt;code&gt;LcaBinaryLifting&lt;/code&gt; 的代码，想要把它刻进脑袋里——毕竟学会了树上跳跃的神功，我可不想再一步一步蜗牛爬了。老勇者这招“二进制提升”，听起来像黑客，用起来像开挂，真香。&lt;/p&gt;
+&lt;p&gt;村长抱着电脑乐颠颠地回去了，Steam Deck的风扇声从远处传来，不知道他又在肝什么新成就。我合上魔法书，往锅炉里添了根柴。今天的树上轻功够我消化几天了——下次再见到老勇者，我一定要把倍增表倒背如流。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3558：对称性的觉醒：当奇数和偶数平分天下</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-11/</link>
+        <pubDate>Thu, 11 Jun 2026 13:00:38 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-11/</guid>
+        <description>&lt;h2 id=&#34;-对称性的觉醒当奇数和偶数平分天下&#34;&gt;🎮 对称性的觉醒：当奇数和偶数平分天下
+&lt;/h2&gt;&lt;p&gt;听说村长最近沉迷于一款叫《技能树大亨》的RPG游戏——我怀疑这老头把省下来的钱全充了Steam余额，账号时长怕不是比我刷题还多。今天一大早，我正蹲在锅炉边添柴，电脑屏幕突然弹出老头的远程协助请求。点下接受，村长的游戏画面直接投屏过来——他的人物正卡在技能树界面，鼠标在一棵枝繁叶茂的树状图上疯狂画圈，技能节点之间的连线旁还标注着&amp;quot;普通升级: 1点&amp;quot;和&amp;quot;强化升级: 2点&amp;quot;。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;小白！我的隐藏成就卡住了！&amp;ldquo;村长的声音从屏幕那头炸出来，急得像是副本门口等着拉人的团长，&amp;ldquo;从根技能1号出发，每条连线可以选普通升级花1点，或者强化升级花2点。隐藏成就叫&amp;rsquo;奇数流大师&amp;rsquo;，要求算出有多少种加点法能使到达最深那个终极技能的总消耗是奇数！”&lt;/p&gt;
+&lt;p&gt;我盯着屏幕，扫到成就描述末尾一行不起眼的小字——&amp;ldquo;忽略从根到最深节点路径外的所有边&amp;rdquo;。这不就把一棵树压缩成一条链吗？只有从根到最深节点的那条路径算数，其他枝丫全是气氛组，约等于RPG里站桩喊固定台词的NPC。问题瞬缩成两件事：第一，最深那层在哪儿——也就是最大深度k是多少；第二，这k条边上各赋1或2，总和为奇数的组合数是多少。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第一步找深度是dfs的肌肉记忆&#34;&gt;第一步：找深度是DFS的肌肉记忆
+&lt;/h4&gt;&lt;p&gt;题目给的是无向树——边[1,2]表示1和2互通，虽然根定在1，但遍历必须双向通行，否则DFS 会困在叶子节点，剩下的分支全遍历不到。所以建邻接表时必须每条边两头都加——1的邻居里有2，2的邻居里也有1，双向车道全登记，DFS才能想去哪去哪。&lt;/p&gt;
+&lt;p&gt;但双向建图有一个经典坑——不记父节点的话，DFS会在父子之间来回横跳，像喝醉的勇者在两个房间之间来回读条，直到栈溢出教我做人。所以递归时带个fa参数当“防回退机制”——告诉DFS“你刚从你爸那儿过来，别再回去了”&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;MOD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1_000_000_007&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(edges) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;g &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [[] &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x, y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; edges: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    g[x]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(y) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    g[y]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(x)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dfs&lt;/span&gt;(x: int, fa: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    d &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; g[x]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; y &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; fa:  &lt;span style=&#34;color:#75715e&#34;&gt;# 不递归到父节点，防止无限循环&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            d &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; max(d, dfs(y, x) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; d
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dfs(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;双向建图 + fa过滤 = 无向图当有向树遍历。叶子节点没有非父邻居，直接返回0；自底向上逐层加一，max取最大深度。这套组合拳打过无数次的DFS模板——就像RPG里的基础连招。&lt;/p&gt;
+&lt;p&gt;深度k到手。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第二步奇偶性的对称美学&#34;&gt;第二步：奇偶性的对称美学
+&lt;/h4&gt;&lt;p&gt;接下来是核心——k条边，每条1或2，总和为奇数的方案数。&lt;/p&gt;
+&lt;p&gt;1是奇数，2是偶数，总和为奇数等价于路径上有奇数个1。枚举C(k,1) + C(k,3) + C(k,5) + &amp;hellip;？我数学早就连本带利还给老师了，组合数求和公式长啥样都忘了，更别说还要取模。&lt;/p&gt;
+&lt;p&gt;等等——换个思路：&lt;strong&gt;如果前k-1条边的和是偶数，最后一条只能选1把总和扳成奇数；前k-1条边的和是奇数，最后一条必须选2把总和保持奇数。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;也就是说，前k-1条边可以自由发挥，最后一条边只能被迫营业——有且仅有一种选择能救场。所以总方案数就是前k-1条边的任意组合数——&lt;strong&gt;前k-1条每条自由选1或2，总共2^{k-1}种&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;再往深层想的话，这可以说是奇偶对称性的必然结果：&lt;strong&gt;对于任意k≥1，在所有2^k种赋值中，权重和为奇数和偶数的方案数永远平分天下，各占一半&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;这不是什么巧合，是奇偶性天生的对称：把最后一条边从1翻成2，奇偶就翻转，所有方案两两配对，恰好一半奇一半偶。所以答案=&lt;strong&gt;2^k / 2 = 2^{k-1}&lt;/strong&gt;。不用枚举，不用求和，一行对称性直接秒杀。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;return pow(2, k - 1, MOD)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;pow(base, exp, mod)&lt;/code&gt;快速幂，底层用二分指数，O(log k)搞定，属实是标准库里的隐藏神器。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;收工&#34;&gt;收工？
+&lt;/h4&gt;&lt;p&gt;我敲下回车，屏幕那头村长的隐藏成就图标“叮”地一声亮了，金色光芒闪得他差点把电脑抱起来转圈。“拿到了！奇数流大师！我就知道找你是对的！” 村长的声音兴奋得像刚抽到SSR。&lt;/p&gt;
+&lt;p&gt;我刚想谦虚两句，突然看到游戏界面上弹出一个新的成就预告——&amp;ldquo;奇数流宗师：应对任意两个技能节点之间的路径，计算奇偶方案数，解锁终极加点方案&amp;rdquo;。&lt;/p&gt;
+&lt;p&gt;我心里咯噔一下。任意两个节点之间的路径？那可不是今天这种“从根到最深叶子”的单条快车道了——查询可能从任意节点出发，到任意节点结束，路径长度各不相同，有些说不定还会往上走到公共祖先再拐下去。奇偶对称性的核心没变，路径上有k条边，方案数还是2^{k-1}，但每条查询的k都不一样，怎么快速找出任意两点之间的距离？&lt;/p&gt;
+&lt;p&gt;我感觉自己的后背开始冒汗。&lt;/p&gt;
+&lt;p&gt;村长还在屏幕那头兴奋地嚷嚷：&amp;ldquo;小白，你看这个&amp;rsquo;奇数流宗师&amp;rsquo;成就，好像有点意思啊！要不你现在帮我看看……&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;今、今天就算了吧！&amp;ldquo;我慌忙打断他，&amp;ldquo;我得去……去添柴！锅炉要熄了！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;说完，我果断切断了远程连接，瘫在椅子上长长地舒了一口气。&lt;/p&gt;
+&lt;p&gt;明天的事，明天再说吧。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3691从堆到树：一道题的两个平行宇宙</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-10/</link>
+        <pubDate>Wed, 10 Jun 2026 16:10:20 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-10/</guid>
+        <description>&lt;h2 id=&#34;从堆到树一道题的两个平行宇宙&#34;&gt;🎮从堆到树：一道题的两个平行宇宙
+&lt;/h2&gt;&lt;p&gt;今天的任务卷轴——3691. 最大子数组总值 II——规则赫然写着：选恰好 k 个&lt;strong&gt;不同的非空子数组，可以重叠，同一个子数组不能被选择超过一次&lt;/strong&gt;。求最大极差之和。&lt;/p&gt;
+&lt;p&gt;我差点笑出声。这不就是老勇者昨天拿红笔在我羊皮纸上改出来的那道“如果加上约束”吗？连标点符号都没改！直接上昨天那套代码——隧道模型 + 贪心堆 + 稀疏表。稀疏表预处理 O(n log n)，每条隧道初始最深段入堆，候选池恒定 n 个，每次弹堆顶累加极差、同一隧道缩一格压回，k 次堆操作 O(k log n)。提交，AC，一气呵成。&lt;/p&gt;
+&lt;p&gt;我往椅背上一靠，长长地舒了一口气。今天这副本过得这么快，说白了还得感谢老勇者昨天提前给我开的小灶，跟考前泄题似的。我严重怀疑这老头是策划部的内鬼。我端起茶杯，想着今天终于不用担心被弹脑瓜崩——毕竟答案是他自己教的，他总不能弹自己吧？&lt;/p&gt;
+&lt;p&gt;茶杯刚端到嘴边，茶水表面映出一个熟悉的身影。我手一抖，滚烫的茶水差点浇在裤裆上。老勇者正站在我身后，低头看着我的屏幕，表情介于&amp;quot;孺子可教&amp;quot;和&amp;quot;你还差得远&amp;quot;之间。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;大、大师……&amp;ldquo;我结结巴巴地说道，&amp;ldquo;你怎么又来了？！这题不就是昨天你红笔改的那道吗，没加新约束，原封不动！我用的是你教的隧道模型加堆加稀疏表，一个变量都没改！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;别紧张。&amp;ldquo;老勇者笑了笑，在我肩上轻轻拍了拍——终于不是弹脑瓜崩，&amp;ldquo;昨天教你的，今天能直接用上，说明你记住了，理解了&amp;rsquo;固定一端、贪心另一端&amp;rsquo;的精髓。我来不是为了弹你，是来问你一个问题。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;问题？&amp;ldquo;我心里咯噔一下，毕竟老勇者的&amp;quot;问题&amp;quot;通常意味着&amp;quot;你又掉坑里了&amp;quot;或者&amp;quot;还有更优解&amp;rdquo;。&lt;/p&gt;
+&lt;p&gt;老勇者指了指我的代码：&amp;ldquo;隧道模型加堆，k 次堆操作 O(k log n)，k 到十万的时候千万级操作量，常数拉满。如果哪天 k 飙到 10^6、10^7，你这个堆还撑得住吗？”&lt;/p&gt;
+&lt;p&gt;我倒吸一口凉气。说实话，我压根没想过这个问题。能过就行，还要什么自行车？但老勇者这么一说，我突然意识到：这解法复杂度跟 k 线性相关，k 越大越慢。现在 k ≤ 10^5 能过，但如果 k 到了 10^6、10^7 呢？如果这是一道交互题，要求在线查询呢？&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;真正的勇士，&amp;ldquo;老勇者缓缓开口，&amp;ldquo;敢于直面惨淡的复杂度，敢于正视淋漓的 TLE。如果有一种方法，复杂度跟 k 彻底解耦，能在 O(n log n) 的时间内解决，不管 k 有多大都稳如泰山——你想不想学？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我手里的茶杯&amp;quot;啪&amp;quot;地掉在地上：&amp;ldquo;O(n log n)？跟 k 无关？这都违反信息论了吧？！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;老勇者狡黠一笑，&amp;rdquo;&lt;strong&gt;二分答案&lt;/strong&gt;，上古时代用来处理 Top-K 问题的禁忌魔法。它的核心思想简单得反直觉：&lt;strong&gt;不直接找那 k 个子数组，而是先找到第 k 大的极差值到底是多少，然后分类统计&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;等等，你是说……我不需要知道前 k 名分别是谁，只需要知道第 k 名的分数是多少？” 我感觉自己的世界观在崩塌。&lt;/p&gt;
+&lt;p&gt;“对。”老勇者打了个响指，空中应声浮现出一排数字，“就像你不需要把全班成绩单从头排到尾，只需要知道第十名的分数——然后比它高的全录，刚好压线的挑几个凑够人数，剩下的全刷。这种思路叫&lt;strong&gt;二分答案判定&lt;/strong&gt;，把选择问题降维成判定问题。在很多 Top-K 场景里，都是降维打击的利器。”&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第一重封印二分答案先找阈值再分类统计&#34;&gt;第一重封印：二分答案——先找阈值，再分类统计
+&lt;/h4&gt;&lt;p&gt;老勇者在卷轴背面画出一条数轴，从 &lt;code&gt;0&lt;/code&gt; 标到 &lt;code&gt;max(nums) - min(nums)&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;想象你在玩一个猜数字游戏。我告诉你：存在一个阈值 &lt;code&gt;low_d&lt;/code&gt;，所有极差严格大于 &lt;code&gt;low_d&lt;/code&gt; 的子数组，数量凑不够 k 个；但如果把等于 &lt;code&gt;low_d&lt;/code&gt; 的也加上，数量就够 k 了——甚至超过 k。这个 &lt;code&gt;low_d&lt;/code&gt; 是什么？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我想了想：&amp;ldquo;这不就是第 k 大的极差值吗？排名刚好卡在第 k 位的那个人！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;没错。&amp;ldquo;老勇者点点头，手指在数轴上轻轻一划，&amp;ldquo;如果我们能快速算出&amp;rsquo;有多少个子数组的极差 ≥ X&amp;rsquo;，就能用二分查找精准定位这个 &lt;code&gt;low_d&lt;/code&gt;。找到之后，问题就拆成三块：极差严格大于 &lt;code&gt;low_d&lt;/code&gt; 的全选；极差刚好等于 &lt;code&gt;low_d&lt;/code&gt; 的，挑几个补满 k 个；极差小于 &lt;code&gt;low_d&lt;/code&gt; 的直接pass。最后用选中的子数组去求和。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我眼睛一亮：&amp;ldquo;这不就高考录取吗！先划分数线，过线的全录，压线的按志愿顺序挑，没达线的回家种地。把 Top-K 选择问题降维成一个判定问题——&amp;lsquo;这个分数线划得合不合理？&amp;rsquo;——然后二分答案！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;是这个道理。&amp;ldquo;老勇者笑了笑，话锋陡然一转，&amp;ldquo;不过，现在你只是知道了解法蓝图。蓝图里最关键的那块砖还没烧——怎么高效判定？给你一个阈值 X，你&lt;strong&gt;怎么快速统计出极差 ≥ X 的子数组到底有多少个&lt;/strong&gt;？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我嘴巴闭得紧紧的，心里反复默念——绝对不能提 O(n²) 暴力枚举，求生欲告诉我，沉默是金。&lt;/p&gt;
+&lt;p&gt;他瞅了瞅我：&amp;ldquo;这就引出了第二重封印——滑动窗口加单调队列。想学的话，把你脑子里那个 O(n²) 的念头掐掉，我要往里面塞点真正高效的东西。&amp;rdquo;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第二重封印滑动窗口--单调队列像塔防游戏一样收缩防线&#34;&gt;第二重封印：滑动窗口 + 单调队列——像塔防游戏一样收缩防线
+&lt;/h4&gt;&lt;p&gt;老勇者在纸上画了一个窗口 &lt;code&gt;[left, i]&lt;/code&gt;，左右两端各站着一个守卫，一个盯最大值，一个盯最小值。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;想象你在玩一个塔防游戏。右端点 i 是你不断往前推的兵线，每次加入一个新元素，你要维护窗口内的最大值和最小值，确保极差始终小于 X。一旦极差飙到 ≥ X，说明战线崩了，就得把左端点 left 往右挪，收缩防线，直到极差重新掉回安全线以下。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他写下一段代码，我凑了过去，看到两个双端队列 &lt;code&gt;min_q&lt;/code&gt; 和 &lt;code&gt;max_q&lt;/code&gt;，一个单调递增存最小值候选，一个单调递减存最大值候选。每次 i 右移，新元素入队，过期元素被窗口淘汰。关键在最后一句：&lt;code&gt;cnt += left&lt;/code&gt;——对于当前右端点 i，左端点在 &lt;code&gt;[0, left-1]&lt;/code&gt; 范围内的所有子数组，极差都 ≥ X，所以直接累加 left 就是新增的数量。一旦 cnt 攒到 k，就说明这个阈值太低，数量超标了，直接打回。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;check&lt;/span&gt;(low_d: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; bool:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    low_d &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 实际检查的是极差 &amp;gt;= low_d+1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    min_q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; deque()  &lt;span style=&#34;color:#75715e&#34;&gt;# 单调递增队列，维护最小值的下标&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    max_q &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; deque()  &lt;span style=&#34;color:#75715e&#34;&gt;# 单调递减队列，维护最大值的下标&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cnt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; left &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(nums):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 1. 右边入队：维护单调性&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; min_q &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; nums[min_q[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            min_q&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pop()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        min_q&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; max_q &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; nums[max_q[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            max_q&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pop()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        max_q&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 2. 左边出队：收缩窗口直到极差 &amp;lt; low_d+1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; nums[max_q[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; nums[min_q[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; low_d:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            left &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; min_q[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; left:  &lt;span style=&#34;color:#75715e&#34;&gt;# 队首不在窗口中&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                min_q&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;popleft()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; max_q[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; left:  &lt;span style=&#34;color:#75715e&#34;&gt;# 队首不在窗口中&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                max_q&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;popleft()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        cnt &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; left  &lt;span style=&#34;color:#75715e&#34;&gt;# 对于右端点i，有left个左端点使得极差 &amp;gt;= low_d+1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; cnt &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; k:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;False&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 数量够了，阈值太低&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 数量不够，阈值太高&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;low_d &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; bisect_left(range(max(nums) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; min(nums)), &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;, key&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;check)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我盯着那段单调队列的代码，感觉似曾相识：&amp;ldquo;等等，两个双端队列一左一右夹着窗口滑过去，最大值最小值实时追踪，这不就是 1438 题&amp;rsquo;绝对差不超过限制的最长连续子数组&amp;rsquo;的经典套路吗？那道题求的是窗口能撑到多长，这道题求的是子数组数量，就差在 &lt;code&gt;cnt += left&lt;/code&gt; 这一行！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;没错。&amp;ldquo;老勇者点点头，&amp;ldquo;对于当前右端点 i，左端点在 &lt;code&gt;[0, left-1]&lt;/code&gt; 范围内的所有子数组，极差全都 ≥ &lt;code&gt;low_d&lt;/code&gt;。所以直接累加 left，数量就出来了。判定函数的返回值也反过来用：返回 True 说明数量不够，阈值太高了，得往下降；返回 False 说明数量超了，阈值太低了，得往上抬。二分夹逼到最后，第一个让 check 返回 True 的 &lt;code&gt;low_d&lt;/code&gt;，就是第 k 大的极差值。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;但——&amp;ldquo;他话锋一转，眼神变得危险起来，&amp;ldquo;滑动窗口只能告诉你&amp;rsquo;有多少个&amp;rsquo;子数组过线了，至于每个过线子数组的极差具体是多少、加起来总和多大，它一概不管，就像个只数人头不登记分数的门卫。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我感觉后背开始冒汗，&amp;ldquo;既然滑动窗口只能计数不能求和，那要求极差之和，难道要把每个子数组的最大最小值都查出来？这不又退回 O(n²) 了？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;lsquo;所以才需要第三重封印。&amp;ldquo;老勇者在纸上写下三个大字——单调栈，&amp;ldquo;判定靠滑动窗口，求和靠单调栈加线段树——前者是哨兵站岗，只管数人头；后者是工程兵架桥，把每一段极差的具体数值算清楚。&amp;rdquo;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第三重封印单调栈给每个元素划地盘&#34;&gt;第三重封印：单调栈——给每个元素划地盘
+&lt;/h4&gt;&lt;p&gt;&amp;ldquo;先解决第一步——怎么快速知道每个子数组的最小值和最大值由谁当。&amp;ldquo;老勇者叩了叩桌子，&amp;ldquo;对于每个位置 i，你怎么快速找到它左边第一个 ≤ nums[i] 的位置？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我想了想：&amp;lsquo;&amp;lsquo;用一个单调递增栈，从左往右扫，栈顶就是左边第一个比当前元素小的位置？&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;&amp;lsquo;对。&amp;lsquo;&amp;lsquo;老勇者提笔唰唰写下几行代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(nums)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;left_less_eq &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; n   &lt;span style=&#34;color:#75715e&#34;&gt;# 左边第一个 &amp;lt;= nums[i] 的位置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;left_great_eq &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; n  &lt;span style=&#34;color:#75715e&#34;&gt;# 左边第一个 &amp;gt;= nums[i] 的位置&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;st1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]  &lt;span style=&#34;color:#75715e&#34;&gt;# 哨兵&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;st2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(nums):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; len(st1) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; nums[st1[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; x:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        st1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pop()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left_less_eq[i] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; st1[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    st1&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; len(st2) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; nums[st2[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; x:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        st2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;pop()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    left_great_eq[i] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; st2[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    st2&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(i)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&amp;ldquo;两个单调栈，一趟扫描，分别追踪左边第一个 ≤ 和第一个 &amp;gt; 的位置。&lt;code&gt;left_less_eq[i]&lt;/code&gt; 表示位置 i 左边第一个 ≤ nums[i] 的位置。这意味着在区间 &lt;code&gt;(left_less_eq[i], i]&lt;/code&gt; 内，所有元素都严格大于 nums[i]。所以，&lt;strong&gt;以 i 为右端点、左端点落在这个区间内的所有子数组，最小值统统是 nums[i]&lt;/strong&gt;。&amp;rsquo;&amp;rsquo;&lt;/p&gt;
+&lt;p&gt;我惊呼道：&amp;ldquo;那 &lt;code&gt;left_greater_eq[i]&lt;/code&gt; 就是左边第一个 ≥ nums[i] 的位置，左端点落在 &lt;code&gt;(left_greater_eq[i], i]&lt;/code&gt; 内的所有子数组，最大值都是&lt;code&gt; nums[i]&lt;/code&gt;！两个数组合起来，就把每个元素作为最小值或最大值的‘地盘’划得清清楚楚！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;没错。相当于给每个元素发了一张地契——在它的地盘里，它就是最值。&amp;ldquo;老勇者点点头，&amp;ldquo;但光有地盘还不够。你想想，随着右端点 i 不断往右移，每个左端点 j 对应的子数组 &lt;code&gt;[j, i]&lt;/code&gt; 的最小值和最大值是动态变化的。新元素一加入，某些左端点对应的最值就要更新。你需要一个数据结构，能把这些动态变化的最值维护起来，还能快速查询任意左端点区间内的最值之和。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我感觉脑细胞已经开始集体抗议：&amp;ldquo;今天的强度过分了啊——动态维护所有左端点的最值？还区间查询求和？这活儿谁干得了？队列不行，栈也不行，总不能上树吧——&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;老勇者咳了一声，连锅炉里的火都抖了三抖，&amp;ldquo;你说对了——就是要上树。欢迎来到地狱模式的最终章：懒标记线段树。&amp;rdquo;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;第四重封印懒标记线段树动态维护所有左端点的极值&#34;&gt;第四重封印：懒标记线段树——动态维护所有左端点的极值
+&lt;/h4&gt;&lt;p&gt;老勇者在纸上画出一棵倒挂的二叉树，每个节点上挂着四面小旗，分别写着 &lt;code&gt;sum_min&lt;/code&gt;、&lt;code&gt;sum_max&lt;/code&gt;、&lt;code&gt;l_min&lt;/code&gt;、&lt;code&gt;l_max&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;线段树的下标 j 代表&amp;rsquo;&lt;strong&gt;以 j 为左端点，当前 i 为右端点&lt;/strong&gt;&amp;lsquo;的子数组 &lt;code&gt;[j, i]&lt;/code&gt;。每个节点管一片连续的左端点区间，维护四个值——&lt;code&gt;sum_min&lt;/code&gt; 是这个区间内所有左端点对应的当前子数组的&lt;strong&gt;最小值之和&lt;/strong&gt;，&lt;code&gt;sum_max&lt;/code&gt; 是&lt;strong&gt;最大值之和&lt;/strong&gt;。&lt;code&gt;l_min&lt;/code&gt; 和 &lt;code&gt;l_max&lt;/code&gt; 是&lt;strong&gt;懒标记&lt;/strong&gt;，代表这个区间内所有左端点被统一刷成的&amp;rsquo;共同最小值&amp;rsquo;和&amp;rsquo;共同最大值&amp;rsquo;。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我感觉自己的 SAN 值正在狂掉：&amp;ldquo;等等，为什么存&amp;rsquo;和&amp;rsquo;？还有那个&amp;rsquo;懒标记&amp;rsquo;是什么鬼？听起来像我的拖延症一样。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;因为你要的不是单个子数组的极差，而是&amp;rsquo;&lt;strong&gt;所有极差 ≥ low_d 的子数组的极差之和&lt;/strong&gt;&amp;rsquo;。&amp;ldquo;老勇者耐心地解释，&amp;ldquo;如果你只存单个最值，查区间 &lt;code&gt;[0, l]&lt;/code&gt; 的极差之和时，你得把 l+1 个左端点挨个捞出来，一个个减，一个个加——O(n)，求和又炸了。但每个节点提前把管辖区的 &lt;code&gt;sum_max&lt;/code&gt; 和 &lt;code&gt;sum_min&lt;/code&gt; 存好，一次区间查询直接拎出两个总和，&lt;strong&gt;极差之和 = sum_max - sum_min&lt;/strong&gt;，O(log n) 完事。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我恍然大悟：&amp;ldquo;所以线段树不是在存单个值，是在存&amp;rsquo;辖区总和&amp;rsquo;！每个节点提前把自己管的那段区间的账算好了，上面要查的时候直接报总数，不用一个一个数人头！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;正是。这就是线段树的精髓——把 O(n) 的区间求和压成 O(log n) 的分块预结算。&amp;ldquo;老勇者话锋一转，&amp;ldquo;但光有查询还不够，你还得能更新。每次 i 往右移一位，新元素 &lt;code&gt;nums[i]&lt;/code&gt; 加入，哪些左端点对应的子数组最值会变？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我顺着他的目光看向之前写的单调栈代码：&amp;ldquo;左端点落在&lt;code&gt; (left_less_eq[i], i]&lt;/code&gt; 内的，最小值统统更新为 &lt;code&gt;nums[i]&lt;/code&gt;；左端点落在&lt;code&gt; (left_greater_eq[i], i]&lt;/code&gt; 内的，最大值统统更新为 &lt;code&gt;nums[i]&lt;/code&gt;。这就是&lt;strong&gt;两次区间赋值&lt;/strong&gt;——每来一个新元素，就要把两片连续区间的所有左端点的最值全刷成同一个数。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;对。区间赋值，暴力改是 O(n)，来一个元素改一片，总复杂度直接飙回 O(n²)。这时候&lt;strong&gt;懒标记&lt;/strong&gt;就登场了。&amp;ldquo;老勇者指了指节点上那两面写有 &lt;code&gt;l_min&lt;/code&gt; 和 &lt;code&gt;l_max&lt;/code&gt; 的小旗，&amp;ldquo;以刷最小值为例——如果当前节点完全被覆盖，直接把它的 &lt;code&gt;l_min&lt;/code&gt; 更新成 &lt;code&gt;nums[i]&lt;/code&gt;，对应的 &lt;code&gt;sum_min&lt;/code&gt; 就是 &lt;code&gt;l_min × 区间长度&lt;/code&gt;，然后拍拍屁股走人，&lt;strong&gt;不用往下递归到每个叶子&lt;/strong&gt;。它的子孙们先欠着，等下次查询或更新路过的时候再把这笔账还下去。这样一次区间赋值也是 O(log n)，而不是 O(n)。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我目瞪口呆，&amp;ldquo;所以懒标记不是偷懒，是把区间赋值的活儿打包延期执行——每次只改大区间的总账，明细先欠着，等要查明细的时候再往下分摊！这不就是我平时写代码时的 &amp;lsquo;TODO: 稍后优化&amp;rsquo; 吗？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;你这说的……虽然不太恰当，但意外地准确。&amp;ldquo;老勇者嘴角抽搐了一下，&amp;ldquo;懒标记的核心思想就是&lt;strong&gt;延迟传播&lt;/strong&gt;（Lazy Propagation）。更新时只改当前节点的标记和总和，不往下递归；查询或再次更新时，如果需要访问子节点，才把标记下传（spread）。这样保证每次操作都是 O(log n)。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他提笔写下了一颗完整的懒标记线段树，看起来就像魔法阵一样：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Node&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# val = [sum_min, sum_max, l_min, l_max]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# todo = [todo_min, todo_max]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    __slots__ &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;val&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;todo&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;LazySegmentTree&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 懒标记初始值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    _TODO_INIT &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;__init__&lt;/span&gt;(self, n: int):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 线段树维护一个长为 n 的数组（下标从 0 到 n-1）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; n
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [Node() &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; (n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bit_length())]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_build(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 合并两个 val&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_merge_val&lt;/span&gt;(self, a: List[int], b: List[int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; List[int]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; [a[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;], a[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], a[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;], a[&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;]]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 把懒标记作用到 node 子树（本例为区间赋值）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_apply&lt;/span&gt;(self, node: int, l: int, r: int, todo) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        cur &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 计算 tree[node] 区间的整体变化&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        todo_min, todo_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; todo
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; todo_min &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cur&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; todo_min &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (r &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# 区间最小值之和 = 最小值 × 区间长度&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cur&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; todo_min                  &lt;span style=&#34;color:#75715e&#34;&gt;# 记录共同最小值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cur&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;todo[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; todo_min                 &lt;span style=&#34;color:#75715e&#34;&gt;# 设置懒标记&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; todo_max &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cur&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; todo_max &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (r &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# 区间最大值之和&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cur&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val[&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; todo_max
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cur&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;todo[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; todo_max
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 把当前节点的懒标记下传给左右儿子&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_spread&lt;/span&gt;(self, node: int, l: int, r: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        todo &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;todo
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; todo &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_TODO_INIT:  &lt;span style=&#34;color:#75715e&#34;&gt;# 没有需要下传的信息&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (l &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; r) &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_apply(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, l, m, todo)      &lt;span style=&#34;color:#75715e&#34;&gt;# 下传给左儿子&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_apply(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, m &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, r, todo)  &lt;span style=&#34;color:#75715e&#34;&gt;# 下传给右儿子&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        todo[:] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_TODO_INIT[:]  &lt;span style=&#34;color:#75715e&#34;&gt;# 清空当前节点的懒标记&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 合并左右儿子的 val 到当前节点的 val&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_maintain&lt;/span&gt;(self, node: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_merge_val(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val, 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        )
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 初始化线段树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 时间复杂度 O(n)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_build&lt;/span&gt;(self, node: int, l: int, r: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;todo &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_TODO_INIT[:]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; r:  &lt;span style=&#34;color:#75715e&#34;&gt;# 叶子&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (l &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; r) &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_build(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, l, m)      &lt;span style=&#34;color:#75715e&#34;&gt;# 初始化左子树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_build(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, m &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, r)  &lt;span style=&#34;color:#75715e&#34;&gt;# 初始化右子树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_maintain(node)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_update&lt;/span&gt;(self, node: int, l: int, r: int, ql: int, qr: int, f: Tuple[int, int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; ql &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; r &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; qr:  &lt;span style=&#34;color:#75715e&#34;&gt;# 当前子树完全在 [ql, qr] 内&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_apply(node, l, r, f)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_spread(node, l, r)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (l &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; r) &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; ql &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; m:  &lt;span style=&#34;color:#75715e&#34;&gt;# 更新左子树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_update(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, l, m, ql, qr, f)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; qr &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; m:  &lt;span style=&#34;color:#75715e&#34;&gt;# 更新右子树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_update(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, m &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, r, ql, qr, f)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_maintain(node)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_query&lt;/span&gt;(self, node: int, l: int, r: int, ql: int, qr: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; List[int]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; ql &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; r &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; qr:  &lt;span style=&#34;color:#75715e&#34;&gt;# 当前子树完全在 [ql, qr] 内&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_spread(node, l, r)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (l &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; r) &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; qr &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; m:  &lt;span style=&#34;color:#75715e&#34;&gt;# [ql, qr] 在左子树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_query(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, l, m, ql, qr)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; ql &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; m:  &lt;span style=&#34;color:#75715e&#34;&gt;# [ql, qr] 在右子树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_query(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, m &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, r, ql, qr)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        l_res &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_query(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, l, m, ql, qr)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        r_res &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_query(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, m &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, r, ql, qr)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_merge_val(l_res, r_res)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_find_last&lt;/span&gt;(self, node: int, l: int, r: int, ql: int, qr: int, f: Callable[[List[int]], int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; qr &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; r &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; ql &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; f(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_tree[node]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; r:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; l
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_spread(node, l, r)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        m &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (l &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; r) &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        idx &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_find_last(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, m &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, r, ql, qr, f)  &lt;span style=&#34;color:#75715e&#34;&gt;# 优先查右子树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; idx &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            idx &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_find_last(node &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, l, m, ql, qr, f)  &lt;span style=&#34;color:#75715e&#34;&gt;# 右子树没有再查左子树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; idx
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 用 f 更新 [ql, qr] 中的每个 a[i]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 0 &amp;lt;= ql &amp;lt;= qr &amp;lt;= n-1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 时间复杂度 O(log n)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;update&lt;/span&gt;(self, ql: int, qr: int, f: Tuple[int, int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_update(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, ql, qr, f)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 返回用 _merge_val 合并所有 a[i] 的计算结果，其中 i 在闭区间 [ql, qr] 中&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 0 &amp;lt;= ql &amp;lt;= qr &amp;lt;= n-1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 时间复杂度 O(log n)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;query&lt;/span&gt;(self, ql: int, qr: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; List[int]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_query(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, ql, qr)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 返回 [ql, qr] 内最后一个满足 f 的下标&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 0 &amp;lt;= ql &amp;lt;= qr &amp;lt;= n-1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 时间复杂度 O(log n)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;find_last&lt;/span&gt;(self, ql: int, qr: int, f: Callable[[List[int]], int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_find_last(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;_n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, ql, qr, f)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&amp;ldquo;注意看 &lt;code&gt;_ apply&lt;/code&gt; 方法。&amp;ldquo;老勇者指着代码，&amp;quot;&lt;code&gt;todo_min &amp;gt;= 0&lt;/code&gt; 表示要把这个区间的最小值设为 &lt;code&gt;todo_min&lt;/code&gt;。那么 &lt;code&gt;sum_min = todo_min × 区间长度&lt;/code&gt;，同时设置 &lt;code&gt;l_min = todo_min&lt;/code&gt; 和懒标记 &lt;code&gt;todo[0] = todo_min&lt;/code&gt;。&lt;code&gt;_spread&lt;/code&gt; 方法负责把懒标记下传给子节点，然后清空当前节点的标记。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我感觉脑子有点转不过来：&amp;ldquo;所以下传的时候，是把父节点的懒标记应用到子节点上，然后父节点的标记清零？这就像是老板把任务分配给下属，然后自己装作什么都没发生过？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;差不多。&amp;ldquo;老勇者点点头，&amp;ldquo;但要注意，下传之前要检查懒标记是否是初始值（这里是 &lt;code&gt;[-1, -1]&lt;/code&gt;）。如果是初始值，说明没有待下传的任务，直接返回。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;还有 &lt;code&gt;_merge_val&lt;/code&gt; 方法，合并左右儿子的信息时，&lt;code&gt;sum_min&lt;/code&gt; 和 &lt;code&gt;sum_max&lt;/code&gt; 直接相加，因为要统计总和；&lt;code&gt;l_min&lt;/code&gt; 和 &lt;code&gt;l_max&lt;/code&gt; 取左儿子的值——注意：这里有个前提——只有在区间被统一赋值时，&lt;code&gt;l_min&lt;/code&gt;/&lt;code&gt;l_max&lt;/code&gt; 才有意义，合并时实际上只用叶子节点的真实值。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我盯着那段 &lt;code&gt;find_last&lt;/code&gt; 的代码，感觉脑子快要烧了：&amp;ldquo;这个 &lt;code&gt;find_last&lt;/code&gt; 为什么优先查右子树？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;因为要找&amp;rsquo;最后一个&amp;rsquo;满足条件的位置。&amp;ldquo;老勇者解释道，&amp;ldquo;线段树的中序遍历是从左到右，所以右子树的下标更大。优先查右子树，如果右子树里有满足条件的，就直接返回；如果没有，再查左子树。这样保证找到的是最右边的那个。另外，注意看它开头的判断：&lt;code&gt;if l &amp;gt; qr or r &amp;lt; ql or not f(self._tree[node].val) &lt;/code&gt;。如果当前节点的 val 都不满足&lt;code&gt;条件 f&lt;/code&gt;，那它的子节点肯定也不满足，直接剪枝返回 -1。这是线段树查询的经典优化。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;接着，他写下了主逻辑：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Lazy 线段树&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;t &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; LazySegmentTree(n)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cnt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(nums):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update(left_less_eq[i] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, i, (x, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))   &lt;span style=&#34;color:#75715e&#34;&gt;# 更新最小值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;update(left_great_eq[i] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, i, (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, x))  &lt;span style=&#34;color:#75715e&#34;&gt;# 更新最大值&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 找到最后一个使得 最大值-最小值 &amp;gt;= low_d 的左端点&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    l &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;find_last(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, i, &lt;span style=&#34;color:#66d9ef&#34;&gt;lambda&lt;/span&gt; v: v[&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; v[&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; low_d)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        cnt &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; l &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;           &lt;span style=&#34;color:#75715e&#34;&gt;# 有 l+1 个子数组满足条件&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        d &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; t&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;query(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, l)      &lt;span style=&#34;color:#75715e&#34;&gt;# 查询这些子数组的 sum_min 和 sum_max&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        s &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; d[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; d[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]       &lt;span style=&#34;color:#75715e&#34;&gt;# 极差之和 = sum_max - sum_min&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; s &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; (cnt &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; k) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; low_d  &lt;span style=&#34;color:#75715e&#34;&gt;# 减掉多算的&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&amp;ldquo;这就是全部流程。&amp;ldquo;老勇者一边写一边解释，&amp;ldquo;每次 i 往右移一位，先用单调栈确定地盘，再用线段树做两次区间赋值——把 &lt;code&gt;(left_less_eq[i], i]&lt;/code&gt; 的最小值刷成 &lt;code&gt;nums[i]&lt;/code&gt;，把&lt;code&gt;(left_greater_eq[i], i]&lt;/code&gt; 的最大值刷成 &lt;code&gt;nums[i]&lt;/code&gt;。更新完之后，在线段树上用 &lt;code&gt;find_last&lt;/code&gt; 在区间 &lt;code&gt;[0, i]&lt;/code&gt; 内从右往左找到最后一个满足&lt;strong&gt;最大值 - 最小值 ≥ low_d&lt;/strong&gt;的左端点 l。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他顿了顿，补了一句：&amp;quot;&lt;code&gt;find_last&lt;/code&gt; 就是线段树上做一次二分——从右往左找最后一个满足条件的叶子位置。因为极差随左端点左移单调不减，区间越长，极差越大，所以找到最后一个过线的左端点 l，&lt;code&gt;[0, l]&lt;/code&gt; 内的就全过线了。直接区间查询 &lt;code&gt;[0, l]&lt;/code&gt; 的 &lt;code&gt;sum_max - sum_min&lt;/code&gt;，累加进答案 s，数量 cnt 累加 l+1。最后，二分阶段确定的 &lt;code&gt;low_d&lt;/code&gt; 是第 k 大极差，实际统计的过线数量 cnt 可能超过 k，多出来的那些极差都等于 &lt;code&gt;low_d&lt;/code&gt;，答案减去 &lt;code&gt;(cnt - k) * low_d&lt;/code&gt; 收工。&amp;rdquo;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;终章封印解除&#34;&gt;终章：封印解除
+&lt;/h4&gt;&lt;p&gt;我瘫在椅子上，盯着那张画满二叉树、懒标记和单调栈的草稿纸，感觉自己的脑细胞像被矿脉采掘过一样，空了又满，满了又空。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;让我理一理……&amp;rdquo; 我扶着额头，把刚才那一整套流程在脑子里重新串了一遍：&amp;rdquo;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;二分答案&lt;/strong&gt;：定位第 k 大的极差值 &lt;code&gt;low_d&lt;/code&gt;，把选择问题降维成判定问题——我不需要知道具体是哪 k 个子数组，只需要知道第 k 大的极差是多少&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;滑动窗口 + 单调队列&lt;/strong&gt;：在 check 函数里统计极差 ≥ X 的子数组数量，用双端队列维护窗口的最大最小值，O(n) 完成判定&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;单调栈预处理&lt;/strong&gt;：给每个元素划好地盘，确定每个元素作为最小值/最大值的影响范围——left_less_eq 和 left_great_eq 就是它们的地契&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;懒标记线段树&lt;/strong&gt;：动态维护每个左端点对应的子数组的极值，快速统计过线子数组的极差之和——区间赋值用懒标记 O(log n)，区间查询直接报总数 O(log n)&amp;rdquo;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;老勇者欣慰地点点头，像是在看一个终于学会走路的孩子：&amp;ldquo;现在你来算算复杂度——&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;二分答案 &lt;code&gt;O(log(max_val))&lt;/code&gt;，每次 check &lt;code&gt;O(n)&lt;/code&gt;，单调栈 &lt;code&gt;O(n)&lt;/code&gt;，线段树 &lt;code&gt;O(n log n)&lt;/code&gt;。总复杂度 &lt;code&gt;O(n log n + n log(max_val))&lt;/code&gt;，跟 &lt;code&gt;k&lt;/code&gt; 无关！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;这是真正的优化。&amp;ldquo;老勇者缓缓地站起身，火光映射下，他的身影就像超人一样，&amp;ldquo;昨天的堆 + 稀疏表，复杂度跟 k 线性相关；今天的二分答案 + 线段树，完全摆脱了 k 的束缚。当 k 很大时，这就是降维打击。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;不过——&amp;rdquo; 他的话音严肃了起来，&amp;ldquo;今天的解法虽然复杂度更优，但代码量是昨天的三倍，调试难度也是指数级上升。在实际面试中，除非面试官明确要求&amp;rsquo;优化掉 k&amp;rsquo;，否则昨天的堆版本就足够了。别为了炫技把自己坑了。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我目送老勇者的背影消失在村口，然后低头看了看草稿纸上那密密麻麻的四重封印——二分答案、滑动窗口、单调栈、线段树，每一个单独拎出来都能撑起一道中等难度的题，今天它们被串成一条流水线，就为了从一个十万长度的数组里精准捞出前 k 大极差。&lt;/p&gt;
+&lt;p&gt;炫技？我连把这套代码完整写出来不报错都够呛，还炫技。脑细胞都快集体罢工了好吧。&lt;/p&gt;
+&lt;p&gt;我小心翼翼地把画满老勇者笔迹的草稿纸收进我的魔法书里，想起老勇者的话，在旁边加了一小行：能用一行流解决的问题，别上 DP；能用堆解决的问题，别上线段树。但如果约束真的逼到了那一步——也别怂，四重封印该解就解，大不了多薅些头发。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3689 贪心策略的两种命运：可重复选vs不可重复选</title>
+        <link>http://localhost:1313/posts/leetcode_stories/26-06-09/</link>
+        <pubDate>Tue, 09 Jun 2026 17:16:07 +0800</pubDate>
+        
+        <guid>http://localhost:1313/posts/leetcode_stories/26-06-09/</guid>
+        <description>&lt;h2 id=&#34;-贪心策略的两种命运可重复选vs不可重复选&#34;&gt;🎮 贪心策略的两种命运：可重复选vs不可重复选
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;能摆的时候别卷，该卷的时候别摆&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;村长又来信了。这次竟然是让村里的老黄牛慢悠悠驮过来的——我怀疑村长把信鸽的口粮预算都给砍了，这老头在省钱的路上已经走火入魔。我展开纸条一看：“ 小白，勇士团下周开荒新副本，出发前要做战力波动评估！规则如下：给一个数组 &lt;code&gt;nums&lt;/code&gt; 和一个整数 &lt;code&gt;k&lt;/code&gt;，从中选&lt;strong&gt;恰好 &lt;code&gt;k&lt;/code&gt; 个非空子数组。子数组可以重叠，同一个子数组可以被选择超过一次&lt;/strong&gt;。每个子数组的值 = 最大值 - 最小值，求最大可能的总值。”&lt;/p&gt;
+&lt;p&gt;我盯着“可以重叠”和“可以被选择超过一次”这两行字，手里的拨火棍差点掉进锅炉里。这不就是明摆着让我薅羊毛吗？整个数组就是天然的极差冠军——既然同一段能刷 k 遍，那就把极差冠军往死里薅——就像在游戏里找到经验值最高的怪，然后挂机刷 k 次，连走位都省了。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;return (max(nums) - min(nums)) * k
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;一行流，三十秒 AC，我甚至有空给自己泡了杯茶。茶杯端到嘴边，我忽然顿住了——不对劲。非常不对劲。&lt;/p&gt;
+&lt;p&gt;我见过太多副本了——加一个约束，难度翻倍；砍一个约束，难度减半。但这题居然专门强调“子数组可以重叠”“同一个子数组可以反复选”——也就是说，“子数组之间不能重叠”和“每个子数组只能选一次”这两个最要命的约束全被砍了，直接退化成一个极值问题，难度标签形同虚设。这不是放水，这是泄洪啊。&lt;/p&gt;
+&lt;p&gt;事出反常必有妖。我正盯着屏幕发呆，后脑勺&amp;quot;啪&amp;quot;地挨了一下。不重不轻，力道精准得像调试过阈值的触发器。果然又是老勇者，手指还保持着弹脑瓜崩的姿势，“AC 了还发呆？不像你啊——”&lt;/p&gt;
+&lt;p&gt;“喂，大师，下次咱换个出场方式行吗？” 我揉着后脑勺嘟囔道，“这道题简单到诡异啊。” 我把题目指给他看，“‘可以重叠’、‘可以反复选’——约束全砍了，一行代码就搞定，策划是不是被盗号了？”&lt;/p&gt;
+&lt;p&gt;老勇者笑了：“策划没被盗号，他这是在告诉你——贪心的极致就是摆烂。既然能无限次选择最优解，就别整那些花里胡哨的，直接把最优解复制 k 份。你想想，如果连摆烂的机会都不给你，直接上硬核约束，你连这个一行流的心得都悟不到，直接被困难版锤进地里。”&lt;/p&gt;
+&lt;p&gt;“……所以，策划用心良苦就是为了教我读题？”&lt;/p&gt;
+&lt;p&gt;”能看穿什么时候该摆烂，也是一种本事。不过——&amp;quot;&lt;/p&gt;
+&lt;p&gt;老勇者话锋一转，眼神突然变得危险起来，&amp;ldquo;如果加上约束，阁下又将如何应对？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他伸手拿起那张皱巴巴的羊皮纸，掏出随身携带的红笔——那个瞬间我甚至怀疑他是不是专门等着改我的题目——在纸上画了画，然后又递回给我。我低头一看：&lt;/p&gt;
+&lt;p&gt;“选择恰好 k 个&lt;strong&gt;不同&lt;/strong&gt;的非空子数组。子数组可以重叠，同一个子数组&lt;strong&gt;不可以&lt;/strong&gt;被选择超过一次。”&lt;/p&gt;
+&lt;p&gt;我倒吸一口凉气，手里的茶杯差点跟着羊皮纸一块儿掉进锅炉里。“不同的”非空子数组，“同一个子数组不能被选择超过一次”——约束一加，难度飞天。刚才一行流抓最肥的羊反复薅，现在每只羊只让薅一次，这不得挑出前k个最肥的羊？&lt;/p&gt;
+&lt;p&gt;我开始盘算：直接上暴力把所有可能的子数组全列出来，算极差，排序，取前 k 大。但长度为 n 的数组，子数组数量 n(n+1)/2，O(n²) 的候选集，n 大了直接炸，评测机怕是要给我唱一首《超时咏》。&lt;/p&gt;
+&lt;p&gt;“等等——题目只改了‘不能重复选同一段’，没禁止段之间重叠！！” 我拿着笔在纸上戳了戳，“既然可以重叠，那我不需要担心选了一段之后堵死其他段的问题。整个数组的极差max - min是冠军，只能用一次。把它用掉之后，第二大极差要么是抠掉最大值后剩下的区间，要么是抠掉最小值后剩下的区间——把最值抠掉，极差才可能变小。然后，季军就是从亚军的残骸里继续抠最值——”&lt;/p&gt;
+&lt;p&gt;我一拍脑门，“这不就是一个贪心扩展的过程吗？搞个大根堆维护候选池，每次挑极差最大的区间用掉，然后把它‘切开’——抠掉最大值或最小值之后，剩下的子区间重新扔回候选池里。重复 k 次，累加极差，搞定。大根堆！这可是高级数据结构，这把稳了。”&lt;/p&gt;
+&lt;p&gt;“方向是对的。”老勇者点点头，然后毫不留情地浇了一盆冷水，“但你的刀法有问题——候选池里的区间数量会指数爆炸，你这不叫堆，叫炸弹。想象一下，每次切一下产生两个新区间，k 次就是 2^k 个候选，你的堆会变成二叉树的坟场。&amp;quot;&lt;/p&gt;
+&lt;p&gt;我刚刚燃烧起来的小宇宙瞬间被浇灭，整个人像被触发了 NullPointerException 一样瘫在椅子上。大根堆都救不了我，那还有什么能救？&lt;/p&gt;
+&lt;p&gt;老勇者撇了我一眼，拿起笔在草稿纸上画了一条长线，标上刻度 0 到 n。“换个角度。别再跟切分死磕了。任意一个子数组都由两个东西决定——左端点 l 和右端点 r。固定 l，极差随 r 怎么变？”&lt;/p&gt;
+&lt;p&gt;我想了想：“r 越往右，区间越长，最大值只会变大或不变，最小值只会变小或不变——所以极差只增不减？”&lt;/p&gt;
+&lt;p&gt;“对。“老勇者在纸上画了几条平行的隧道，每条从不同起点出发，箭头齐刷刷指向右边，“”这就像玩一个挖矿游戏——固定起点，隧道越长，挖到的宝藏价值差越大。“&lt;/p&gt;
+&lt;p&gt;”初始地图上有 n 个起点，你站在每个起点 i，把每条隧道都从起点一路挖到最深处 [i, n)，把这 n 个候选段全扔进一个最大堆里。弹出堆顶——当前极差最大的区间——累加价值差进答案，然后把当前隧道在深度上缩一格，也就是把右端点从 r 减到 r-1，再压回堆里作为新的候选。如此重复 k 次即可。&amp;quot;&lt;/p&gt;
+&lt;p&gt;我盯着那排箭头：“等等——所以不是切碎区间？而是固定左端点，只缩短右端点？让堆里永远只有 n 个候选？！”&lt;/p&gt;
+&lt;p&gt;“对。每次弹出 [l, r)，压回 [l, r-1)。候选数恒定 n 个，不会指数爆炸。而且对于固定 l，极差随 r 单调不减，每次取堆顶一定是全局最优，贪心正确性有保证——这就是&amp;rsquo;隧道模型&amp;rsquo;，只在一个方向缩，不往两个方向切。&amp;quot;&lt;/p&gt;
+&lt;p&gt;“但每次缩一格要重新扫一遍极差不还是 O(n)，这是把爆炸从堆里挪到了查询里吗？&amp;ldquo;我皱着眉头，感觉这个方案还是有致命伤。&lt;/p&gt;
+&lt;p&gt;老勇者嘴角勾起一抹神秘的微笑：&amp;ldquo;所以你需要一件神器——能让任意区间的极差查询在 O(1) 时间内完成的神器。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;O(1)？！&amp;ldquo;我差点从椅子上跳起来，&amp;ldquo;难道不用遍历就能知道最大值和最小值？这违反了信息论吧？在每个位置都装个预知未来的水晶球？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;差不多。&amp;ldquo;老勇者真的从怀里掏出了一块……石板？上面刻满了密密麻麻的符文，&amp;ldquo;这叫稀疏表（Sparse Table），上古时代用来快速查询区间最值的魔法阵。核心思想很简单——提前把所有可能用到的区间的最值都算好存起来，用的时候直接查表。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他抬手在空中划出一串发光的代码，稀疏表像闪亮的星星一样悬在半空：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;op&lt;/span&gt;(a, b):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; (min(a[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;], b[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]), max(a[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], b[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ST&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;__init__&lt;/span&gt;(self, a):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(a)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        w &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; n&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bit_length()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        st &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [[&lt;span style=&#34;color:#66d9ef&#34;&gt;None&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; n &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; _ &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(w)]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        st[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [(x, x) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; a]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, w):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; i) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                st[i][j] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; op(st[i&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;][j], st[i&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;][j &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; (i&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;st &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; st
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 查询 [l, r) 左闭右开，返回极差&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;query&lt;/span&gt;(self, l, r):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        k &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (r &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; l)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;bit_length() &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        mn, mx &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; op(self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;st[k][l], self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;st[k][r &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; k)])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; mx &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; mn
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&amp;ldquo;等等等等，&amp;ldquo;我被那一堆位运算晃得眼晕，&amp;ldquo;这玩意儿怎么看都像黑魔法……1 &amp;laquo; i 是什么鬼？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;老勇者叹了口气，拿起笔在石板上画了个示意图：&amp;ldquo;别被位运算吓到。我给你翻译成人话——&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;第一层魔法：预处理所有 2 的幂次长度的区间。你看 st[0] 存的是长度为 1 的区间（就是单个元素），st[1] 存的是长度为 2 的区间，st[2] 存的是长度为 4 的区间，以此类推。1 &amp;laquo; i 就是 2^i，左移一位相当于乘以 2。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他在纸上画了一排格子：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原始数组:     [1, 3, 2, 5, 4]&lt;/p&gt;
+&lt;p&gt;st&lt;a class=&#34;link&#34; href=&#34;%e9%95%bf%e5%ba%a61&#34; &gt; 0 &lt;/a&gt;: [(1,1), (3,3), (2,2), (5,5), (4,4)]
+st&lt;a class=&#34;link&#34; href=&#34;%e9%95%bf%e5%ba%a62&#34; &gt;1&lt;/a&gt;: [(1,3), (2,3), (2,5), (4,5)]
+st&lt;a class=&#34;link&#34; href=&#34;%e9%95%bf%e5%ba%a64&#34; &gt;2&lt;/a&gt;: [(1,5), (2,5)]&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;quot; st[ i ] [ j ] 表示从位置 j 开始、长度为 2^i 的区间的 (最小值, 最大值)。关键在于——长区间可以由两个短区间拼出来。比如，长度为 4 的区间 [j, j+4) 可以拆成两个长度为 2 的区间 [j, j+2) 和 [j+2, j+4)，取它们的 min 和 max 就行。这就是 op 函数的作用——合并两个区间的极值。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我盯着那个递推式 st[ i ] [ j ]  = op(st[ i-1 ] [ j ] , st[ i-1 ] [ j + (1 &amp;laquo; (i-1)) ])：&amp;ldquo;所以这是先把短的算好了，长的直接拼？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;没错。ST 表预处理的复杂度是 O(n log n)，因为最多有 log n 层，每层最多 n 个元素。&amp;rdquo; 老勇者指着 query 方法，&amp;ldquo;真正的魔法在这里——怎么在 O(1) 时间内查询任意长度的区间？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;假设我要查 [l, r)，长度是 len = r - l。我们需要找到不超过 len 的最大的 2 的幂次。比如 len=5，最大的幂次是 4（也就是 2^2），然后用两个长度为 4 的区间覆盖 [l, r)——一个从左边开始 [l, l+4)，一个从右边结束 [r-4, r)。这两个区间一定有重叠，但没关系，我们要的是最大值和最小值，重叠部分不影响结果。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;他在纸上画了个覆盖示意图：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;数组:      [1, 3, 2, 5, 4, 6, 3]
+|&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;|             ← [l, l+4) 长度4
+|&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;|         ← [r-4, r) 长度4
+|&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;&amp;mdash;|         ← [l, r) 长度5&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&amp;ldquo;k = (r - l).bit_length() - 1 就是在找这个最大的幂次。op(self.st[ k ] [ l ], self.st[ k ] [ r - (1 &amp;laquo; k) ]) 就是把两个区间拼起来，返回 (最小值, 最大值)，相减就是极差。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我感觉脑子里有什么东西突然连通了：&amp;ldquo;所以稀疏表就是提前背好了所有标准长度（1, 2, 4, 8, 16&amp;hellip;）的区间攻略，遇到任何长度的查询，就用两个标准区间拼出来？这确实是 O(1)，因为只需要查两次表再加一次合并！&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;对。不过要注意，稀疏表只能处理静态数组的区间查询，不能修改元素。如果要支持修改，就得用线段树或者树状数组。但这道题不需要修改，所以稀疏表是最优解。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;老勇者接着写下了主逻辑：初始化堆的时候，把每个起点 i 对应的最长隧道 [i, n) 的极差塞进去。因为隧道长度的缩减只会导致极差变小或不变，初始堆已经满足大根堆性质，连 heapify 都省了。循环 k 次，每次弹出堆顶，累加极差，然后把同一隧道缩一格 [l, r-1) 压回去。如果堆顶的极差已经等于 0，说明剩下的都是极差为 0 的区间，可以直接收工。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;def maxTotalValue(self, nums, k):
+    n = len(nums)
+    st = ST(nums)
+    # 最大堆: (极差, l, r)，初始每条隧道挖到最深处
+    h = [(st.query(i, n), i, n) for i in range(n)]
+    
+    ans = 0
+    for _ in range(k):
+        d, l, r = h[0]
+        if d == 0:  # 极差为 0，收工
+            break
+        ans += d
+        # 弹出堆顶，同一隧道缩一格再压回去
+        heapreplace_max(h, (st.query(l, r-1), l, r-1))
+    return ans
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;我盯着这段代码，感觉像在看一个动态的挖矿图。堆里始终只有 n 个候选——每条矿脉一个。每次取走堆顶收益最大的矿段，同一条矿脉往浅层退一格，重新排队。稀疏表像一台地质探测仪，O(1) 就能查任意矿段的价值差。ST 表预处理O(n log n)，查询区间最值 O(1)。堆操作一次 O(log n)，k 次 O(k log n)。总复杂度 O(n log n + k log n)，稳稳扛住十万级。&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;隧道模型 + 贪心堆 + 稀疏表，&amp;ldquo;我靠在椅背上，把这三个词在嘴里嚼了一遍，&amp;ldquo;固定一端，单调扩展，堆维护全局最优。极差查询交给 ST 表。这比我那套切分方案强太多了——那是中间开花，指数爆炸；这是单端收缩，候选数恒定。同一个贪心思路，区别这么大。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;老勇者拍了拍我的肩膀，转身向门口走去：&amp;ldquo;固定一端、贪心另一端，这种&amp;rsquo;隧道模型&amp;rsquo;在很多区间选 k 大的题里都能用。算法优化往往就是换个角度看问题，消除不必要的计算。记住，当你发现候选集要爆炸的时候，问问自己：能不能固定一个维度，只让另一个维度动？&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;走到门口，他顿了顿，回头补了一句，眼神里闪烁着某种兴奋的光芒：&amp;ldquo;下次要是再加个约束——&amp;lsquo;子数组不能重叠&amp;rsquo;的变种题，记得叫我——那时候，才是真正的战斗开始。动态规划的地狱之门，会为你敞开。&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;我打了个寒颤，默默保存了今天的代码，顺手给文件加了个备份——万一哪天真的要用到呢？毕竟，在这个充满约束的世界里，唯一不变的就是变化本身。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>每日随机一句话</title>
         <link>http://localhost:1313/tools/daily_quote/</link>
         <pubDate>Mon, 08 Jun 2026 14:04:38 +0800</pubDate>
@@ -75,6 +1036,27 @@ window.onload = newQuote;
 &lt;p&gt;“原地交换加插入排序，能压到 O(1) 空间——每遇到一个元素，先判断它该去哪边，再用位移操作把它挪到对应位置，保证组内顺序不变。但每次挪位置都是 O(n)，总复杂度 O(n²)。O(1) 空间换 O(n²) 时间，等于徒手搬一百趟装备省一个空间戒指，血亏。”&lt;/p&gt;
 &lt;p&gt;他把棒棒糖往嘴里一叼，拍了拍我肩膀：“编程跟打副本一个道理——理解机制比硬刚更重要。稳定分区必须付出代价，要么付空间，要么付时间。n ≤ 10⁵ 的数据量，O(n) 空间换 O(n) 时间是血赚。省空间的念头，留着对付那些不要求稳定性的题——那才是原地交换大展拳脚的地方。”&lt;/p&gt;
 &lt;p&gt;窗外，勇士团扛着新到货的装备箱浩浩荡荡走过，村长跟在后面一路小跑，手里还抱着我分好的三摞清单。我把魔法书翻到今天这一页，在旁边批了三行：能分组的，就别排序。稳定分区，空间换时间是正道。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -142,6 +1124,27 @@ children = set()
 &lt;p&gt;送走村长后，我拆开那袋土豆，发现下面还压着一张小纸条：&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&amp;ldquo;多谢相助。另：如果你愿意帮我们优化一下农田灌溉系统的最短路径算法，报酬是十袋土豆。&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;我一把抓起纸条，搓成一团，扔了出去。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -202,6 +1205,27 @@ children = set()
 解法：total 推右边和，数学去冗余。一趟遍历原地修改，O(n) 时间，O(1) 额外空间
 心得：右边和不是独立信息，是派生值。用老勇者的话说——能现场算的，就别存。&lt;/p&gt;
 &lt;/blockquote&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -238,6 +1262,27 @@ children = set()
 &lt;p&gt;“理论上，”我重新拿起拨火棍，往锅炉里又添了根柴，“位数再涨十倍，状态数也就多个零。只要问题本质没变，战报永远管用。”&lt;/p&gt;
 &lt;p&gt;村长哼了一声，推开门的瞬间，风把他半句话吹了进来：“……你小子，学了点东西。”&lt;/p&gt;
 &lt;p&gt;门关上。我靠在椅背上，火苗在锅炉里欢快地蹿着。魔法书摊在膝上，两行批注一上一下——3751 教会我怎么写数位 DP，3753 教会我一个更重要的道理——最好的代码不是跑得最快的，而是数据量涨一百亿倍也不用改一行的。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -378,6 +1423,27 @@ children = set()
 核心收获：波动值是战报，不是行李。限制状态和计算状态分开，记忆化才能真正发威。&lt;code&gt;c * last_cmp &amp;lt; 0&lt;/code&gt; 一行统一峰谷判断。峰谷贡献不是 &lt;code&gt;+1&lt;/code&gt;，是 &lt;code&gt;+ sub_num_cnt&lt;/code&gt;。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;我在“波动值是战报，不是行李”下面又重重划了道下划线。靠在椅背上，我透过窗户望了一眼算法乐园的方向，天边那座数位过山车的轨道在夕阳下闪闪发亮。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -410,6 +1476,27 @@ children = set()
 解法：同 3633 优化版，O(n+m)，代码零改动，昨天多想十分钟，今天就省下四个数量级。&lt;br&gt;
 心得体会：剪枝剪得好，正式版再猛也不怕。暴力不是错，但知道什么时候不暴力，才是真正的抠门大师。&lt;/p&gt;
 &lt;/blockquote&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
 </description>
         </item>
         <item>
@@ -486,6 +1573,27 @@ children = set()
 &lt;p&gt;“来了来了！”我一把抓起柴火往炉膛里塞，火苗重新蹿起来，村长的眉头这才舒展开。&lt;/p&gt;
 &lt;p&gt;“村长，”我擦了把汗，往锅炉里又扔了根柴，“下次再发福利，换个正常点的游乐园行不？那个递归过山车，有个老头没设 base case，到现在还在天上转呢。”&lt;/p&gt;
 &lt;p&gt;村长愣了一下，抬头往乐园方向望了望——天边那个小黑点还在轨道上循环，隐约的“谁来帮我 return 啊——”随风飘来。他沉默了两秒，诚恳地点了点头：“行，下次发隔壁‘数据结构农场’的票，最多也就被二叉树的刺扎一下，至少人还能回来。”&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
 </description>
         </item>
         <item>
