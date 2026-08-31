@@ -1,7 +1,7 @@
 # hugo.yaml
-baseURL: http://icurious-d.github.io/  # !!!替换为你的最终域名，部署后必须修改!!!
-locale: zh         # 语言设为中文
-title: 我的小站           # 网站标题
+baseURL: http://icurious-d.github.io/  # CI 部署时会被 GitHub Actions 自动覆盖，无需手动修改
+locale: zh-cn      # 语言设为中文（匹配主题 i18n/zh-cn.yaml）
+title: gugugu           # 网站标题
 # theme: hugo-theme-stack      # 主题名称，与模块名一致
 
 # 首页文章列表的设置
@@ -25,6 +25,12 @@ menu:
       weight: 10
       params:
         icon: "home"
+    - identifier: "projects"
+      name: "项目"
+      url: "/projects/"
+      weight: 15
+      params:
+        icon: "tools"         # 项目图标
     - identifier: "posts"
       name: "文章"
       url: "/posts/"
@@ -34,19 +40,19 @@ menu:
     - identifier: "tools"
       name: "工具"
       url: "/tools"
-      weight: 30
+      weight: 25
       params:
         icon: "tools"
-    - identifier: "notes"
-      name: "笔记"
-      url: "/notes"
-      weight: 40
+    - identifier: "kids"
+      name: "趣学"
+      url: "/kids/"
+      weight: 28
       params:
         icon: "notes"
     - identifier: "about"
       name: "关于我"
       url: "/about/"
-      weight: 50
+      weight: 30
       params:
         icon: "user"          # 用户图标
 
@@ -59,18 +65,21 @@ menu:
         icon: "brand-github"
 
 params:
+  favicon: /favicon.svg   # 网站图标（emoji SVG）
+
   # 侧边栏配置 (这是重点)
   sidebar:
     emoji: "✏️"
-    subtitle: "喜欢讲故事的咕咕咕"  # 这里的 subname 会显示在头像下方作为个人签名
+    subtitle: "AI Engineer / AIGC Builder"  # 头像下方的个人签名
     avatar:
       src: "img/avatar.jpg"          # 头像路径 (稍后会解释如何放置)
       # srcDark 用于暗色模式，可选用另一张图，可以不设置
       # srcDark: "img/avatar-dark.png"
       alt: "gugugu的头像"             # 图片描述
 
-  # 文章目录配置 (保证首页能显示)
+  # 首页显示的内容板块（顺序决定排列优先级）
   mainSections:
+    - projects
     - posts
 
   comments:
@@ -101,15 +110,12 @@ params:
   widgets:
     homepage:
       - type: search
-      - type: archives
-        params:
-          limit: 5
       - type: categories
         params:
           limit: 5
       - type: tag-cloud
         params:
-          limit: 5
+          limit: 15
     page:
       - type: toc
     # 可选：也可以为文章页单独配置
