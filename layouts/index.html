@@ -1,0 +1,53 @@
+{{ define "main" }}
+    {{/* ── 获取所有主页文章，分离置顶与普通文章 ── */}}
+    {{ $allPages := where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
+    {{ $allPages = where $allPages "Params.hidden" "!=" true }}
+    {{ $pinnedPages := where $allPages "Params.pinned" true }}
+    {{ $pinnedProjects := where $pinnedPages "Section" "projects" }}
+    {{ $pinnedArticles := where $pinnedPages "Section" "posts" }}
+    {{ $regularPages := where $allPages "Params.pinned" "!=" true | first 10 }}
+
+    {{/* ── 精选文章/项目（项目在前、文章在后） ── */}}
+    {{ with $pinnedPages }}
+    <section class="homepage-featured">
+        <div class="section-label">
+            <span class="section-label__icon">⭐</span>
+            <span class="section-label__text">精选</span>
+        </div>
+        <div class="article-list">
+            {{ range $pinnedProjects }}
+                {{ partial "article-list/default" . }}
+            {{ end }}
+            {{ range $pinnedArticles }}
+                {{ partial "article-list/default" . }}
+            {{ end }}
+        </div>
+    </section>
+    {{ end }}
+
+    {{/* ── 分隔线 + 最新标签 ── */}}
+    {{ if and $pinnedPages $regularPages }}
+    <hr class="homepage-hr">
+    <div class="section-label">
+        <span class="section-label__icon">📰</span>
+        <span class="section-label__text">最新</span>
+    </div>
+    {{ end }}
+
+    {{/* ── 最新文章列表 ── */}}
+    {{ with $regularPages }}
+    <section class="homepage-latest">
+        <div class="article-list">
+            {{ range . }}
+                {{ partial "article-list/default" . }}
+            {{ end }}
+        </div>
+    </section>
+    {{ end }}
+
+    {{ partial "footer/footer" . }}
+{{ end }}
+
+{{ define "right-sidebar" }}
+    {{ partial "sidebar/right.html" (dict "Context" . "Scope" "homepage") }}
+{{ end }}

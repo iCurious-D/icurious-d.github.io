@@ -1,0 +1,58 @@
+<style>
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: star-fly 0.75s ease-out forwards;
+}
+@keyframes star-fly {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+    var COLORS = ['#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#FF9F43', '#F368E0', '#48DBFB'];
+    var SHAPES = [
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 0L14.59 8.41 23 12 14.59 15.59 12 24 9.41 15.59 1 12 9.41 8.41z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><circle cx="12" cy="12" r="10"/></svg>'
+    ];
+
+    document.addEventListener('click', function(e) {
+        var count = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < count; i++) {
+            var star = document.createElement('div');
+            star.className = 'click-star';
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var shape = SHAPES[Math.floor(Math.random() * SHAPES.length)].replace('CL', color);
+            var size = 8 + Math.floor(Math.random() * 14);
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+            var dist = 30 + Math.random() * 60;
+
+            star.style.left = (e.clientX - size / 2) + 'px';
+            star.style.top = (e.clientY - size / 2) + 'px';
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+            star.style.setProperty('--dy', (Math.sin(angle) * dist - 20) + 'px');
+            star.innerHTML = shape;
+            document.body.appendChild(star);
+            (function(el) {
+                setTimeout(function() { el.remove(); }, 800);
+            })(star);
+        }
+    });
+})();
+</script>
+<script>
+(function() {
+    document.querySelectorAll('.article-list article').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            var link = card.querySelector('.article-title a');
+            if (link) window.location = link.href;
+        });
+    });
+})();
+</script>
