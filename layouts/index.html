@@ -14,12 +14,12 @@
             <span class="section-label__icon">⭐</span>
             <span class="section-label__text">精选</span>
         </div>
-        <div class="article-list">
+        <div class="article-list article-list--homepage">
             {{ range $pinnedProjects }}
-                {{ partial "article-list/default" . }}
+                {{ partial "article-list/homepage" . }}
             {{ end }}
             {{ range $pinnedArticles }}
-                {{ partial "article-list/default" . }}
+                {{ partial "article-list/homepage" . }}
             {{ end }}
         </div>
     </section>
@@ -37,9 +37,9 @@
     {{/* ── 最新文章列表 ── */}}
     {{ with $regularPages }}
     <section class="homepage-latest">
-        <div class="article-list">
+        <div class="article-list article-list--homepage">
             {{ range . }}
-                {{ partial "article-list/default" . }}
+                {{ partial "article-list/homepage" . }}
             {{ end }}
         </div>
     </section>

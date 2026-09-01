@@ -1,0 +1,48 @@
+<article class="homepage-card">
+    <div class="homepage-card__content">
+        {{ $icon := .Params.icon }}
+        {{ if not $icon }}
+            {{ $category := "" }}
+            {{ with .Params.categories }}{{ $category = index . 0 }}{{ end }}
+            {{ $categoryLower := lower $category }}
+            {{ if eq $categoryLower "项目实战" }}{{ $icon = "🛠️" }}
+            {{ else if eq $categoryLower "ai 技术笔记" }}{{ $icon = "🧩" }}
+            {{ else if eq $categoryLower "leetcode题解" }}{{ $icon = "📝" }}
+            {{ else if eq .Section "tools" }}{{ $icon = "🔧" }}
+            {{ else if eq .Section "kids" }}{{ $icon = "🎨" }}
+            {{ else }}{{ $icon = "📄" }}{{ end }}
+        {{ end }}
+
+        <h2 class="homepage-card__title">
+            <span class="homepage-card__icon">{{ $icon }}</span>
+            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </h2>
+
+        {{ with .Params.description }}
+        <p class="homepage-card__desc">{{ . }}</p>
+        {{ end }}
+
+        <div class="homepage-card__meta">
+            <span class="homepage-card__meta-item">
+                {{ partial "helper/icon" "date" }}
+                <time datetime='{{ .Date.Format "2006-01-02T15:04:05-07:00" }}'>
+                    {{ .Date.Format "Jan 02, 2006" }}
+                </time>
+            </span>
+
+            <span class="homepage-card__meta-item">
+                {{ partial "helper/icon" "clock" }}
+                {{ T "article.readingTime" .ReadingTime }}
+            </span>
+
+            {{ if .Params.categories }}
+            <span class="homepage-card__meta-item homepage-card__category">
+                {{ partial "helper/icon" "categories" }}
+                {{ range (.GetTerms "categories") }}
+                <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+                {{ end }}
+            </span>
+            {{ end }}
+        </div>
+    </div>
+</article>

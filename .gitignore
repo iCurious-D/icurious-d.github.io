@@ -1,0 +1,6 @@
+# Generated files
+public/
+resources/
+
+# IDE / local
+.qoder/

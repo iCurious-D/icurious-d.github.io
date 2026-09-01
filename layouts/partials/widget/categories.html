@@ -1,0 +1,29 @@
+{{- $context := .Context -}}
+{{- $limit := default 10 .Params.limit -}}
+<section class="widget categories-list">
+    <h2 class="widget-title section-title">{{ T "widget.categoriesCloud.title" }}</h2>
+
+    <div class="categories-list-items">
+        {{ range first $limit $context.Site.Taxonomies.categories.ByCount }}
+            {{ $name := .Page.Title }}
+            {{ $nameLower := lower $name }}
+            {{ $icon := "📁" }}
+            {{ $class := "" }}
+            {{ if eq $nameLower "项目实战" }}
+                {{ $icon = "🛠️" }}
+                {{ $class = "categories-list-item--orange" }}
+            {{ else if eq $nameLower "ai 技术笔记" }}
+                {{ $icon = "🧩" }}
+                {{ $class = "categories-list-item--blue" }}
+            {{ else if eq $nameLower "leetcode题解" }}
+                {{ $icon = "📝" }}
+                {{ $class = "categories-list-item--green" }}
+            {{ end }}
+            <a href="{{ .Page.RelPermalink }}" class="categories-list-item {{ $class }}">
+                <span class="categories-list-item__icon">{{ $icon }}</span>
+                <span class="categories-list-item__name">{{ $name }}</span>
+                <span class="categories-list-item__count">{{ .Count }}</span>
+            </a>
+        {{ end }}
+    </div>
+</section>

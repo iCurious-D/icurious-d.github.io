@@ -1,0 +1,3 @@
+article:
+    readingTime:
+        other: "{{ .Count }} min 阅读"
