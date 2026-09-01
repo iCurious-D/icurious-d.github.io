@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮快慢指针拆项链，递归回溯借东风 今天我正蹲在锅炉边享受难得的清静，熟悉的Steam Deck风扇声又由远及近地碾了过来。村长捧着电脑冲了进来，屏幕上闪烁着一条由圆环串联而成的项链，每个环上标着数字，还散发着淡蓝色的魔法光芒。\n&ldquo;小白！游戏里掉落了一条神秘的项链！&ldquo;村长的眼睛比项链还亮，&ldquo;你看，这链子一共 n 个环，n 还是偶数！游戏提示说蕴含什么对称的力量——从两头往中间数，第 i 个环和第 n-1-i 个环叫‘孪生环’！每对孪生环放在一起会产生能量共鸣，共鸣值就是两个环上的数字之和！需要找出最强共鸣值提交给锻造台，才能解锁传说中的对称之盾！&rdquo;\n我接过电脑，屏幕上那条项链排成一条直线，圆环之间用箭头连接——这不就是链表吗？偶数个节点，首尾对称配对，求最大孪生和。“村长，您直接把它塞进一个数组里，然后用个 for 循环，左边一个指针右边一个指针往中间夹击不就行了？”\n村长一听，胡子都翘起来了：“糊涂！数组是什么？那是连续内存！这链子这么长，万一中间断了，你还得重新分配一大块连续的内存空间来存它！我们村的魔法锅炉用的就是碎片化内存管理，最忌讳动不动就开大数组！最好是 O(1) 空间复杂度，原地解决！”\n我叹了口气，行吧，那只能对链表本身进行物理改造了。\n斩链刀·反转术 梳理下思路：快慢指针找中点，反转后半段，然后前后同时遍历配对——正好是 O(n) 时间加 O(1) 空间。\n我抄起键盘开干：快慢指针是老搭档了，fast 每次走两步，slow 每次走一步，当 fast 跑到终点时，slow 正好卡在中点。然后把后半段链表反转，让尾节点变成新头。最后前半段从原头出发，后半段从新头出发，一边走一边求和，max 一路追最大值。\nclass Solution: def middleNode(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: slow = fast = head while fast and fast.next: slow = slow.next fast = fast.next.next return slow def reverseList(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: pre, cur = None, head while cur: nxt = cur.next cur.next = pre pre = cur cur = nxt return pre def pairSum(self, head: Optional[ListNode]) -&gt; int: mid_node = self.middleNode(head) second_head = self.reverseList(mid_node) ans = 0 while second_head: ans = max(ans, head.val + second_head.val) head = head.next second_head = second_head.next return ans 提交，AC。“村长，这什么孪生环啊，分明是把链表反转加双指针的经典面试题穿上了魔法项链的皮肤！连‘对称之盾’这种道具名都起得跟算法术语似的。”我一边吐槽，一边我把计算出的最大孪生和报给村长：“是 10086！”\n">
 <title>leetcode2130 快慢指针拆项链，递归回溯借东风</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-14/'>
+<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-14/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode2130 快慢指针拆项链，递归回溯借东风">
+<link rel="stylesheet" href="/scss/style.min.86e4926d6336cd3b00711635ecc0740f3109784c840a3f4cd56f34c775673afa.css"><meta property='og:title' content="leetcode2130 快慢指针拆项链，递归回溯借东风">
 <meta property='og:description' content="🎮快慢指针拆项链，递归回溯借东风 今天我正蹲在锅炉边享受难得的清静，熟悉的Steam Deck风扇声又由远及近地碾了过来。村长捧着电脑冲了进来，屏幕上闪烁着一条由圆环串联而成的项链，每个环上标着数字，还散发着淡蓝色的魔法光芒。\n&ldquo;小白！游戏里掉落了一条神秘的项链！&ldquo;村长的眼睛比项链还亮，&ldquo;你看，这链子一共 n 个环，n 还是偶数！游戏提示说蕴含什么对称的力量——从两头往中间数，第 i 个环和第 n-1-i 个环叫‘孪生环’！每对孪生环放在一起会产生能量共鸣，共鸣值就是两个环上的数字之和！需要找出最强共鸣值提交给锻造台，才能解锁传说中的对称之盾！&rdquo;\n我接过电脑，屏幕上那条项链排成一条直线，圆环之间用箭头连接——这不就是链表吗？偶数个节点，首尾对称配对，求最大孪生和。“村长，您直接把它塞进一个数组里，然后用个 for 循环，左边一个指针右边一个指针往中间夹击不就行了？”\n村长一听，胡子都翘起来了：“糊涂！数组是什么？那是连续内存！这链子这么长，万一中间断了，你还得重新分配一大块连续的内存空间来存它！我们村的魔法锅炉用的就是碎片化内存管理，最忌讳动不动就开大数组！最好是 O(1) 空间复杂度，原地解决！”\n我叹了口气，行吧，那只能对链表本身进行物理改造了。\n斩链刀·反转术 梳理下思路：快慢指针找中点，反转后半段，然后前后同时遍历配对——正好是 O(n) 时间加 O(1) 空间。\n我抄起键盘开干：快慢指针是老搭档了，fast 每次走两步，slow 每次走一步，当 fast 跑到终点时，slow 正好卡在中点。然后把后半段链表反转，让尾节点变成新头。最后前半段从原头出发，后半段从新头出发，一边走一边求和，max 一路追最大值。\nclass Solution: def middleNode(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: slow = fast = head while fast and fast.next: slow = slow.next fast = fast.next.next return slow def reverseList(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: pre, cur = None, head while cur: nxt = cur.next cur.next = pre pre = cur cur = nxt return pre def pairSum(self, head: Optional[ListNode]) -&gt; int: mid_node = self.middleNode(head) second_head = self.reverseList(mid_node) ans = 0 while second_head: ans = max(ans, head.val + second_head.val) head = head.next second_head = second_head.next return ans 提交，AC。“村长，这什么孪生环啊，分明是把链表反转加双指针的经典面试题穿上了魔法项链的皮肤！连‘对称之盾’这种道具名都起得跟算法术语似的。”我一边吐槽，一边我把计算出的最大孪生和报给村长：“是 10086！”\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-14/'>
-<meta property='og:site_name' content='我的小站'>
+<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-14/'>
+<meta property='og:site_name' content='gugugu'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-14T12:37:13&#43;08:00'/><meta property='article:modified_time' content='2026-06-14T12:37:13&#43;08:00'/>
 <meta name="twitter:title" content="leetcode2130 快慢指针拆项链，递归回溯借东风">
 <meta name="twitter:description" content="🎮快慢指针拆项链，递归回溯借东风 今天我正蹲在锅炉边享受难得的清静，熟悉的Steam Deck风扇声又由远及近地碾了过来。村长捧着电脑冲了进来，屏幕上闪烁着一条由圆环串联而成的项链，每个环上标着数字，还散发着淡蓝色的魔法光芒。\n&ldquo;小白！游戏里掉落了一条神秘的项链！&ldquo;村长的眼睛比项链还亮，&ldquo;你看，这链子一共 n 个环，n 还是偶数！游戏提示说蕴含什么对称的力量——从两头往中间数，第 i 个环和第 n-1-i 个环叫‘孪生环’！每对孪生环放在一起会产生能量共鸣，共鸣值就是两个环上的数字之和！需要找出最强共鸣值提交给锻造台，才能解锁传说中的对称之盾！&rdquo;\n我接过电脑，屏幕上那条项链排成一条直线，圆环之间用箭头连接——这不就是链表吗？偶数个节点，首尾对称配对，求最大孪生和。“村长，您直接把它塞进一个数组里，然后用个 for 循环，左边一个指针右边一个指针往中间夹击不就行了？”\n村长一听，胡子都翘起来了：“糊涂！数组是什么？那是连续内存！这链子这么长，万一中间断了，你还得重新分配一大块连续的内存空间来存它！我们村的魔法锅炉用的就是碎片化内存管理，最忌讳动不动就开大数组！最好是 O(1) 空间复杂度，原地解决！”\n我叹了口气，行吧，那只能对链表本身进行物理改造了。\n斩链刀·反转术 梳理下思路：快慢指针找中点，反转后半段，然后前后同时遍历配对——正好是 O(n) 时间加 O(1) 空间。\n我抄起键盘开干：快慢指针是老搭档了，fast 每次走两步，slow 每次走一步，当 fast 跑到终点时，slow 正好卡在中点。然后把后半段链表反转，让尾节点变成新头。最后前半段从原头出发，后半段从新头出发，一边走一边求和，max 一路追最大值。\nclass Solution: def middleNode(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: slow = fast = head while fast and fast.next: slow = slow.next fast = fast.next.next return slow def reverseList(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: pre, cur = None, head while cur: nxt = cur.next cur.next = pre pre = cur cur = nxt return pre def pairSum(self, head: Optional[ListNode]) -&gt; int: mid_node = self.middleNode(head) second_head = self.reverseList(mid_node) ans = 0 while second_head: ans = max(ans, head.val + second_head.val) head = head.next second_head = second_head.next return ans 提交，AC。“村长，这什么孪生环啊，分明是把链表反转加双指针的经典面试题穿上了魔法项链的皮肤！连‘对称之盾’这种道具名都起得跟算法术语似的。”我一边吐槽，一边我把计算出的最大孪生和报给村长：“是 10086！”\n">
+    <link rel="shortcut icon" href="/favicon.svg" />
+
     </head>
     <body class="
     article-page
@@ -40,7 +42,7 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -69,8 +71,8 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">我的小站</a></h1>
-            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+            <h1 class="site-name"><a href="/">gugugu</a></h1>
+            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -144,6 +146,39 @@ unicode: "ecde"
         
         
         <li >
+            <a href='/projects/' >
+                
+                
+                
+                    <!--
+tags: [cube, app, application, package, container]
+version: "1.0"
+unicode: "ea45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+  <path d="M12 12l8 -4.5" />
+  <path d="M12 12l0 9" />
+  <path d="M12 12l-8 -4.5" />
+</svg>
+
+                
+                <span>项目</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/posts/' >
                 
                 
@@ -210,7 +245,7 @@ unicode: "ea45"
         
         
         <li >
-            <a href='/notes' >
+            <a href='/kids/' >
                 
                 
                 
@@ -237,7 +272,7 @@ unicode: "eb96"
 </svg>
 
                 
-                <span>笔记</span>
+                <span>趣学</span>
             </a>
         </li>
         
@@ -295,7 +330,7 @@ unicode: "eb49"
 
 
 
-                        <span>Dark Mode</span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -320,7 +355,7 @@ unicode: "eb49"
 
 
         </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
+        <h2 class="widget-title section-title">目录</h2>
         
         <div class="widget--toc">
             <nav id="TableOfContents">
@@ -351,8 +386,8 @@ unicode: "eb49"
             
             
             
-            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
-                Leetcode题解故事
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3/" style="background-color: hsl(227, 60%, 84%); color: hsl(227, 60%, 15%);">
+                Leetcode题解
             </a>
         
     </header>
@@ -382,7 +417,7 @@ unicode: "eb49"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-06-14T12:37:13&#43;08:00'>6月 14, 2026</time>
+                <time class="article-time--published" datetime='2026-06-14T12:37:13&#43;08:00'>Jun 14, 2026</time>
             </div>
         
 
@@ -397,7 +432,7 @@ unicode: "eb49"
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    1 min 阅读
                 </time>
             </div>
         
@@ -540,7 +575,7 @@ unicode: "eb49"
     
 
 <aside class="related-content--wrapper">
-    <h2 class="section-title">Related content</h2>
+    <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
             
@@ -673,12 +708,12 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 我的小站
+        2026 gugugu
     </section>
     
     <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -768,7 +803,7 @@ unicode: "eb49"
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2db790992f3b20090509a78a8809578bf0632ae99498dd4dc03d3f15ffe700f8.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -779,6 +814,64 @@ unicode: "eb49"
 
         document.head.appendChild(customFont);
     }());
+</script>
+<style>
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: star-fly 0.75s ease-out forwards;
+}
+@keyframes star-fly {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+    var COLORS = ['#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#FF9F43', '#F368E0', '#48DBFB'];
+    var SHAPES = [
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 0L14.59 8.41 23 12 14.59 15.59 12 24 9.41 15.59 1 12 9.41 8.41z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><circle cx="12" cy="12" r="10"/></svg>'
+    ];
+
+    document.addEventListener('click', function(e) {
+        var count = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < count; i++) {
+            var star = document.createElement('div');
+            star.className = 'click-star';
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var shape = SHAPES[Math.floor(Math.random() * SHAPES.length)].replace('CL', color);
+            var size = 8 + Math.floor(Math.random() * 14);
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+            var dist = 30 + Math.random() * 60;
+
+            star.style.left = (e.clientX - size / 2) + 'px';
+            star.style.top = (e.clientY - size / 2) + 'px';
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+            star.style.setProperty('--dy', (Math.sin(angle) * dist - 20) + 'px');
+            star.innerHTML = shape;
+            document.body.appendChild(star);
+            (function(el) {
+                setTimeout(function() { el.remove(); }, 800);
+            })(star);
+        }
+    });
+})();
+</script>
+<script>
+(function() {
+    document.querySelectorAll('.article-list article').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            var link = card.querySelector('.article-title a');
+            if (link) window.location = link.href;
+        });
+    });
+})();
 </script>
 
     </body>

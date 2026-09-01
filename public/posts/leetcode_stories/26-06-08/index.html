@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 装备分拣：一行流的诱惑与分桶的正道 “小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——[9, 12, 5, 10, 14, 3, 10]。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”\n我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。\n正准备掏分桶代码，我脑子突然一抽：等等，Python 的 sort 不是稳定排序吗？Timsort 亲口承诺“相同键值保序”，那我直接用 key 函数把小于 pivot 的映射成 -1，等于的映射成 0，大于的映射成 1，然后排一遍不就行了？一行流，帅就完事。\nnums.sort(key=lambda x: (x &gt; pivot) - (x &lt; pivot)) 跑样例，输出完美。提交，AC 弹出。我往椅背上一靠，翘起二郎腿，心里已经开始给自己加戏——一行代码搞定装备分拣，村长直呼内行，精英团连夜给我加 Buff，仓库管理员感动得要把女儿许配给我。\n正美着，后脑勺“啪”地挨了一下。\n回头一看，老勇者叼着棒棒糖站在我身后，手指还保持着弹脑瓜崩的姿势。“你觉得这就算写完了？”\n“AC 了啊！”我捂着后脑勺，指着屏幕上的绿色大勾。\n“AC 不代表没毛病。”他点了点屏幕，“你这 sort，时间复杂度多少？”\n“O(n log n)……”我声音小了一半，后脑勺还隐隐作痛。\n”题目让你分组，不是让你排序。分组是 O(n) 的活——看一眼战力值，扔进对应的箱子，完事。你调 sort，等于雇了个全职排序师来当门卫。排序引擎不知道你只想分堆——它勤勤恳恳地比较、归并、插入，log n 层递归树跑满，就为了完成一个你早就知道答案的任务。而且 Timsort 底层 merge 要临时数组，额外空间也是 O(n)——你这一行流，时间复杂度输了，空间也没省。”\n他把棒棒糖往嘴角一叼：“一行流看着帅，语义不对。用排序引擎做分组，技术债，利息 O(n log n)。哪天副本掉了一百万件装备，Boss 都刷新两轮了你的代码还在排序，勇士团站门口干等，回头差评全写你名字。”\n">
 <title>leetcode2161 装备分拣：一行流的诱惑与分桶的正道</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-08/'>
+<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-08/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode2161 装备分拣：一行流的诱惑与分桶的正道">
+<link rel="stylesheet" href="/scss/style.min.86e4926d6336cd3b00711635ecc0740f3109784c840a3f4cd56f34c775673afa.css"><meta property='og:title' content="leetcode2161 装备分拣：一行流的诱惑与分桶的正道">
 <meta property='og:description' content="🎮 装备分拣：一行流的诱惑与分桶的正道 “小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——[9, 12, 5, 10, 14, 3, 10]。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”\n我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。\n正准备掏分桶代码，我脑子突然一抽：等等，Python 的 sort 不是稳定排序吗？Timsort 亲口承诺“相同键值保序”，那我直接用 key 函数把小于 pivot 的映射成 -1，等于的映射成 0，大于的映射成 1，然后排一遍不就行了？一行流，帅就完事。\nnums.sort(key=lambda x: (x &gt; pivot) - (x &lt; pivot)) 跑样例，输出完美。提交，AC 弹出。我往椅背上一靠，翘起二郎腿，心里已经开始给自己加戏——一行代码搞定装备分拣，村长直呼内行，精英团连夜给我加 Buff，仓库管理员感动得要把女儿许配给我。\n正美着，后脑勺“啪”地挨了一下。\n回头一看，老勇者叼着棒棒糖站在我身后，手指还保持着弹脑瓜崩的姿势。“你觉得这就算写完了？”\n“AC 了啊！”我捂着后脑勺，指着屏幕上的绿色大勾。\n“AC 不代表没毛病。”他点了点屏幕，“你这 sort，时间复杂度多少？”\n“O(n log n)……”我声音小了一半，后脑勺还隐隐作痛。\n”题目让你分组，不是让你排序。分组是 O(n) 的活——看一眼战力值，扔进对应的箱子，完事。你调 sort，等于雇了个全职排序师来当门卫。排序引擎不知道你只想分堆——它勤勤恳恳地比较、归并、插入，log n 层递归树跑满，就为了完成一个你早就知道答案的任务。而且 Timsort 底层 merge 要临时数组，额外空间也是 O(n)——你这一行流，时间复杂度输了，空间也没省。”\n他把棒棒糖往嘴角一叼：“一行流看着帅，语义不对。用排序引擎做分组，技术债，利息 O(n log n)。哪天副本掉了一百万件装备，Boss 都刷新两轮了你的代码还在排序，勇士团站门口干等，回头差评全写你名字。”\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-08/'>
-<meta property='og:site_name' content='我的小站'>
+<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-08/'>
+<meta property='og:site_name' content='gugugu'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-08T12:47:26&#43;08:00'/><meta property='article:modified_time' content='2026-06-08T12:47:26&#43;08:00'/>
 <meta name="twitter:title" content="leetcode2161 装备分拣：一行流的诱惑与分桶的正道">
 <meta name="twitter:description" content="🎮 装备分拣：一行流的诱惑与分桶的正道 “小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——[9, 12, 5, 10, 14, 3, 10]。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”\n我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。\n正准备掏分桶代码，我脑子突然一抽：等等，Python 的 sort 不是稳定排序吗？Timsort 亲口承诺“相同键值保序”，那我直接用 key 函数把小于 pivot 的映射成 -1，等于的映射成 0，大于的映射成 1，然后排一遍不就行了？一行流，帅就完事。\nnums.sort(key=lambda x: (x &gt; pivot) - (x &lt; pivot)) 跑样例，输出完美。提交，AC 弹出。我往椅背上一靠，翘起二郎腿，心里已经开始给自己加戏——一行代码搞定装备分拣，村长直呼内行，精英团连夜给我加 Buff，仓库管理员感动得要把女儿许配给我。\n正美着，后脑勺“啪”地挨了一下。\n回头一看，老勇者叼着棒棒糖站在我身后，手指还保持着弹脑瓜崩的姿势。“你觉得这就算写完了？”\n“AC 了啊！”我捂着后脑勺，指着屏幕上的绿色大勾。\n“AC 不代表没毛病。”他点了点屏幕，“你这 sort，时间复杂度多少？”\n“O(n log n)……”我声音小了一半，后脑勺还隐隐作痛。\n”题目让你分组，不是让你排序。分组是 O(n) 的活——看一眼战力值，扔进对应的箱子，完事。你调 sort，等于雇了个全职排序师来当门卫。排序引擎不知道你只想分堆——它勤勤恳恳地比较、归并、插入，log n 层递归树跑满，就为了完成一个你早就知道答案的任务。而且 Timsort 底层 merge 要临时数组，额外空间也是 O(n)——你这一行流，时间复杂度输了，空间也没省。”\n他把棒棒糖往嘴角一叼：“一行流看着帅，语义不对。用排序引擎做分组，技术债，利息 O(n log n)。哪天副本掉了一百万件装备，Boss 都刷新两轮了你的代码还在排序，勇士团站门口干等，回头差评全写你名字。”\n">
+    <link rel="shortcut icon" href="/favicon.svg" />
+
     </head>
     <body class="
     article-page
@@ -40,7 +42,7 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -69,8 +71,8 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">我的小站</a></h1>
-            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+            <h1 class="site-name"><a href="/">gugugu</a></h1>
+            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -144,6 +146,39 @@ unicode: "ecde"
         
         
         <li >
+            <a href='/projects/' >
+                
+                
+                
+                    <!--
+tags: [cube, app, application, package, container]
+version: "1.0"
+unicode: "ea45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+  <path d="M12 12l8 -4.5" />
+  <path d="M12 12l0 9" />
+  <path d="M12 12l-8 -4.5" />
+</svg>
+
+                
+                <span>项目</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/posts/' >
                 
                 
@@ -210,7 +245,7 @@ unicode: "ea45"
         
         
         <li >
-            <a href='/notes' >
+            <a href='/kids/' >
                 
                 
                 
@@ -237,7 +272,7 @@ unicode: "eb96"
 </svg>
 
                 
-                <span>笔记</span>
+                <span>趣学</span>
             </a>
         </li>
         
@@ -295,7 +330,7 @@ unicode: "eb49"
 
 
 
-                        <span>Dark Mode</span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -320,7 +355,7 @@ unicode: "eb49"
 
 
         </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
+        <h2 class="widget-title section-title">目录</h2>
         
         <div class="widget--toc">
             <nav id="TableOfContents">
@@ -347,8 +382,8 @@ unicode: "eb49"
             
             
             
-            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
-                Leetcode题解故事
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3/" style="background-color: hsl(227, 60%, 84%); color: hsl(227, 60%, 15%);">
+                Leetcode题解
             </a>
         
     </header>
@@ -378,7 +413,7 @@ unicode: "eb49"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-06-08T12:47:26&#43;08:00'>6月 08, 2026</time>
+                <time class="article-time--published" datetime='2026-06-08T12:47:26&#43;08:00'>Jun 08, 2026</time>
             </div>
         
 
@@ -393,7 +428,7 @@ unicode: "eb49"
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    1 min 阅读
                 </time>
             </div>
         
@@ -489,7 +524,7 @@ unicode: "eb49"
     
 
 <aside class="related-content--wrapper">
-    <h2 class="section-title">Related content</h2>
+    <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
             
@@ -622,12 +657,12 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 我的小站
+        2026 gugugu
     </section>
     
     <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -717,7 +752,7 @@ unicode: "eb49"
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2db790992f3b20090509a78a8809578bf0632ae99498dd4dc03d3f15ffe700f8.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -728,6 +763,64 @@ unicode: "eb49"
 
         document.head.appendChild(customFont);
     }());
+</script>
+<style>
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: star-fly 0.75s ease-out forwards;
+}
+@keyframes star-fly {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+    var COLORS = ['#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#FF9F43', '#F368E0', '#48DBFB'];
+    var SHAPES = [
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 0L14.59 8.41 23 12 14.59 15.59 12 24 9.41 15.59 1 12 9.41 8.41z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><circle cx="12" cy="12" r="10"/></svg>'
+    ];
+
+    document.addEventListener('click', function(e) {
+        var count = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < count; i++) {
+            var star = document.createElement('div');
+            star.className = 'click-star';
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var shape = SHAPES[Math.floor(Math.random() * SHAPES.length)].replace('CL', color);
+            var size = 8 + Math.floor(Math.random() * 14);
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+            var dist = 30 + Math.random() * 60;
+
+            star.style.left = (e.clientX - size / 2) + 'px';
+            star.style.top = (e.clientY - size / 2) + 'px';
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+            star.style.setProperty('--dy', (Math.sin(angle) * dist - 20) + 'px');
+            star.innerHTML = shape;
+            document.body.appendChild(star);
+            (function(el) {
+                setTimeout(function() { el.remove(); }, 800);
+            })(star);
+        }
+    });
+})();
+</script>
+<script>
+(function() {
+    document.querySelectorAll('.article-list article').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            var link = card.querySelector('.article-title a');
+            if (link) window.location = link.href;
+        });
+    });
+})();
 </script>
 
     </body>

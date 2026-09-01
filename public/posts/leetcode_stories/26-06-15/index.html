@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 快慢指针找前驱，虚拟节点消特判 昨天村长把“对称之盾”爆出来后，乐得像个两百斤的傻子。听说他那 Steam Deck 的风扇嗡嗡转了一宿，隔着半堵墙都能听见装备界面循环播放的BGM。今天一大早，我正蹲在锅炉边添柴，寻思着要不要摸个鱼，院门“砰”地一声又被一脚踹开。\n“小白！出Bug了！”村长冲进来，屏幕上还是昨天那条魔法项链，但这次画风突变——项链正中间的环正在疯狂闪烁刺眼的红光，还伴随着刺耳的警报声。\n“你看！锻造台提示说，项链的能量回路必须重新平衡！”村长把屏幕怼到我脸上，唾沫星子差点喷我眼睛里，“要删掉正中间那个环！只有把它‘优化’掉，整条链子的对称性才能稳定，我的盾牌属性才能生效！”\n我接过电脑，屏幕上那条项链依然排成一条直线，圆环之间用箭头连接。这次的任务不是求什么孪生和了，而是简单粗暴的物理超度——定位正中间的节点，把它从链上摘掉。如果节点数是奇数，中间只有一个；如果是偶数，中间有两个，取靠后的那个，也就是下标为 ⌊n/2⌋ 的那个。\n“村长，这不就是经典的删除链表中间节点吗？快慢指针的老本行。”我撸起袖子，“只不过这次不是找中点本身，而是要找它的前驱节点——毕竟单向链表只认 next 不认 prev，要删掉中点，得让前一个节点直接跳过它，指向它的下一个节点，完成物理断联。”\n快慢指针找前驱 我抄起键盘，开始盘逻辑。对付这种单链表找位置的活儿，还得是快慢指针这对老搭档—— fast 每次走两步，slow 每次走一步，等 fast 走到尽头，slow 刚好站在中间节点上。\n不过这次有个小细节：我们要删的恰好就是中间节点本身。单向链表是个无情的数据结构——每个节点只认 next，不认 prev，想删谁，得先找到它的前任。为了让 slow 最终稳稳停在中间节点的前一个位置，我决定让 fast 抢跑两步——等 fast 跑到终点时，slow 自然就卡在前驱的位置上了。\ndef deleteMiddle(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: # 边界情况：只有一个节点，删掉后链表为空 if not head.next: return None slow, fast = head, head # fast 先走两步，让 slow 慢一拍，最终 slow 停在中间节点的前驱 fast = fast.next.next while fast and fast.next: slow = slow.next fast = fast.next.next # 物理断联：让前驱直接指向中间节点的下一个节点 slow.next = slow.next.next return head 提交，AC。我把屏幕转过去，正准备向村长邀功：“搞定！中间的红环已经被抠掉了！”\n">
 <title>leetcode2095 快慢指针找前驱，虚拟节点消特判</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-15/'>
+<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-15/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode2095 快慢指针找前驱，虚拟节点消特判">
+<link rel="stylesheet" href="/scss/style.min.86e4926d6336cd3b00711635ecc0740f3109784c840a3f4cd56f34c775673afa.css"><meta property='og:title' content="leetcode2095 快慢指针找前驱，虚拟节点消特判">
 <meta property='og:description' content="🎮 快慢指针找前驱，虚拟节点消特判 昨天村长把“对称之盾”爆出来后，乐得像个两百斤的傻子。听说他那 Steam Deck 的风扇嗡嗡转了一宿，隔着半堵墙都能听见装备界面循环播放的BGM。今天一大早，我正蹲在锅炉边添柴，寻思着要不要摸个鱼，院门“砰”地一声又被一脚踹开。\n“小白！出Bug了！”村长冲进来，屏幕上还是昨天那条魔法项链，但这次画风突变——项链正中间的环正在疯狂闪烁刺眼的红光，还伴随着刺耳的警报声。\n“你看！锻造台提示说，项链的能量回路必须重新平衡！”村长把屏幕怼到我脸上，唾沫星子差点喷我眼睛里，“要删掉正中间那个环！只有把它‘优化’掉，整条链子的对称性才能稳定，我的盾牌属性才能生效！”\n我接过电脑，屏幕上那条项链依然排成一条直线，圆环之间用箭头连接。这次的任务不是求什么孪生和了，而是简单粗暴的物理超度——定位正中间的节点，把它从链上摘掉。如果节点数是奇数，中间只有一个；如果是偶数，中间有两个，取靠后的那个，也就是下标为 ⌊n/2⌋ 的那个。\n“村长，这不就是经典的删除链表中间节点吗？快慢指针的老本行。”我撸起袖子，“只不过这次不是找中点本身，而是要找它的前驱节点——毕竟单向链表只认 next 不认 prev，要删掉中点，得让前一个节点直接跳过它，指向它的下一个节点，完成物理断联。”\n快慢指针找前驱 我抄起键盘，开始盘逻辑。对付这种单链表找位置的活儿，还得是快慢指针这对老搭档—— fast 每次走两步，slow 每次走一步，等 fast 走到尽头，slow 刚好站在中间节点上。\n不过这次有个小细节：我们要删的恰好就是中间节点本身。单向链表是个无情的数据结构——每个节点只认 next，不认 prev，想删谁，得先找到它的前任。为了让 slow 最终稳稳停在中间节点的前一个位置，我决定让 fast 抢跑两步——等 fast 跑到终点时，slow 自然就卡在前驱的位置上了。\ndef deleteMiddle(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: # 边界情况：只有一个节点，删掉后链表为空 if not head.next: return None slow, fast = head, head # fast 先走两步，让 slow 慢一拍，最终 slow 停在中间节点的前驱 fast = fast.next.next while fast and fast.next: slow = slow.next fast = fast.next.next # 物理断联：让前驱直接指向中间节点的下一个节点 slow.next = slow.next.next return head 提交，AC。我把屏幕转过去，正准备向村长邀功：“搞定！中间的红环已经被抠掉了！”\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-15/'>
-<meta property='og:site_name' content='我的小站'>
+<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-15/'>
+<meta property='og:site_name' content='gugugu'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-15T12:36:59&#43;08:00'/><meta property='article:modified_time' content='2026-06-15T12:36:59&#43;08:00'/>
 <meta name="twitter:title" content="leetcode2095 快慢指针找前驱，虚拟节点消特判">
 <meta name="twitter:description" content="🎮 快慢指针找前驱，虚拟节点消特判 昨天村长把“对称之盾”爆出来后，乐得像个两百斤的傻子。听说他那 Steam Deck 的风扇嗡嗡转了一宿，隔着半堵墙都能听见装备界面循环播放的BGM。今天一大早，我正蹲在锅炉边添柴，寻思着要不要摸个鱼，院门“砰”地一声又被一脚踹开。\n“小白！出Bug了！”村长冲进来，屏幕上还是昨天那条魔法项链，但这次画风突变——项链正中间的环正在疯狂闪烁刺眼的红光，还伴随着刺耳的警报声。\n“你看！锻造台提示说，项链的能量回路必须重新平衡！”村长把屏幕怼到我脸上，唾沫星子差点喷我眼睛里，“要删掉正中间那个环！只有把它‘优化’掉，整条链子的对称性才能稳定，我的盾牌属性才能生效！”\n我接过电脑，屏幕上那条项链依然排成一条直线，圆环之间用箭头连接。这次的任务不是求什么孪生和了，而是简单粗暴的物理超度——定位正中间的节点，把它从链上摘掉。如果节点数是奇数，中间只有一个；如果是偶数，中间有两个，取靠后的那个，也就是下标为 ⌊n/2⌋ 的那个。\n“村长，这不就是经典的删除链表中间节点吗？快慢指针的老本行。”我撸起袖子，“只不过这次不是找中点本身，而是要找它的前驱节点——毕竟单向链表只认 next 不认 prev，要删掉中点，得让前一个节点直接跳过它，指向它的下一个节点，完成物理断联。”\n快慢指针找前驱 我抄起键盘，开始盘逻辑。对付这种单链表找位置的活儿，还得是快慢指针这对老搭档—— fast 每次走两步，slow 每次走一步，等 fast 走到尽头，slow 刚好站在中间节点上。\n不过这次有个小细节：我们要删的恰好就是中间节点本身。单向链表是个无情的数据结构——每个节点只认 next，不认 prev，想删谁，得先找到它的前任。为了让 slow 最终稳稳停在中间节点的前一个位置，我决定让 fast 抢跑两步——等 fast 跑到终点时，slow 自然就卡在前驱的位置上了。\ndef deleteMiddle(self, head: Optional[ListNode]) -&gt; Optional[ListNode]: # 边界情况：只有一个节点，删掉后链表为空 if not head.next: return None slow, fast = head, head # fast 先走两步，让 slow 慢一拍，最终 slow 停在中间节点的前驱 fast = fast.next.next while fast and fast.next: slow = slow.next fast = fast.next.next # 物理断联：让前驱直接指向中间节点的下一个节点 slow.next = slow.next.next return head 提交，AC。我把屏幕转过去，正准备向村长邀功：“搞定！中间的红环已经被抠掉了！”\n">
+    <link rel="shortcut icon" href="/favicon.svg" />
+
     </head>
     <body class="
     article-page
@@ -40,7 +42,7 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -69,8 +71,8 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">我的小站</a></h1>
-            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+            <h1 class="site-name"><a href="/">gugugu</a></h1>
+            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -144,6 +146,39 @@ unicode: "ecde"
         
         
         <li >
+            <a href='/projects/' >
+                
+                
+                
+                    <!--
+tags: [cube, app, application, package, container]
+version: "1.0"
+unicode: "ea45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+  <path d="M12 12l8 -4.5" />
+  <path d="M12 12l0 9" />
+  <path d="M12 12l-8 -4.5" />
+</svg>
+
+                
+                <span>项目</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/posts/' >
                 
                 
@@ -210,7 +245,7 @@ unicode: "ea45"
         
         
         <li >
-            <a href='/notes' >
+            <a href='/kids/' >
                 
                 
                 
@@ -237,7 +272,7 @@ unicode: "eb96"
 </svg>
 
                 
-                <span>笔记</span>
+                <span>趣学</span>
             </a>
         </li>
         
@@ -295,7 +330,7 @@ unicode: "eb49"
 
 
 
-                        <span>Dark Mode</span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -320,7 +355,7 @@ unicode: "eb49"
 
 
         </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
+        <h2 class="widget-title section-title">目录</h2>
         
         <div class="widget--toc">
             <nav id="TableOfContents">
@@ -351,8 +386,8 @@ unicode: "eb49"
             
             
             
-            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
-                Leetcode题解故事
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3/" style="background-color: hsl(227, 60%, 84%); color: hsl(227, 60%, 15%);">
+                Leetcode题解
             </a>
         
     </header>
@@ -382,7 +417,7 @@ unicode: "eb49"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-06-15T12:36:59&#43;08:00'>6月 15, 2026</time>
+                <time class="article-time--published" datetime='2026-06-15T12:36:59&#43;08:00'>Jun 15, 2026</time>
             </div>
         
 
@@ -397,7 +432,7 @@ unicode: "eb49"
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    1 min 阅读
                 </time>
             </div>
         
@@ -512,7 +547,7 @@ unicode: "eb49"
     
 
 <aside class="related-content--wrapper">
-    <h2 class="section-title">Related content</h2>
+    <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
             
@@ -645,12 +680,12 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 我的小站
+        2026 gugugu
     </section>
     
     <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -740,7 +775,7 @@ unicode: "eb49"
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2db790992f3b20090509a78a8809578bf0632ae99498dd4dc03d3f15ffe700f8.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -751,6 +786,64 @@ unicode: "eb49"
 
         document.head.appendChild(customFont);
     }());
+</script>
+<style>
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: star-fly 0.75s ease-out forwards;
+}
+@keyframes star-fly {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+    var COLORS = ['#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#FF9F43', '#F368E0', '#48DBFB'];
+    var SHAPES = [
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 0L14.59 8.41 23 12 14.59 15.59 12 24 9.41 15.59 1 12 9.41 8.41z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><circle cx="12" cy="12" r="10"/></svg>'
+    ];
+
+    document.addEventListener('click', function(e) {
+        var count = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < count; i++) {
+            var star = document.createElement('div');
+            star.className = 'click-star';
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var shape = SHAPES[Math.floor(Math.random() * SHAPES.length)].replace('CL', color);
+            var size = 8 + Math.floor(Math.random() * 14);
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+            var dist = 30 + Math.random() * 60;
+
+            star.style.left = (e.clientX - size / 2) + 'px';
+            star.style.top = (e.clientY - size / 2) + 'px';
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+            star.style.setProperty('--dy', (Math.sin(angle) * dist - 20) + 'px');
+            star.innerHTML = shape;
+            document.body.appendChild(star);
+            (function(el) {
+                setTimeout(function() { el.remove(); }, 800);
+            })(star);
+        }
+    });
+})();
+</script>
+<script>
+(function() {
+    document.querySelectorAll('.article-list article').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            var link = card.querySelector('.article-title a');
+            if (link) window.location = link.href;
+        });
+    });
+})();
 </script>
 
     </body>

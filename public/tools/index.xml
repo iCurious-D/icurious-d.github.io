@@ -1,17 +1,519 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>小工具 on 我的小站</title>
-        <link>http://localhost:1313/tools/</link>
-        <description>Recent content in 小工具 on 我的小站</description>
+        <title>小工具 on gugugu</title>
+        <link>http://localhost:1315/tools/</link>
+        <description>Recent content in 小工具 on gugugu</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>zh</language>
-        <lastBuildDate>Mon, 08 Jun 2026 14:04:38 +0800</lastBuildDate><atom:link href="http://localhost:1313/tools/index.xml" rel="self" type="application/rss+xml" /><item>
+        <language>zh-cn</language>
+        <lastBuildDate>Sun, 30 Aug 2026 12:00:00 +0800</lastBuildDate><atom:link href="http://localhost:1315/tools/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>RAG 分块可视化工具</title>
+        <link>http://localhost:1315/tools/rag_chunking_visualizer/</link>
+        <pubDate>Sun, 30 Aug 2026 12:00:00 +0800</pubDate>
+        
+        <guid>http://localhost:1315/tools/rag_chunking_visualizer/</guid>
+        <description>&lt;p&gt;输入一段文本，调整参数，实时查看不同分块策略的效果。&lt;/p&gt;
+&lt;div style=&#34;margin: 2rem 0;&#34;&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;输入文本&lt;/label&gt;
+&lt;textarea id=&#34;chunkInput&#34; rows=&#34;8&#34; placeholder=&#34;粘贴一段较长的文本（建议 300 字以上），观察不同分块策略的效果...&#34; style=&#34;width:100%; padding:0.8rem; font-size:0.95rem; border:1px solid #ccc; border-radius:6px; resize:vertical;&#34;&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+&lt;div style=&#34;display:grid; grid-template-columns: 1fr 1fr 1fr; gap:1rem; margin-bottom:1.5rem;&#34;&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;Chunk Size（字符数）&lt;/label&gt;
+&lt;input id=&#34;chunkSize&#34; type=&#34;range&#34; min=&#34;50&#34; max=&#34;500&#34; value=&#34;150&#34; oninput=&#34;updateChunks()&#34; style=&#34;width:100%;&#34;&gt;
+&lt;span id=&#34;chunkSizeVal&#34; style=&#34;font-size:0.9rem; color:#666;&#34;&gt;150&lt;/span&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;Overlap（重叠字符数）&lt;/label&gt;
+&lt;input id=&#34;overlap&#34; type=&#34;range&#34; min=&#34;0&#34; max=&#34;100&#34; value=&#34;30&#34; oninput=&#34;updateChunks()&#34; style=&#34;width:100%;&#34;&gt;
+&lt;span id=&#34;overlapVal&#34; style=&#34;font-size:0.9rem; color:#666;&#34;&gt;30&lt;/span&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;分块策略&lt;/label&gt;
+&lt;select id=&#34;strategy&#34; onchange=&#34;updateChunks()&#34; style=&#34;width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;&#34;&gt;
+&lt;option value=&#34;fixed&#34;&gt;固定长度分块&lt;/option&gt;
+&lt;option value=&#34;sentence&#34;&gt;按句子分块&lt;/option&gt;
+&lt;option value=&#34;paragraph&#34;&gt;按段落分块&lt;/option&gt;
+&lt;/select&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;statsBar&#34; style=&#34;display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1rem; padding:0.8rem; background:#f8f8f8; border-radius:6px;&#34;&gt;
+&lt;span&gt;分块数：&lt;strong id=&#34;chunkCount&#34;&gt;0&lt;/strong&gt;&lt;/span&gt;
+&lt;span&gt;平均块大小：&lt;strong id=&#34;avgSize&#34;&gt;0&lt;/strong&gt; 字符&lt;/span&gt;
+&lt;span&gt;最大块：&lt;strong id=&#34;maxChunk&#34;&gt;0&lt;/strong&gt; 字符&lt;/span&gt;
+&lt;span&gt;最小块：&lt;strong id=&#34;minChunk&#34;&gt;0&lt;/strong&gt; 字符&lt;/span&gt;
+&lt;/div&gt;
+&lt;div id=&#34;chunksDisplay&#34; style=&#34;display:grid; gap:0.5rem;&#34;&gt;&lt;/div&gt;
+&lt;script&gt;
+const COLORS = [&#39;#4a9eff&#39;, &#39;#ff6b6b&#39;, &#39;#2ecc71&#39;, &#39;#f39c12&#39;, &#39;#9b59b6&#39;, &#39;#1abc9c&#39;, &#39;#e74c3c&#39;, &#39;#3498db&#39;];
+
+function fixedChunk(text, size, overlap) {
+  const chunks = [];
+  let start = 0;
+  while (start &lt; text.length) {
+    chunks.push(text.substring(start, start + size));
+    start += size - overlap;
+  }
+  return chunks.filter(c =&gt; c.trim().length &gt; 0);
+}
+
+function sentenceChunk(text, size, overlap) {
+  const sentences = text.match(/[^。！？\n]+[。！？]?/g) || [text];
+  const chunks = [];
+  let current = &#39;&#39;;
+  for (const s of sentences) {
+    if (current.length + s.length &gt; size &amp;&amp; current.length &gt; 0) {
+      chunks.push(current);
+      // overlap: 保留上一块的末尾部分
+      if (overlap &gt; 0 &amp;&amp; current.length &gt; overlap) {
+        current = current.slice(-overlap) + s;
+      } else {
+        current = s;
+      }
+    } else {
+      current += s;
+    }
+  }
+  if (current.trim()) chunks.push(current);
+  return chunks;
+}
+
+function paragraphChunk(text, size, overlap) {
+  const paragraphs = text.split(/\n{2,}|\n/).filter(p =&gt; p.trim().length &gt; 0);
+  const chunks = [];
+  let current = &#39;&#39;;
+  for (const p of paragraphs) {
+    if (current.length + p.length &gt; size &amp;&amp; current.length &gt; 0) {
+      chunks.push(current);
+      if (overlap &gt; 0 &amp;&amp; current.length &gt; overlap) {
+        current = current.slice(-overlap) + &#39;\n&#39; + p;
+      } else {
+        current = p;
+      }
+    } else {
+      current += (current ? &#39;\n&#39; : &#39;&#39;) + p;
+    }
+  }
+  if (current.trim()) chunks.push(current);
+  return chunks;
+}
+
+function updateChunks() {
+  const text = document.getElementById(&#39;chunkInput&#39;).value.trim();
+  const size = parseInt(document.getElementById(&#39;chunkSize&#39;).value);
+  const overlap = parseInt(document.getElementById(&#39;overlap&#39;).value);
+  const strategy = document.getElementById(&#39;strategy&#39;).value;
+
+  document.getElementById(&#39;chunkSizeVal&#39;).textContent = size;
+  document.getElementById(&#39;overlapVal&#39;).textContent = overlap;
+
+  if (!text) {
+    document.getElementById(&#39;chunksDisplay&#39;).innerHTML = &#39;&lt;p style=&#34;color:#888; text-align:center;&#34;&gt;请在上方输入文本&lt;/p&gt;&#39;;
+    return;
+  }
+
+  let chunks;
+  switch (strategy) {
+    case &#39;sentence&#39;: chunks = sentenceChunk(text, size, overlap); break;
+    case &#39;paragraph&#39;: chunks = paragraphChunk(text, size, overlap); break;
+    default: chunks = fixedChunk(text, size, overlap);
+  }
+
+  const sizes = chunks.map(c =&gt; c.length);
+  const maxLen = Math.max(...sizes);
+  document.getElementById(&#39;chunkCount&#39;).textContent = chunks.length;
+  document.getElementById(&#39;avgSize&#39;).textContent = Math.round(sizes.reduce((a, b) =&gt; a + b, 0) / sizes.length);
+  document.getElementById(&#39;maxChunk&#39;).textContent = Math.max(...sizes);
+  document.getElementById(&#39;minChunk&#39;).textContent = Math.min(...sizes);
+
+  document.getElementById(&#39;chunksDisplay&#39;).innerHTML = chunks.map(function(chunk, i) {
+    var color = COLORS[i % COLORS.length];
+    var widthPct = (chunk.length / maxLen) * 100;
+    var preview = chunk.length &gt; 80 ? chunk.substring(0, 80) + &#39;...&#39; : chunk;
+    return &#39;&lt;div style=&#34;border:1px solid &#39; + color + &#39;30; border-radius:6px; padding:0.8rem; border-left:4px solid &#39; + color + &#39;;&#34;&gt;&#39; +
+      &#39;&lt;div style=&#34;display:flex; justify-content:space-between; margin-bottom:0.3rem;&#34;&gt;&#39; +
+      &#39;&lt;span style=&#34;font-weight:bold; color:&#39; + color + &#39;;&#34;&gt;Chunk &#39; + (i + 1) + &#39;&lt;/span&gt;&#39; +
+      &#39;&lt;span style=&#34;font-size:0.85rem; color:#888;&#34;&gt;&#39; + chunk.length + &#39; 字符&lt;/span&gt;&#39; +
+      &#39;&lt;/div&gt;&#39; +
+      &#39;&lt;div style=&#34;background:#f0f0f0; border-radius:3px; height:6px; margin-bottom:0.4rem;&#34;&gt;&#39; +
+      &#39;&lt;div style=&#34;width:&#39; + widthPct + &#39;%; background:&#39; + color + &#39;; height:100%; border-radius:3px;&#34;&gt;&lt;/div&gt;&#39; +
+      &#39;&lt;/div&gt;&#39; +
+      &#39;&lt;div style=&#34;font-size:0.85rem; color:#555; line-height:1.5; word-break:break-all;&#34;&gt;&#39; + preview + &#39;&lt;/div&gt;&#39; +
+      &#39;&lt;/div&gt;&#39;;
+  }).join(&#39;&#39;);
+}
+
+document.getElementById(&#39;chunkInput&#39;).addEventListener(&#39;input&#39;, updateChunks);
+&lt;/script&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;关于这个工具&#34;&gt;关于这个工具
+&lt;/h3&gt;&lt;p&gt;RAG 系统中，文档分块（Chunking）是影响检索效果的关键环节。这个工具帮助你直观理解：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Chunk Size&lt;/strong&gt;：每个分块的大小。太小会丢失上下文，太大会引入噪音&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Overlap&lt;/strong&gt;：相邻块之间的重叠字符数。适当的 overlap 可以避免信息在切分边界处丢失&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分块策略&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;固定长度&lt;/strong&gt;：按字符数硬切，简单但可能截断语义&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;按句子&lt;/strong&gt;：在句子边界处切分，保持语义完整性&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;按段落&lt;/strong&gt;：在段落边界处切分，适合结构清晰的文档&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;拖动滑块调整参数，观察分块数量和大小分布的变化，找到最适合你数据的参数组合。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Prompt 生成器</title>
+        <link>http://localhost:1315/tools/prompt_generator/</link>
+        <pubDate>Sun, 30 Aug 2026 11:00:00 +0800</pubDate>
+        
+        <guid>http://localhost:1315/tools/prompt_generator/</guid>
+        <description>&lt;p&gt;通过填写表单要素，自动生成结构化的 Prompt，可直接复制使用。&lt;/p&gt;
+&lt;div style=&#34;margin: 2rem 0; display:grid; gap:1rem;&#34;&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;角色（Role）&lt;/label&gt;
+&lt;input id=&#34;role&#34; type=&#34;text&#34; placeholder=&#34;例如：资深 Python 工程师、数据分析师&#34; style=&#34;width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem;&#34;&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;任务（Task）&lt;/label&gt;
+&lt;textarea id=&#34;task&#34; rows=&#34;2&#34; placeholder=&#34;例如：审查以下代码并指出潜在的性能问题&#34; style=&#34;width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem;&#34;&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;上下文（Context）&lt;/label&gt;
+&lt;textarea id=&#34;context&#34; rows=&#34;3&#34; placeholder=&#34;例如：这是一段处理用户日志的 Python 脚本，日志文件约 10GB...&#34; style=&#34;width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem;&#34;&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;输出格式（Format）&lt;/label&gt;
+&lt;select id=&#34;format&#34; style=&#34;width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem;&#34;&gt;
+&lt;option value=&#34;&#34;&gt;-- 选择输出格式 --&lt;/option&gt;
+&lt;option value=&#34;Markdown 文本&#34;&gt;Markdown 文本&lt;/option&gt;
+&lt;option value=&#34;JSON 格式&#34;&gt;JSON 格式&lt;/option&gt;
+&lt;option value=&#34;Markdown 表格，包含问题分析和建议&#34;&gt;Markdown 表格&lt;/option&gt;
+&lt;option value=&#34;分步骤的列表，每步包含说明和代码示例&#34;&gt;分步骤列表&lt;/option&gt;
+&lt;option value=&#34;简洁的要点列表&#34;&gt;要点列表&lt;/option&gt;
+&lt;option value=&#34;自定义&#34;&gt;自定义格式&lt;/option&gt;
+&lt;/select&gt;
+&lt;input id=&#34;formatCustom&#34; type=&#34;text&#34; placeholder=&#34;输入自定义格式描述...&#34; style=&#34;width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem; margin-top:0.3rem; display:none;&#34;&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;约束条件（Constraint）&lt;/label&gt;
+&lt;textarea id=&#34;constraint&#34; rows=&#34;2&#34; placeholder=&#34;例如：只关注性能问题，不要修改代码风格；回答用中文；不超过 500 字&#34; style=&#34;width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem;&#34;&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+&lt;div&gt;
+&lt;label style=&#34;font-weight:bold; display:block; margin-bottom:0.3rem;&#34;&gt;示例（Few-shot，可选）&lt;/label&gt;
+&lt;textarea id=&#34;examples&#34; rows=&#34;3&#34; placeholder=&#34;输入 → 输出的示例，每行一组，用 --- 分隔多组示例&#34; style=&#34;width:100%; padding:0.6rem; border:1px solid #ccc; border-radius:4px; font-size:0.95rem;&#34;&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+&lt;div style=&#34;display:flex; gap:0.5rem; flex-wrap:wrap;&#34;&gt;
+&lt;button onclick=&#34;generatePrompt()&#34; style=&#34;padding:0.5rem 1.5rem; cursor:pointer; background:#4a9eff; color:#fff; border:none; border-radius:4px;&#34;&gt;生成 Prompt&lt;/button&gt;
+&lt;button onclick=&#34;copyPrompt()&#34; id=&#34;copyBtn&#34; style=&#34;padding:0.5rem 1rem; cursor:pointer; background:#2ecc71; color:#fff; border:none; border-radius:4px; display:none;&#34;&gt;复制&lt;/button&gt;
+&lt;button onclick=&#34;clearForm()&#34; style=&#34;padding:0.5rem 1rem; cursor:pointer; background:#eee; border:1px solid #ccc; border-radius:4px;&#34;&gt;清空&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;outputArea&#34; style=&#34;display:none; margin-top:1rem;&#34;&gt;
+&lt;h3&gt;生成的 Prompt&lt;/h3&gt;
+&lt;pre id=&#34;promptOutput&#34; style=&#34;background:#1e1e1e; color:#d4d4d4; padding:1rem; border-radius:6px; white-space:pre-wrap; word-wrap:break-word; font-size:0.9rem; line-height:1.6; max-height:500px; overflow-y:auto;&#34;&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;script&gt;
+document.getElementById(&#39;format&#39;).addEventListener(&#39;change&#39;, function() {
+  document.getElementById(&#39;formatCustom&#39;).style.display = this.value === &#39;自定义&#39; ? &#39;block&#39; : &#39;none&#39;;
+});
+
+function generatePrompt() {
+  const role = document.getElementById(&#39;role&#39;).value.trim();
+  const task = document.getElementById(&#39;task&#39;).value.trim();
+  const context = document.getElementById(&#39;context&#39;).value.trim();
+  const formatSel = document.getElementById(&#39;format&#39;).value;
+  const formatCustom = document.getElementById(&#39;formatCustom&#39;).value.trim();
+  const format = formatSel === &#39;自定义&#39; ? formatCustom : formatSel;
+  const constraint = document.getElementById(&#39;constraint&#39;).value.trim();
+  const examples = document.getElementById(&#39;examples&#39;).value.trim();
+
+  if (!task) { alert(&#39;请至少填写&#34;任务&#34;字段&#39;); return; }
+
+  let prompt = &#39;&#39;;
+
+  if (role) {
+    prompt += &#39;# 角色\n你是一位&#39; + role + &#39;。\n\n&#39;;
+  }
+
+  prompt += &#39;# 任务\n&#39; + task + &#39;\n\n&#39;;
+
+  if (context) {
+    prompt += &#39;# 上下文\n&#39; + context + &#39;\n\n&#39;;
+  }
+
+  if (format) {
+    prompt += &#39;# 输出要求\n- 格式：&#39; + format + &#39;\n- 语言：中文\n\n&#39;;
+  }
+
+  if (constraint) {
+    const lines = constraint.split(/[;；\n]/).map(s =&gt; s.trim()).filter(Boolean);
+    if (format) {
+      // 追加到已有的输出要求
+      prompt = prompt.replace(/\n\n$/, &#39;\n&#39;);
+      for (var i = 0; i &lt; lines.length; i++) {
+        prompt += &#39;- &#39; + lines[i] + &#39;\n&#39;;
+      }
+      prompt += &#39;\n&#39;;
+    } else {
+      prompt += &#39;# 约束条件\n&#39;;
+      for (var i = 0; i &lt; lines.length; i++) {
+        prompt += &#39;- &#39; + lines[i] + &#39;\n&#39;;
+      }
+      prompt += &#39;\n&#39;;
+    }
+  }
+
+  if (examples) {
+    prompt += &#39;# 示例\n&#39;;
+    const exampleList = examples.split(/---|\n{2,}/).map(s =&gt; s.trim()).filter(Boolean);
+    exampleList.forEach(function(ex, i) {
+      prompt += &#39;示例 &#39; + (i + 1) + &#39;：\n&#39; + ex + &#39;\n\n&#39;;
+    });
+  }
+
+  prompt += &#39;# 用户输入\n{在此输入具体内容}&#39;;
+
+  document.getElementById(&#39;promptOutput&#39;).textContent = prompt;
+  document.getElementById(&#39;outputArea&#39;).style.display = &#39;block&#39;;
+  document.getElementById(&#39;copyBtn&#39;).style.display = &#39;inline-block&#39;;
+}
+
+function copyPrompt() {
+  const text = document.getElementById(&#39;promptOutput&#39;).textContent;
+  navigator.clipboard.writeText(text).then(() =&gt; {
+    const btn = document.getElementById(&#39;copyBtn&#39;);
+    btn.textContent = &#39;已复制!&#39;;
+    setTimeout(() =&gt; { btn.textContent = &#39;复制&#39;; }, 2000);
+  });
+}
+
+function clearForm() {
+  [&#39;role&#39;,&#39;task&#39;,&#39;context&#39;,&#39;constraint&#39;,&#39;examples&#39;,&#39;formatCustom&#39;].forEach(id =&gt; {
+    document.getElementById(id).value = &#39;&#39;;
+  });
+  document.getElementById(&#39;format&#39;).selectedIndex = 0;
+  document.getElementById(&#39;outputArea&#39;).style.display = &#39;none&#39;;
+  document.getElementById(&#39;copyBtn&#39;).style.display = &#39;none&#39;;
+}
+&lt;/script&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;关于这个工具&#34;&gt;关于这个工具
+&lt;/h3&gt;&lt;p&gt;基于 Prompt Engineering 的四要素框架（角色 / 任务 / 格式 / 约束）设计的结构化 Prompt 生成器。&lt;/p&gt;
+&lt;p&gt;使用方式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;填写各表单字段（只有&amp;quot;任务&amp;quot;是必填的）&lt;/li&gt;
+&lt;li&gt;点击&amp;quot;生成 Prompt&amp;quot;，自动生成结构化的 Prompt&lt;/li&gt;
+&lt;li&gt;点击&amp;quot;复制&amp;quot;即可粘贴到 ChatGPT、Claude 等对话界面使用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个工具本身也体现了 Prompt Engineering 的核心理念——&lt;strong&gt;用结构化的方式组织指令，让 LLM 更容易理解你的意图&lt;/strong&gt;。&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>AI 文本分析器</title>
+        <link>http://localhost:1315/tools/text_analyzer/</link>
+        <pubDate>Sun, 30 Aug 2026 10:00:00 +0800</pubDate>
+        
+        <guid>http://localhost:1315/tools/text_analyzer/</guid>
+        <description>&lt;p&gt;输入一段中文文本，工具会自动分析关键词、词频和情感倾向。&lt;/p&gt;
+&lt;div style=&#34;margin: 2rem 0;&#34;&gt;
+&lt;textarea id=&#34;inputText&#34; rows=&#34;6&#34; placeholder=&#34;在此粘贴或输入一段中文文本...&#34; style=&#34;width:100%; padding:0.8rem; font-size:1rem; border:1px solid #ccc; border-radius:6px; resize:vertical;&#34;&gt;&lt;/textarea&gt;
+&lt;div style=&#34;margin-top:0.8rem; display:flex; gap:0.5rem; flex-wrap:wrap;&#34;&gt;
+&lt;button onclick=&#34;analyzeText()&#34; style=&#34;padding:0.5rem 1.5rem; cursor:pointer; background:#4a9eff; color:#fff; border:none; border-radius:4px;&#34;&gt;分析&lt;/button&gt;
+&lt;button onclick=&#34;clearAll()&#34; style=&#34;padding:0.5rem 1rem; cursor:pointer; background:#eee; border:1px solid #ccc; border-radius:4px;&#34;&gt;清空&lt;/button&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=&#34;results&#34; style=&#34;display:none;&#34;&gt;
+&lt;h3 id=&#34;基本信息&#34;&gt;基本信息
+&lt;/h3&gt;&lt;div id=&#34;basicStats&#34; style=&#34;display:flex; gap:1.5rem; flex-wrap:wrap; margin:1rem 0;&#34;&gt;&lt;/div&gt;
+&lt;h3 id=&#34;关键词提取-tf-idf&#34;&gt;关键词提取 (TF-IDF)
+&lt;/h3&gt;&lt;div id=&#34;keywords&#34; style=&#34;display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0;&#34;&gt;&lt;/div&gt;
+&lt;h3 id=&#34;词频统计-top-10&#34;&gt;词频统计 Top 10
+&lt;/h3&gt;&lt;div id=&#34;freqChart&#34; style=&#34;margin:1rem 0;&#34;&gt;&lt;/div&gt;
+&lt;h3 id=&#34;情感分析&#34;&gt;情感分析
+&lt;/h3&gt;&lt;div id=&#34;sentiment&#34; style=&#34;margin:1rem 0; padding:1rem; border-radius:6px;&#34;&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+// 中文停用词表（精简版）
+const STOPWORDS = new Set([&#39;的&#39;,&#39;了&#39;,&#39;在&#39;,&#39;是&#39;,&#39;我&#39;,&#39;有&#39;,&#39;和&#39;,&#39;就&#39;,&#39;不&#39;,&#39;人&#39;,&#39;都&#39;,&#39;一&#39;,&#39;一个&#39;,&#39;上&#39;,&#39;也&#39;,&#39;很&#39;,
+  &#39;到&#39;,&#39;说&#39;,&#39;要&#39;,&#39;去&#39;,&#39;你&#39;,&#39;会&#39;,&#39;着&#39;,&#39;没有&#39;,&#39;看&#39;,&#39;好&#39;,&#39;自己&#39;,&#39;这&#39;,&#39;他&#39;,&#39;她&#39;,&#39;它&#39;,&#39;们&#39;,&#39;那&#39;,&#39;里&#39;,&#39;为&#39;,
+  &#39;什么&#39;,&#39;吗&#39;,&#39;呢&#39;,&#39;吧&#39;,&#39;啊&#39;,&#39;哦&#39;,&#39;嗯&#39;,&#39;呀&#39;,&#39;哈&#39;,&#39;把&#39;,&#39;被&#39;,&#39;让&#39;,&#39;给&#39;,&#39;从&#39;,&#39;向&#39;,&#39;对&#39;,&#39;但&#39;,&#39;而&#39;,
+  &#39;或&#39;,&#39;如果&#39;,&#39;因为&#39;,&#39;所以&#39;,&#39;虽然&#39;,&#39;但是&#39;,&#39;而且&#39;,&#39;并且&#39;,&#39;可以&#39;,&#39;可能&#39;,&#39;应该&#39;,&#39;已经&#39;,&#39;还是&#39;,&#39;或者&#39;,
+  &#39;之&#39;,&#39;与&#39;,&#39;及&#39;,&#39;等&#39;,&#39;中&#39;,&#39;以&#39;,&#39;及&#39;,&#39;其&#39;,&#39;将&#39;,&#39;于&#39;,&#39;则&#39;,&#39;此&#39;,&#39;该&#39;,&#39;这些&#39;,&#39;那些&#39;,&#39;这个&#39;,&#39;那个&#39;]);
+
+// 简易中文分词（基于字符n-gram + 规则）
+function segment(text) {
+  // 去除标点，提取连续的汉字/字母序列
+  const words = [];
+  const patterns = text.match(/[\u4e00-\u9fa5]+|[a-zA-Z]+/g);
+  if (!patterns) return words;
+  for (const seg of patterns) {
+    // 对中文做 2-gram 和 3-gram 切分作为简易分词
+    if (/[\u4e00-\u9fa5]/.test(seg)) {
+      for (let i = 0; i &lt; seg.length - 1; i++) {
+        const bigram = seg.substring(i, i + 2);
+        if (!STOPWORDS.has(bigram)) words.push(bigram);
+      }
+      for (let i = 0; i &lt; seg.length - 2; i++) {
+        const trigram = seg.substring(i, i + 3);
+        if (!STOPWORDS.has(trigram)) words.push(trigram);
+      }
+      // 单字也保留
+      for (const ch of seg) {
+        if (!STOPWORDS.has(ch) &amp;&amp; seg.length &lt;= 4) words.push(ch);
+      }
+    } else {
+      words.push(seg.toLowerCase());
+    }
+  }
+  return words;
+}
+
+// 词频统计
+function countFreq(words) {
+  const freq = {};
+  for (const w of words) {
+    freq[w] = (freq[w] || 0) + 1;
+  }
+  return freq;
+}
+
+// 简易 TF-IDF（将文本按句号分段作为&#34;文档&#34;）
+function tfIdf(text) {
+  const sentences = text.split(/[。！？\n]+/).filter(s =&gt; s.trim().length &gt; 0);
+  if (sentences.length === 0) return [];
+
+  const docs = sentences.map(s =&gt; segment(s));
+  const N = docs.length;
+
+  // 计算 DF（文档频率）
+  const df = {};
+  for (const doc of docs) {
+    const unique = new Set(doc);
+    for (const w of unique) {
+      df[w] = (df[w] || 0) + 1;
+    }
+  }
+
+  // 计算每段的 TF-IDF 并汇总
+  const scores = {};
+  for (const doc of docs) {
+    const tf = countFreq(doc);
+    const total = doc.length;
+    for (const [w, c] of Object.entries(tf)) {
+      if (w.length &lt; 2) continue;
+      const tfVal = c / total;
+      const idfVal = Math.log(N / (1 + (df[w] || 0)));
+      scores[w] = (scores[w] || 0) + tfVal * idfVal;
+    }
+  }
+
+  return Object.entries(scores)
+    .sort((a, b) =&gt; b[1] - a[1])
+    .slice(0, 10);
+}
+
+// 情感词典
+const POS_WORDS = new Set([&#39;好&#39;,&#39;棒&#39;,&#39;优秀&#39;,&#39;出色&#39;,&#39;喜欢&#39;,&#39;满意&#39;,&#39;开心&#39;,&#39;快乐&#39;,&#39;精彩&#39;,&#39;完美&#39;,&#39;强大&#39;,
+  &#39;方便&#39;,&#39;简单&#39;,&#39;清晰&#39;,&#39;高效&#39;,&#39;稳定&#39;,&#39;流畅&#39;,&#39;漂亮&#39;,&#39;赞&#39;,&#39;推荐&#39;,&#39;成功&#39;,&#39;突破&#39;,&#39;进步&#39;,&#39;提升&#39;]);
+const NEG_WORDS = new Set([&#39;差&#39;,&#39;烂&#39;,&#39;糟&#39;,&#39;坏&#39;,&#39;失败&#39;,&#39;失望&#39;,&#39;难过&#39;,&#39;痛苦&#39;,&#39;无聊&#39;,&#39;困难&#39;,&#39;问题&#39;,
+  &#39;错误&#39;,&#39;崩溃&#39;,&#39;卡顿&#39;,&#39;缓慢&#39;,&#39;复杂&#39;,&#39;混乱&#39;,&#39;模糊&#39;,&#39;缺陷&#39;,&#39;bug&#39;,&#39;漏洞&#39;,&#39;风险&#39;,&#39;威胁&#39;,&#39;损失&#39;]);
+
+function analyzeSentiment(text) {
+  const chars = [...text];
+  let pos = 0, neg = 0;
+  const posHits = [], negHits = [];
+  for (const w of POS_WORDS) {
+    if (text.includes(w)) { pos++; posHits.push(w); }
+  }
+  for (const w of NEG_WORDS) {
+    if (text.includes(w)) { neg++; negHits.push(w); }
+  }
+  const total = pos + neg;
+  let label, color;
+  if (total === 0) { label = &#39;中性&#39;; color = &#39;#888&#39;; }
+  else if (pos &gt; neg) { label = &#39;正面&#39;; color = &#39;#2ecc71&#39;; }
+  else if (neg &gt; pos) { label = &#39;负面&#39;; color = &#39;#e74c3c&#39;; }
+  else { label = &#39;中性（正负持平）&#39;; color = &#39;#f39c12&#39;; }
+  return { label, color, pos, neg, posHits, negHits };
+}
+
+function analyzeText() {
+  const text = document.getElementById(&#39;inputText&#39;).value.trim();
+  if (!text) { alert(&#39;请先输入文本&#39;); return; }
+
+  document.getElementById(&#39;results&#39;).style.display = &#39;block&#39;;
+
+  // 基本统计
+  const charCount = text.replace(/\s/g, &#39;&#39;).length;
+  const sentenceCount = text.split(/[。！？\n]+/).filter(s =&gt; s.trim()).length;
+  const words = segment(text);
+  const uniqueWords = new Set(words);
+
+  document.getElementById(&#39;basicStats&#39;).innerHTML = [
+    &#39;📝 字符数：&lt;strong&gt;&#39; + charCount + &#39;&lt;/strong&gt;&#39;,
+    &#39;📋 句数：&lt;strong&gt;&#39; + sentenceCount + &#39;&lt;/strong&gt;&#39;,
+    &#39;🔤 词数（分词后）：&lt;strong&gt;&#39; + words.length + &#39;&lt;/strong&gt;&#39;,
+    &#39;📊 去重词数：&lt;strong&gt;&#39; + uniqueWords.size + &#39;&lt;/strong&gt;&#39;
+  ].map(function(s) { return &#39;&lt;span style=&#34;background:#f0f0f0; padding:0.4rem 0.8rem; border-radius:4px;&#34;&gt;&#39; + s + &#39;&lt;/span&gt;&#39;; }).join(&#39;&#39;);
+
+  // 关键词（TF-IDF）
+  const keywords = tfIdf(text);
+  const maxScore = keywords.length &gt; 0 ? keywords[0][1] : 1;
+  document.getElementById(&#39;keywords&#39;).innerHTML = keywords.map(([w, s]) =&gt; {
+    const size = 0.8 + (s / maxScore) * 0.8;
+    return &#39;&lt;span style=&#34;background:#4a9eff; color:#fff; padding:0.3rem 0.7rem; border-radius:12px; font-size:&#39; + size + &#39;rem;&#34;&gt;&#39; + w + &#39; &lt;small&gt;(&#39; + s.toFixed(3) + &#39;)&lt;/small&gt;&lt;/span&gt;&#39;;
+  }).join(&#39;&#39;);
+
+  // 词频统计
+  const freq = countFreq(words);
+  const top10 = Object.entries(freq).filter(([w]) =&gt; w.length &gt;= 2).sort((a, b) =&gt; b[1] - a[1]).slice(0, 10);
+  const maxFreq = top10.length &gt; 0 ? top10[0][1] : 1;
+  document.getElementById(&#39;freqChart&#39;).innerHTML = top10.map(function(item) {
+    var w = item[0], c = item[1];
+    return &#39;&lt;div style=&#34;display:flex; align-items:center; margin:0.3rem 0;&#34;&gt;&#39; +
+      &#39;&lt;span style=&#34;width:60px; text-align:right; margin-right:0.5rem; font-size:0.9rem;&#34;&gt;&#39; + w + &#39;&lt;/span&gt;&#39; +
+      &#39;&lt;div style=&#34;flex:1; background:#eee; border-radius:4px; height:22px;&#34;&gt;&#39; +
+      &#39;&lt;div style=&#34;width:&#39; + (c/maxFreq)*100 + &#39;%; background:#4a9eff; height:100%; border-radius:4px; display:flex; align-items:center; justify-content:flex-end; padding-right:6px;&#34;&gt;&#39; +
+      &#39;&lt;span style=&#34;color:#fff; font-size:0.75rem;&#34;&gt;&#39; + c + &#39;&lt;/span&gt;&#39; +
+      &#39;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&#39;;
+  }).join(&#39;&#39;);
+
+  // 情感分析
+  const sent = analyzeSentiment(text);
+  document.getElementById(&#39;sentiment&#39;).style.background = sent.color + &#39;15&#39;;
+  document.getElementById(&#39;sentiment&#39;).style.borderLeft = &#39;4px solid &#39; + sent.color;
+  document.getElementById(&#39;sentiment&#39;).innerHTML =
+    &#39;&lt;div style=&#34;font-size:1.2rem; font-weight:bold; color:&#39; + sent.color + &#39;;&#34;&gt;情感倾向：&#39; + sent.label + &#39;&lt;/div&gt;&#39; +
+    &#39;&lt;div style=&#34;margin-top:0.5rem; font-size:0.9rem;&#34;&gt;&#39; +
+    &#39;正面词：&#39; + (sent.posHits.length &gt; 0 ? sent.posHits.join(&#39;、&#39;) : &#39;无&#39;) + &#39;（&#39; + sent.pos + &#39; 个）&lt;br&gt;&#39; +
+    &#39;负面词：&#39; + (sent.negHits.length &gt; 0 ? sent.negHits.join(&#39;、&#39;) : &#39;无&#39;) + &#39;（&#39; + sent.neg + &#39; 个）&#39; +
+    &#39;&lt;/div&gt;&#39; +
+    &#39;&lt;div style=&#34;margin-top:0.5rem; font-size:0.8rem; color:#888;&#34;&gt;基于简易情感词典分析，仅供演示。生产环境建议使用专业 NLP 模型。&lt;/div&gt;&#39;;
+}
+
+function clearAll() {
+  document.getElementById(&#39;inputText&#39;).value = &#39;&#39;;
+  document.getElementById(&#39;results&#39;).style.display = &#39;none&#39;;
+}
+&lt;/script&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;关于这个工具&#34;&gt;关于这个工具
+&lt;/h3&gt;&lt;p&gt;纯前端实现的文本分析工具，包含三个功能：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;关键词提取&lt;/strong&gt;：基于 TF-IDF 算法，将文本按句子分段作为&amp;quot;文档集&amp;quot;，计算每个词的 TF-IDF 值&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;词频统计&lt;/strong&gt;：对分词结果进行频率统计，展示 Top 10 高频词&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;情感分析&lt;/strong&gt;：基于预定义的正负面情感词典，判断文本的整体情感倾向&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;分词采用中文 bigram + trigram 的简易方案，适用于演示和学习。如需生产级精度，建议使用 jieba 分词或专业 NLP 模型。&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>每日随机一句话</title>
-        <link>http://localhost:1313/tools/daily_quote/</link>
+        <link>http://localhost:1315/tools/daily_quote/</link>
         <pubDate>Mon, 08 Jun 2026 14:04:38 +0800</pubDate>
         
-        <guid>http://localhost:1313/tools/daily_quote/</guid>
+        <guid>http://localhost:1315/tools/daily_quote/</guid>
         <description>&lt;p&gt;点击按钮，获取一句随机名言。&lt;/p&gt;
 &lt;div style=&#34;text-align:center; margin: 2rem 0;&#34;&gt;
   &lt;p id=&#34;quote&#34; style=&#34;font-size: 1.2rem; font-style: italic; min-height: 3rem;&#34;&gt;✨ 等待你的点击 ✨&lt;/p&gt;

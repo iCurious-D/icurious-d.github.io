@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 贪心策略的两种命运：可重复选vs不可重复选 能摆的时候别卷，该卷的时候别摆\n村长又来信了。这次竟然是让村里的老黄牛慢悠悠驮过来的——我怀疑村长把信鸽的口粮预算都给砍了，这老头在省钱的路上已经走火入魔。我展开纸条一看：“ 小白，勇士团下周开荒新副本，出发前要做战力波动评估！规则如下：给一个数组 nums 和一个整数 k，从中选恰好 k 个非空子数组。子数组可以重叠，同一个子数组可以被选择超过一次。每个子数组的值 = 最大值 - 最小值，求最大可能的总值。”\n我盯着“可以重叠”和“可以被选择超过一次”这两行字，手里的拨火棍差点掉进锅炉里。这不就是明摆着让我薅羊毛吗？整个数组就是天然的极差冠军——既然同一段能刷 k 遍，那就把极差冠军往死里薅——就像在游戏里找到经验值最高的怪，然后挂机刷 k 次，连走位都省了。\nreturn (max(nums) - min(nums)) * k 一行流，三十秒 AC，我甚至有空给自己泡了杯茶。茶杯端到嘴边，我忽然顿住了——不对劲。非常不对劲。\n我见过太多副本了——加一个约束，难度翻倍；砍一个约束，难度减半。但这题居然专门强调“子数组可以重叠”“同一个子数组可以反复选”——也就是说，“子数组之间不能重叠”和“每个子数组只能选一次”这两个最要命的约束全被砍了，直接退化成一个极值问题，难度标签形同虚设。这不是放水，这是泄洪啊。\n事出反常必有妖。我正盯着屏幕发呆，后脑勺&quot;啪&quot;地挨了一下。不重不轻，力道精准得像调试过阈值的触发器。果然又是老勇者，手指还保持着弹脑瓜崩的姿势，“AC 了还发呆？不像你啊——”\n“喂，大师，下次咱换个出场方式行吗？” 我揉着后脑勺嘟囔道，“这道题简单到诡异啊。” 我把题目指给他看，“‘可以重叠’、‘可以反复选’——约束全砍了，一行代码就搞定，策划是不是被盗号了？”\n老勇者笑了：“策划没被盗号，他这是在告诉你——贪心的极致就是摆烂。既然能无限次选择最优解，就别整那些花里胡哨的，直接把最优解复制 k 份。你想想，如果连摆烂的机会都不给你，直接上硬核约束，你连这个一行流的心得都悟不到，直接被困难版锤进地里。”\n“……所以，策划用心良苦就是为了教我读题？”\n”能看穿什么时候该摆烂，也是一种本事。不过——&quot;\n老勇者话锋一转，眼神突然变得危险起来，&ldquo;如果加上约束，阁下又将如何应对？&rdquo;\n他伸手拿起那张皱巴巴的羊皮纸，掏出随身携带的红笔——那个瞬间我甚至怀疑他是不是专门等着改我的题目——在纸上画了画，然后又递回给我。我低头一看：\n“选择恰好 k 个不同的非空子数组。子数组可以重叠，同一个子数组不可以被选择超过一次。”\n我倒吸一口凉气，手里的茶杯差点跟着羊皮纸一块儿掉进锅炉里。“不同的”非空子数组，“同一个子数组不能被选择超过一次”——约束一加，难度飞天。刚才一行流抓最肥的羊反复薅，现在每只羊只让薅一次，这不得挑出前k个最肥的羊？\n我开始盘算：直接上暴力把所有可能的子数组全列出来，算极差，排序，取前 k 大。但长度为 n 的数组，子数组数量 n(n+1)/2，O(n²) 的候选集，n 大了直接炸，评测机怕是要给我唱一首《超时咏》。\n“等等——题目只改了‘不能重复选同一段’，没禁止段之间重叠！！” 我拿着笔在纸上戳了戳，“既然可以重叠，那我不需要担心选了一段之后堵死其他段的问题。整个数组的极差max - min是冠军，只能用一次。把它用掉之后，第二大极差要么是抠掉最大值后剩下的区间，要么是抠掉最小值后剩下的区间——把最值抠掉，极差才可能变小。然后，季军就是从亚军的残骸里继续抠最值——”\n我一拍脑门，“这不就是一个贪心扩展的过程吗？搞个大根堆维护候选池，每次挑极差最大的区间用掉，然后把它‘切开’——抠掉最大值或最小值之后，剩下的子区间重新扔回候选池里。重复 k 次，累加极差，搞定。大根堆！这可是高级数据结构，这把稳了。”\n“方向是对的。”老勇者点点头，然后毫不留情地浇了一盆冷水，“但你的刀法有问题——候选池里的区间数量会指数爆炸，你这不叫堆，叫炸弹。想象一下，每次切一下产生两个新区间，k 次就是 2^k 个候选，你的堆会变成二叉树的坟场。&quot;\n我刚刚燃烧起来的小宇宙瞬间被浇灭，整个人像被触发了 NullPointerException 一样瘫在椅子上。大根堆都救不了我，那还有什么能救？\n老勇者撇了我一眼，拿起笔在草稿纸上画了一条长线，标上刻度 0 到 n。“换个角度。别再跟切分死磕了。任意一个子数组都由两个东西决定——左端点 l 和右端点 r。固定 l，极差随 r 怎么变？”\n">
 <title>leetcode3689 贪心策略的两种命运：可重复选vs不可重复选</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-09/'>
+<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-09/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode3689 贪心策略的两种命运：可重复选vs不可重复选">
+<link rel="stylesheet" href="/scss/style.min.86e4926d6336cd3b00711635ecc0740f3109784c840a3f4cd56f34c775673afa.css"><meta property='og:title' content="leetcode3689 贪心策略的两种命运：可重复选vs不可重复选">
 <meta property='og:description' content="🎮 贪心策略的两种命运：可重复选vs不可重复选 能摆的时候别卷，该卷的时候别摆\n村长又来信了。这次竟然是让村里的老黄牛慢悠悠驮过来的——我怀疑村长把信鸽的口粮预算都给砍了，这老头在省钱的路上已经走火入魔。我展开纸条一看：“ 小白，勇士团下周开荒新副本，出发前要做战力波动评估！规则如下：给一个数组 nums 和一个整数 k，从中选恰好 k 个非空子数组。子数组可以重叠，同一个子数组可以被选择超过一次。每个子数组的值 = 最大值 - 最小值，求最大可能的总值。”\n我盯着“可以重叠”和“可以被选择超过一次”这两行字，手里的拨火棍差点掉进锅炉里。这不就是明摆着让我薅羊毛吗？整个数组就是天然的极差冠军——既然同一段能刷 k 遍，那就把极差冠军往死里薅——就像在游戏里找到经验值最高的怪，然后挂机刷 k 次，连走位都省了。\nreturn (max(nums) - min(nums)) * k 一行流，三十秒 AC，我甚至有空给自己泡了杯茶。茶杯端到嘴边，我忽然顿住了——不对劲。非常不对劲。\n我见过太多副本了——加一个约束，难度翻倍；砍一个约束，难度减半。但这题居然专门强调“子数组可以重叠”“同一个子数组可以反复选”——也就是说，“子数组之间不能重叠”和“每个子数组只能选一次”这两个最要命的约束全被砍了，直接退化成一个极值问题，难度标签形同虚设。这不是放水，这是泄洪啊。\n事出反常必有妖。我正盯着屏幕发呆，后脑勺&quot;啪&quot;地挨了一下。不重不轻，力道精准得像调试过阈值的触发器。果然又是老勇者，手指还保持着弹脑瓜崩的姿势，“AC 了还发呆？不像你啊——”\n“喂，大师，下次咱换个出场方式行吗？” 我揉着后脑勺嘟囔道，“这道题简单到诡异啊。” 我把题目指给他看，“‘可以重叠’、‘可以反复选’——约束全砍了，一行代码就搞定，策划是不是被盗号了？”\n老勇者笑了：“策划没被盗号，他这是在告诉你——贪心的极致就是摆烂。既然能无限次选择最优解，就别整那些花里胡哨的，直接把最优解复制 k 份。你想想，如果连摆烂的机会都不给你，直接上硬核约束，你连这个一行流的心得都悟不到，直接被困难版锤进地里。”\n“……所以，策划用心良苦就是为了教我读题？”\n”能看穿什么时候该摆烂，也是一种本事。不过——&quot;\n老勇者话锋一转，眼神突然变得危险起来，&ldquo;如果加上约束，阁下又将如何应对？&rdquo;\n他伸手拿起那张皱巴巴的羊皮纸，掏出随身携带的红笔——那个瞬间我甚至怀疑他是不是专门等着改我的题目——在纸上画了画，然后又递回给我。我低头一看：\n“选择恰好 k 个不同的非空子数组。子数组可以重叠，同一个子数组不可以被选择超过一次。”\n我倒吸一口凉气，手里的茶杯差点跟着羊皮纸一块儿掉进锅炉里。“不同的”非空子数组，“同一个子数组不能被选择超过一次”——约束一加，难度飞天。刚才一行流抓最肥的羊反复薅，现在每只羊只让薅一次，这不得挑出前k个最肥的羊？\n我开始盘算：直接上暴力把所有可能的子数组全列出来，算极差，排序，取前 k 大。但长度为 n 的数组，子数组数量 n(n+1)/2，O(n²) 的候选集，n 大了直接炸，评测机怕是要给我唱一首《超时咏》。\n“等等——题目只改了‘不能重复选同一段’，没禁止段之间重叠！！” 我拿着笔在纸上戳了戳，“既然可以重叠，那我不需要担心选了一段之后堵死其他段的问题。整个数组的极差max - min是冠军，只能用一次。把它用掉之后，第二大极差要么是抠掉最大值后剩下的区间，要么是抠掉最小值后剩下的区间——把最值抠掉，极差才可能变小。然后，季军就是从亚军的残骸里继续抠最值——”\n我一拍脑门，“这不就是一个贪心扩展的过程吗？搞个大根堆维护候选池，每次挑极差最大的区间用掉，然后把它‘切开’——抠掉最大值或最小值之后，剩下的子区间重新扔回候选池里。重复 k 次，累加极差，搞定。大根堆！这可是高级数据结构，这把稳了。”\n“方向是对的。”老勇者点点头，然后毫不留情地浇了一盆冷水，“但你的刀法有问题——候选池里的区间数量会指数爆炸，你这不叫堆，叫炸弹。想象一下，每次切一下产生两个新区间，k 次就是 2^k 个候选，你的堆会变成二叉树的坟场。&quot;\n我刚刚燃烧起来的小宇宙瞬间被浇灭，整个人像被触发了 NullPointerException 一样瘫在椅子上。大根堆都救不了我，那还有什么能救？\n老勇者撇了我一眼，拿起笔在草稿纸上画了一条长线，标上刻度 0 到 n。“换个角度。别再跟切分死磕了。任意一个子数组都由两个东西决定——左端点 l 和右端点 r。固定 l，极差随 r 怎么变？”\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-09/'>
-<meta property='og:site_name' content='我的小站'>
+<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-09/'>
+<meta property='og:site_name' content='gugugu'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-09T17:16:07&#43;08:00'/><meta property='article:modified_time' content='2026-06-09T17:16:07&#43;08:00'/>
 <meta name="twitter:title" content="leetcode3689 贪心策略的两种命运：可重复选vs不可重复选">
 <meta name="twitter:description" content="🎮 贪心策略的两种命运：可重复选vs不可重复选 能摆的时候别卷，该卷的时候别摆\n村长又来信了。这次竟然是让村里的老黄牛慢悠悠驮过来的——我怀疑村长把信鸽的口粮预算都给砍了，这老头在省钱的路上已经走火入魔。我展开纸条一看：“ 小白，勇士团下周开荒新副本，出发前要做战力波动评估！规则如下：给一个数组 nums 和一个整数 k，从中选恰好 k 个非空子数组。子数组可以重叠，同一个子数组可以被选择超过一次。每个子数组的值 = 最大值 - 最小值，求最大可能的总值。”\n我盯着“可以重叠”和“可以被选择超过一次”这两行字，手里的拨火棍差点掉进锅炉里。这不就是明摆着让我薅羊毛吗？整个数组就是天然的极差冠军——既然同一段能刷 k 遍，那就把极差冠军往死里薅——就像在游戏里找到经验值最高的怪，然后挂机刷 k 次，连走位都省了。\nreturn (max(nums) - min(nums)) * k 一行流，三十秒 AC，我甚至有空给自己泡了杯茶。茶杯端到嘴边，我忽然顿住了——不对劲。非常不对劲。\n我见过太多副本了——加一个约束，难度翻倍；砍一个约束，难度减半。但这题居然专门强调“子数组可以重叠”“同一个子数组可以反复选”——也就是说，“子数组之间不能重叠”和“每个子数组只能选一次”这两个最要命的约束全被砍了，直接退化成一个极值问题，难度标签形同虚设。这不是放水，这是泄洪啊。\n事出反常必有妖。我正盯着屏幕发呆，后脑勺&quot;啪&quot;地挨了一下。不重不轻，力道精准得像调试过阈值的触发器。果然又是老勇者，手指还保持着弹脑瓜崩的姿势，“AC 了还发呆？不像你啊——”\n“喂，大师，下次咱换个出场方式行吗？” 我揉着后脑勺嘟囔道，“这道题简单到诡异啊。” 我把题目指给他看，“‘可以重叠’、‘可以反复选’——约束全砍了，一行代码就搞定，策划是不是被盗号了？”\n老勇者笑了：“策划没被盗号，他这是在告诉你——贪心的极致就是摆烂。既然能无限次选择最优解，就别整那些花里胡哨的，直接把最优解复制 k 份。你想想，如果连摆烂的机会都不给你，直接上硬核约束，你连这个一行流的心得都悟不到，直接被困难版锤进地里。”\n“……所以，策划用心良苦就是为了教我读题？”\n”能看穿什么时候该摆烂，也是一种本事。不过——&quot;\n老勇者话锋一转，眼神突然变得危险起来，&ldquo;如果加上约束，阁下又将如何应对？&rdquo;\n他伸手拿起那张皱巴巴的羊皮纸，掏出随身携带的红笔——那个瞬间我甚至怀疑他是不是专门等着改我的题目——在纸上画了画，然后又递回给我。我低头一看：\n“选择恰好 k 个不同的非空子数组。子数组可以重叠，同一个子数组不可以被选择超过一次。”\n我倒吸一口凉气，手里的茶杯差点跟着羊皮纸一块儿掉进锅炉里。“不同的”非空子数组，“同一个子数组不能被选择超过一次”——约束一加，难度飞天。刚才一行流抓最肥的羊反复薅，现在每只羊只让薅一次，这不得挑出前k个最肥的羊？\n我开始盘算：直接上暴力把所有可能的子数组全列出来，算极差，排序，取前 k 大。但长度为 n 的数组，子数组数量 n(n+1)/2，O(n²) 的候选集，n 大了直接炸，评测机怕是要给我唱一首《超时咏》。\n“等等——题目只改了‘不能重复选同一段’，没禁止段之间重叠！！” 我拿着笔在纸上戳了戳，“既然可以重叠，那我不需要担心选了一段之后堵死其他段的问题。整个数组的极差max - min是冠军，只能用一次。把它用掉之后，第二大极差要么是抠掉最大值后剩下的区间，要么是抠掉最小值后剩下的区间——把最值抠掉，极差才可能变小。然后，季军就是从亚军的残骸里继续抠最值——”\n我一拍脑门，“这不就是一个贪心扩展的过程吗？搞个大根堆维护候选池，每次挑极差最大的区间用掉，然后把它‘切开’——抠掉最大值或最小值之后，剩下的子区间重新扔回候选池里。重复 k 次，累加极差，搞定。大根堆！这可是高级数据结构，这把稳了。”\n“方向是对的。”老勇者点点头，然后毫不留情地浇了一盆冷水，“但你的刀法有问题——候选池里的区间数量会指数爆炸，你这不叫堆，叫炸弹。想象一下，每次切一下产生两个新区间，k 次就是 2^k 个候选，你的堆会变成二叉树的坟场。&quot;\n我刚刚燃烧起来的小宇宙瞬间被浇灭，整个人像被触发了 NullPointerException 一样瘫在椅子上。大根堆都救不了我，那还有什么能救？\n老勇者撇了我一眼，拿起笔在草稿纸上画了一条长线，标上刻度 0 到 n。“换个角度。别再跟切分死磕了。任意一个子数组都由两个东西决定——左端点 l 和右端点 r。固定 l，极差随 r 怎么变？”\n">
+    <link rel="shortcut icon" href="/favicon.svg" />
+
     </head>
     <body class="
     article-page
@@ -40,7 +42,7 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -69,8 +71,8 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">我的小站</a></h1>
-            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+            <h1 class="site-name"><a href="/">gugugu</a></h1>
+            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -144,6 +146,39 @@ unicode: "ecde"
         
         
         <li >
+            <a href='/projects/' >
+                
+                
+                
+                    <!--
+tags: [cube, app, application, package, container]
+version: "1.0"
+unicode: "ea45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+  <path d="M12 12l8 -4.5" />
+  <path d="M12 12l0 9" />
+  <path d="M12 12l-8 -4.5" />
+</svg>
+
+                
+                <span>项目</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/posts/' >
                 
                 
@@ -210,7 +245,7 @@ unicode: "ea45"
         
         
         <li >
-            <a href='/notes' >
+            <a href='/kids/' >
                 
                 
                 
@@ -237,7 +272,7 @@ unicode: "eb96"
 </svg>
 
                 
-                <span>笔记</span>
+                <span>趣学</span>
             </a>
         </li>
         
@@ -295,7 +330,7 @@ unicode: "eb49"
 
 
 
-                        <span>Dark Mode</span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -320,7 +355,7 @@ unicode: "eb49"
 
 
         </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
+        <h2 class="widget-title section-title">目录</h2>
         
         <div class="widget--toc">
             <nav id="TableOfContents">
@@ -347,8 +382,8 @@ unicode: "eb49"
             
             
             
-            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
-                Leetcode题解故事
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3/" style="background-color: hsl(227, 60%, 84%); color: hsl(227, 60%, 15%);">
+                Leetcode题解
             </a>
         
     </header>
@@ -378,7 +413,7 @@ unicode: "eb49"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-06-09T17:16:07&#43;08:00'>6月 09, 2026</time>
+                <time class="article-time--published" datetime='2026-06-09T17:16:07&#43;08:00'>Jun 09, 2026</time>
             </div>
         
 
@@ -393,7 +428,7 @@ unicode: "eb49"
 
 
                 <time class="article-time--reading">
-                    3 minute read
+                    3 min 阅读
                 </time>
             </div>
         
@@ -555,7 +590,7 @@ st<a class="link" href="%e9%95%bf%e5%ba%a64" >2</a>: [(1,5), (2,5)]</p>
     
 
 <aside class="related-content--wrapper">
-    <h2 class="section-title">Related content</h2>
+    <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
             
@@ -688,12 +723,12 @@ st<a class="link" href="%e9%95%bf%e5%ba%a64" >2</a>: [(1,5), (2,5)]</p>
     <section class="copyright">
         &copy; 
         
-        2026 我的小站
+        2026 gugugu
     </section>
     
     <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -783,7 +818,7 @@ st<a class="link" href="%e9%95%bf%e5%ba%a64" >2</a>: [(1,5), (2,5)]</p>
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2db790992f3b20090509a78a8809578bf0632ae99498dd4dc03d3f15ffe700f8.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -794,6 +829,64 @@ st<a class="link" href="%e9%95%bf%e5%ba%a64" >2</a>: [(1,5), (2,5)]</p>
 
         document.head.appendChild(customFont);
     }());
+</script>
+<style>
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: star-fly 0.75s ease-out forwards;
+}
+@keyframes star-fly {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+    var COLORS = ['#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#FF9F43', '#F368E0', '#48DBFB'];
+    var SHAPES = [
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 0L14.59 8.41 23 12 14.59 15.59 12 24 9.41 15.59 1 12 9.41 8.41z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><circle cx="12" cy="12" r="10"/></svg>'
+    ];
+
+    document.addEventListener('click', function(e) {
+        var count = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < count; i++) {
+            var star = document.createElement('div');
+            star.className = 'click-star';
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var shape = SHAPES[Math.floor(Math.random() * SHAPES.length)].replace('CL', color);
+            var size = 8 + Math.floor(Math.random() * 14);
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+            var dist = 30 + Math.random() * 60;
+
+            star.style.left = (e.clientX - size / 2) + 'px';
+            star.style.top = (e.clientY - size / 2) + 'px';
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+            star.style.setProperty('--dy', (Math.sin(angle) * dist - 20) + 'px');
+            star.innerHTML = shape;
+            document.body.appendChild(star);
+            (function(el) {
+                setTimeout(function() { el.remove(); }, 800);
+            })(star);
+        }
+    });
+})();
+</script>
+<script>
+(function() {
+    document.querySelectorAll('.article-list article').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            var link = card.querySelector('.article-title a');
+            if (link) window.location = link.href;
+        });
+    });
+})();
 </script>
 
     </body>

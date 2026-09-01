@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮二进制传送门觉醒：当每个节点都能瞬间跳跃 今天一大早，我刚推开村口锅炉房的门，就看见村长蹲在那儿，顶着两个黑眼圈，怀里抱着笔记本电脑，屏幕上&rsquo;&lsquo;奇数流宗师&rsquo;&lsquo;几个烫金大字一闪一闪的，后面跟着密密麻麻的查询列表，滚动条缩成了一个小点。墨菲定律诚不欺我——怕什么来什么。\n&lsquo;&lsquo;小白！&lsquo;&lsquo;村长看到我，像装了雷达一样从地上弹起来，&lsquo;&lsquo;这个成就太难了！你看，宗师成就要求处理任意两个节点之间的路径查询，不是只有根到叶子那么简单！&lsquo;&lsquo;他疯狂划拉屏幕，&lsquo;&lsquo;查询可能是从1号到5号，从3号到7号，从8号到2号……我把昨天你那套压扁成链的代码套进去，跑的我风扇狂转，Steam Deck差点起飞——结果还没跑完！&rsquo;&rsquo;\n我心里一沉。昨天那是从根到最深叶子，路径只有一条，深度k固定，一行快速幂秒杀。今天是任意两点之间的路径——每条查询的起点终点都不一样，路径长度k各不相同。昨天的对称性trick倒是还能用——路径上有k条边，方案数还是2^{k-1}。但问题变成了：怎么快速算出任意两点间的路径长度？\n我在草稿纸上开始画树。假设查询节点4和节点5，路径是4→3→5，长度是2，查询节点2和节点5，路径是2→1→3→5，长度是3。关键藏在这些路径的交汇处——它们不是一条直线冲到底的，而是先往上爬到某个公共祖先，再拐弯往下。那个&rsquo;&lsquo;分叉点&rsquo;&lsquo;就是最近公共祖先，LCA。那么，对于每个查询(u, v)，路径长度 k = depth[u] + depth[v] - 2*depth[LCA]。有了k，对称性trick照旧——方案数还是2^{k-1}。\n关键在于，怎么快速找到LCA？\n遇事不决先暴力？ 既然LCA的定义是两个节点往上爬、第一个相遇的祖先，那最朴素的做法就是模拟这个爬树过程：从u一路爬到根，把沿途所有节点记下来；再从v一路爬到根，看哪个节点最先出现在u的路径里。\n对于查询(u, v)，分别爬树记录路径，暴力比对找第一个共同节点： find_path(node) 函数记录从node到根节点的路径，find_lca_brute_force(u, v)函数暴力找u和v的最近公共祖先(LCA)。\n# 暴力LCA解法：通过爬树找最近公共祖先 def assignEdgeWeights(edges: List[List[int]], queries: List[List[int]]) -&gt; List[int]: MOD = 1_000_000_007 n = len(edges) + 1 g = [[] for _ in range(n + 1)] for x, y in edges: g[x].append(y) g[y].append(x) # 预处理父节点和深度 parent = [0] * (n + 1) # parent[i]表示节点i的父节点 depth = [0] * (n + 1) # depth[i]表示节点i的深度 def dfs(x: int, fa: int) -&gt; None: parent[x] = fa for y in g[x]: if y != fa: # 避免回溯到父节点 depth[y] = depth[x] + 1 dfs(y, x) dfs(1, 0) # 从根节点1开始DFS，根节点的父节点设为0（虚拟节点） # 记录从node到根节点的路径列表（包含node和根节点） def find_path_to_root(node: int) -&gt; list: path = [] current = node while current != 0: # 一直爬到根节点的父节点（虚拟节点0） path.append(current) current = parent[current] return path # 暴力找u和v的最近公共祖先(LCA) def find_lca_brute_force(u: int, v: int) -&gt; int: path_u = find_path_to_root(u) path_v = find_path_to_root(v) path_u_set = set(path_u) # 将path_u转为集合，方便快速查找 # 从v的路径往上找，第一个在u路径中的节点就是LCA for node in path_v: if node in path_u_set: return node return 1 # 理论上不会到这里，因为根节点一定是公共祖先 # 计算u到v的路径长度k = depth[u] + depth[v] - 2*depth[LCA] def get_distance(u: int, v: int) -&gt; int: lca = find_lca_brute_force(u, v) return depth[u] + depth[v] - 2 * depth[lca] # 计算k条边的赋值方案中，使总和为奇数的方案数 def count_odd_ways(k: int) -&gt; int: return pow(2, k - 1, MOD) if k != 0 else 0 # 处理每个查询 answer = [] for x, y in queries: if x == y: # 同一点，路径长度为0，方案数为0 answer.append(0) else: # 计算路径长度 path_length = get_distance(x, y) # 计算方案数 answer.append(count_odd_ways(path_length)) return answer 我默默算了笔账：查询数量十万，每次暴力找LCA——find_path 爬树最坏O(n)，node in path_v 又是O(n)，总复杂度O(q*n)，十万乘十万，评测机不弹TLE才怪。\n">
 <title>leetcode3559 二进制传送门觉醒：当每个节点都能瞬间跳跃</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-12/'>
+<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-12/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode3559 二进制传送门觉醒：当每个节点都能瞬间跳跃">
+<link rel="stylesheet" href="/scss/style.min.86e4926d6336cd3b00711635ecc0740f3109784c840a3f4cd56f34c775673afa.css"><meta property='og:title' content="leetcode3559 二进制传送门觉醒：当每个节点都能瞬间跳跃">
 <meta property='og:description' content="🎮二进制传送门觉醒：当每个节点都能瞬间跳跃 今天一大早，我刚推开村口锅炉房的门，就看见村长蹲在那儿，顶着两个黑眼圈，怀里抱着笔记本电脑，屏幕上&rsquo;&lsquo;奇数流宗师&rsquo;&lsquo;几个烫金大字一闪一闪的，后面跟着密密麻麻的查询列表，滚动条缩成了一个小点。墨菲定律诚不欺我——怕什么来什么。\n&lsquo;&lsquo;小白！&lsquo;&lsquo;村长看到我，像装了雷达一样从地上弹起来，&lsquo;&lsquo;这个成就太难了！你看，宗师成就要求处理任意两个节点之间的路径查询，不是只有根到叶子那么简单！&lsquo;&lsquo;他疯狂划拉屏幕，&lsquo;&lsquo;查询可能是从1号到5号，从3号到7号，从8号到2号……我把昨天你那套压扁成链的代码套进去，跑的我风扇狂转，Steam Deck差点起飞——结果还没跑完！&rsquo;&rsquo;\n我心里一沉。昨天那是从根到最深叶子，路径只有一条，深度k固定，一行快速幂秒杀。今天是任意两点之间的路径——每条查询的起点终点都不一样，路径长度k各不相同。昨天的对称性trick倒是还能用——路径上有k条边，方案数还是2^{k-1}。但问题变成了：怎么快速算出任意两点间的路径长度？\n我在草稿纸上开始画树。假设查询节点4和节点5，路径是4→3→5，长度是2，查询节点2和节点5，路径是2→1→3→5，长度是3。关键藏在这些路径的交汇处——它们不是一条直线冲到底的，而是先往上爬到某个公共祖先，再拐弯往下。那个&rsquo;&lsquo;分叉点&rsquo;&lsquo;就是最近公共祖先，LCA。那么，对于每个查询(u, v)，路径长度 k = depth[u] + depth[v] - 2*depth[LCA]。有了k，对称性trick照旧——方案数还是2^{k-1}。\n关键在于，怎么快速找到LCA？\n遇事不决先暴力？ 既然LCA的定义是两个节点往上爬、第一个相遇的祖先，那最朴素的做法就是模拟这个爬树过程：从u一路爬到根，把沿途所有节点记下来；再从v一路爬到根，看哪个节点最先出现在u的路径里。\n对于查询(u, v)，分别爬树记录路径，暴力比对找第一个共同节点： find_path(node) 函数记录从node到根节点的路径，find_lca_brute_force(u, v)函数暴力找u和v的最近公共祖先(LCA)。\n# 暴力LCA解法：通过爬树找最近公共祖先 def assignEdgeWeights(edges: List[List[int]], queries: List[List[int]]) -&gt; List[int]: MOD = 1_000_000_007 n = len(edges) + 1 g = [[] for _ in range(n + 1)] for x, y in edges: g[x].append(y) g[y].append(x) # 预处理父节点和深度 parent = [0] * (n + 1) # parent[i]表示节点i的父节点 depth = [0] * (n + 1) # depth[i]表示节点i的深度 def dfs(x: int, fa: int) -&gt; None: parent[x] = fa for y in g[x]: if y != fa: # 避免回溯到父节点 depth[y] = depth[x] + 1 dfs(y, x) dfs(1, 0) # 从根节点1开始DFS，根节点的父节点设为0（虚拟节点） # 记录从node到根节点的路径列表（包含node和根节点） def find_path_to_root(node: int) -&gt; list: path = [] current = node while current != 0: # 一直爬到根节点的父节点（虚拟节点0） path.append(current) current = parent[current] return path # 暴力找u和v的最近公共祖先(LCA) def find_lca_brute_force(u: int, v: int) -&gt; int: path_u = find_path_to_root(u) path_v = find_path_to_root(v) path_u_set = set(path_u) # 将path_u转为集合，方便快速查找 # 从v的路径往上找，第一个在u路径中的节点就是LCA for node in path_v: if node in path_u_set: return node return 1 # 理论上不会到这里，因为根节点一定是公共祖先 # 计算u到v的路径长度k = depth[u] + depth[v] - 2*depth[LCA] def get_distance(u: int, v: int) -&gt; int: lca = find_lca_brute_force(u, v) return depth[u] + depth[v] - 2 * depth[lca] # 计算k条边的赋值方案中，使总和为奇数的方案数 def count_odd_ways(k: int) -&gt; int: return pow(2, k - 1, MOD) if k != 0 else 0 # 处理每个查询 answer = [] for x, y in queries: if x == y: # 同一点，路径长度为0，方案数为0 answer.append(0) else: # 计算路径长度 path_length = get_distance(x, y) # 计算方案数 answer.append(count_odd_ways(path_length)) return answer 我默默算了笔账：查询数量十万，每次暴力找LCA——find_path 爬树最坏O(n)，node in path_v 又是O(n)，总复杂度O(q*n)，十万乘十万，评测机不弹TLE才怪。\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-12/'>
-<meta property='og:site_name' content='我的小站'>
+<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-12/'>
+<meta property='og:site_name' content='gugugu'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-12T15:25:32&#43;08:00'/><meta property='article:modified_time' content='2026-06-12T15:25:32&#43;08:00'/>
 <meta name="twitter:title" content="leetcode3559 二进制传送门觉醒：当每个节点都能瞬间跳跃">
 <meta name="twitter:description" content="🎮二进制传送门觉醒：当每个节点都能瞬间跳跃 今天一大早，我刚推开村口锅炉房的门，就看见村长蹲在那儿，顶着两个黑眼圈，怀里抱着笔记本电脑，屏幕上&rsquo;&lsquo;奇数流宗师&rsquo;&lsquo;几个烫金大字一闪一闪的，后面跟着密密麻麻的查询列表，滚动条缩成了一个小点。墨菲定律诚不欺我——怕什么来什么。\n&lsquo;&lsquo;小白！&lsquo;&lsquo;村长看到我，像装了雷达一样从地上弹起来，&lsquo;&lsquo;这个成就太难了！你看，宗师成就要求处理任意两个节点之间的路径查询，不是只有根到叶子那么简单！&lsquo;&lsquo;他疯狂划拉屏幕，&lsquo;&lsquo;查询可能是从1号到5号，从3号到7号，从8号到2号……我把昨天你那套压扁成链的代码套进去，跑的我风扇狂转，Steam Deck差点起飞——结果还没跑完！&rsquo;&rsquo;\n我心里一沉。昨天那是从根到最深叶子，路径只有一条，深度k固定，一行快速幂秒杀。今天是任意两点之间的路径——每条查询的起点终点都不一样，路径长度k各不相同。昨天的对称性trick倒是还能用——路径上有k条边，方案数还是2^{k-1}。但问题变成了：怎么快速算出任意两点间的路径长度？\n我在草稿纸上开始画树。假设查询节点4和节点5，路径是4→3→5，长度是2，查询节点2和节点5，路径是2→1→3→5，长度是3。关键藏在这些路径的交汇处——它们不是一条直线冲到底的，而是先往上爬到某个公共祖先，再拐弯往下。那个&rsquo;&lsquo;分叉点&rsquo;&lsquo;就是最近公共祖先，LCA。那么，对于每个查询(u, v)，路径长度 k = depth[u] + depth[v] - 2*depth[LCA]。有了k，对称性trick照旧——方案数还是2^{k-1}。\n关键在于，怎么快速找到LCA？\n遇事不决先暴力？ 既然LCA的定义是两个节点往上爬、第一个相遇的祖先，那最朴素的做法就是模拟这个爬树过程：从u一路爬到根，把沿途所有节点记下来；再从v一路爬到根，看哪个节点最先出现在u的路径里。\n对于查询(u, v)，分别爬树记录路径，暴力比对找第一个共同节点： find_path(node) 函数记录从node到根节点的路径，find_lca_brute_force(u, v)函数暴力找u和v的最近公共祖先(LCA)。\n# 暴力LCA解法：通过爬树找最近公共祖先 def assignEdgeWeights(edges: List[List[int]], queries: List[List[int]]) -&gt; List[int]: MOD = 1_000_000_007 n = len(edges) + 1 g = [[] for _ in range(n + 1)] for x, y in edges: g[x].append(y) g[y].append(x) # 预处理父节点和深度 parent = [0] * (n + 1) # parent[i]表示节点i的父节点 depth = [0] * (n + 1) # depth[i]表示节点i的深度 def dfs(x: int, fa: int) -&gt; None: parent[x] = fa for y in g[x]: if y != fa: # 避免回溯到父节点 depth[y] = depth[x] + 1 dfs(y, x) dfs(1, 0) # 从根节点1开始DFS，根节点的父节点设为0（虚拟节点） # 记录从node到根节点的路径列表（包含node和根节点） def find_path_to_root(node: int) -&gt; list: path = [] current = node while current != 0: # 一直爬到根节点的父节点（虚拟节点0） path.append(current) current = parent[current] return path # 暴力找u和v的最近公共祖先(LCA) def find_lca_brute_force(u: int, v: int) -&gt; int: path_u = find_path_to_root(u) path_v = find_path_to_root(v) path_u_set = set(path_u) # 将path_u转为集合，方便快速查找 # 从v的路径往上找，第一个在u路径中的节点就是LCA for node in path_v: if node in path_u_set: return node return 1 # 理论上不会到这里，因为根节点一定是公共祖先 # 计算u到v的路径长度k = depth[u] + depth[v] - 2*depth[LCA] def get_distance(u: int, v: int) -&gt; int: lca = find_lca_brute_force(u, v) return depth[u] + depth[v] - 2 * depth[lca] # 计算k条边的赋值方案中，使总和为奇数的方案数 def count_odd_ways(k: int) -&gt; int: return pow(2, k - 1, MOD) if k != 0 else 0 # 处理每个查询 answer = [] for x, y in queries: if x == y: # 同一点，路径长度为0，方案数为0 answer.append(0) else: # 计算路径长度 path_length = get_distance(x, y) # 计算方案数 answer.append(count_odd_ways(path_length)) return answer 我默默算了笔账：查询数量十万，每次暴力找LCA——find_path 爬树最坏O(n)，node in path_v 又是O(n)，总复杂度O(q*n)，十万乘十万，评测机不弹TLE才怪。\n">
+    <link rel="shortcut icon" href="/favicon.svg" />
+
     </head>
     <body class="
     article-page
@@ -40,7 +42,7 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -69,8 +71,8 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">我的小站</a></h1>
-            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+            <h1 class="site-name"><a href="/">gugugu</a></h1>
+            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -144,6 +146,39 @@ unicode: "ecde"
         
         
         <li >
+            <a href='/projects/' >
+                
+                
+                
+                    <!--
+tags: [cube, app, application, package, container]
+version: "1.0"
+unicode: "ea45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+  <path d="M12 12l8 -4.5" />
+  <path d="M12 12l0 9" />
+  <path d="M12 12l-8 -4.5" />
+</svg>
+
+                
+                <span>项目</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/posts/' >
                 
                 
@@ -210,7 +245,7 @@ unicode: "ea45"
         
         
         <li >
-            <a href='/notes' >
+            <a href='/kids/' >
                 
                 
                 
@@ -237,7 +272,7 @@ unicode: "eb96"
 </svg>
 
                 
-                <span>笔记</span>
+                <span>趣学</span>
             </a>
         </li>
         
@@ -295,7 +330,7 @@ unicode: "eb49"
 
 
 
-                        <span>Dark Mode</span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -320,7 +355,7 @@ unicode: "eb49"
 
 
         </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
+        <h2 class="widget-title section-title">目录</h2>
         
         <div class="widget--toc">
             <nav id="TableOfContents">
@@ -351,8 +386,8 @@ unicode: "eb49"
             
             
             
-            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
-                Leetcode题解故事
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3/" style="background-color: hsl(227, 60%, 84%); color: hsl(227, 60%, 15%);">
+                Leetcode题解
             </a>
         
     </header>
@@ -382,7 +417,7 @@ unicode: "eb49"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-06-12T15:25:32&#43;08:00'>6月 12, 2026</time>
+                <time class="article-time--published" datetime='2026-06-12T15:25:32&#43;08:00'>Jun 12, 2026</time>
             </div>
         
 
@@ -397,7 +432,7 @@ unicode: "eb49"
 
 
                 <time class="article-time--reading">
-                    4 minute read
+                    4 min 阅读
                 </time>
             </div>
         
@@ -658,7 +693,7 @@ unicode: "eb49"
     
 
 <aside class="related-content--wrapper">
-    <h2 class="section-title">Related content</h2>
+    <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
             
@@ -791,12 +826,12 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 我的小站
+        2026 gugugu
     </section>
     
     <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -886,7 +921,7 @@ unicode: "eb49"
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2db790992f3b20090509a78a8809578bf0632ae99498dd4dc03d3f15ffe700f8.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -897,6 +932,64 @@ unicode: "eb49"
 
         document.head.appendChild(customFont);
     }());
+</script>
+<style>
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: star-fly 0.75s ease-out forwards;
+}
+@keyframes star-fly {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+    var COLORS = ['#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#FF9F43', '#F368E0', '#48DBFB'];
+    var SHAPES = [
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 0L14.59 8.41 23 12 14.59 15.59 12 24 9.41 15.59 1 12 9.41 8.41z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><circle cx="12" cy="12" r="10"/></svg>'
+    ];
+
+    document.addEventListener('click', function(e) {
+        var count = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < count; i++) {
+            var star = document.createElement('div');
+            star.className = 'click-star';
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var shape = SHAPES[Math.floor(Math.random() * SHAPES.length)].replace('CL', color);
+            var size = 8 + Math.floor(Math.random() * 14);
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+            var dist = 30 + Math.random() * 60;
+
+            star.style.left = (e.clientX - size / 2) + 'px';
+            star.style.top = (e.clientY - size / 2) + 'px';
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+            star.style.setProperty('--dy', (Math.sin(angle) * dist - 20) + 'px');
+            star.innerHTML = shape;
+            document.body.appendChild(star);
+            (function(el) {
+                setTimeout(function() { el.remove(); }, 800);
+            })(star);
+        }
+    });
+})();
+</script>
+<script>
+(function() {
+    document.querySelectorAll('.article-list article').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            var link = card.querySelector('.article-title a');
+            if (link) window.location = link.href;
+        });
+    });
+})();
 </script>
 
     </body>

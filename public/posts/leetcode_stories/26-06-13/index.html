@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮绝对防御！手动Hash与模运算的土豆级零信任协议 今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。\n“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”\n我接过那张手绘的权重表，嘴角抽搐：“村长，这都2026年了，您还在用手动哈希？连个JWT都不用？咱村不是刚通了5G吗，隔壁勇者团都用上OAuth2.0了。”\n村长捋了捋胡子，一脸高深莫测：“年轻人，这叫复古硬核加密。万一哪天基站被炸了，云计算挂了，咱村的秘密指令还得靠这张纸传。再说了，我这算法密钥只有咱俩知道——绝无第三方持有，零信任架构懂不懂？少废话，赶紧算！”\n我翻开手册，开头就写了三条让人血压飙升的规则：\n第一条，每个单词的“密码值”= 单词里每个字母在权重表中对应值的总和。\n我心中暗想，说得跟什么上古魔法似的，小学二年级的加法运算也敢叫加密。瞥了眼村长，他正自顾自地捋着胡子，仿佛这真的是什么惊天动地的黑科技。\n第二条，把总和对 26 取模，得到一个 0~25 的数字。\n我叹了口气，经典 % 26，取模压缩。村长您是不是觉得26个字母刚好能塞进一个byte的低5位？内存优化强迫症是吧？\n第三条，倒序映射： 0 → &lsquo;z&rsquo;, 1 → &lsquo;y&rsquo;, &hellip;, 25 → &lsquo;a&rsquo;。\n我盯着这行规则看了足足五秒钟，终于绷不住了：&ldquo;等等！正常人不都是 0→&lsquo;a&rsquo; 吗？为什么这里是反的？村长你是不是把ASCII表贴反了？还是说这是为了防止我们用 char + 'a' 一行搞定而故意加的debuff？！&rdquo;\n村长在旁边嘿嘿一笑：&ldquo;哦，那个啊……因为我觉得从z开始数比较有仪式感。你想啊，z是字母表的终点，从终点往起点映射，有一种‘落叶归根’的哲学意味。怎么，有意见？&rdquo;\n我深吸一口气，把到嘴边的吐槽硬生生咽了回去：&ldquo;没意见，您说了算。我写还不行吗。&rdquo;\n既然规则已经明确到这种程度，那还有什么好犹豫的？直接模拟就完事了！\nclass Solution: def mapWordWeight(self, words: List[str], weights: List[int]) -&gt; str: ans = [] ord_a = ord(&#39;a&#39;) ord_z = ord(&#39;z&#39;) for word in words: weight = sum(weights[ord(c) - ord_a] for c in word) % 26 ans.append(chr(ord_z - weight)) return &#39;&#39;.join(ans) 提交，AC，一气呵成。我把翻译出来的指令条递给村长——上面赫然写着：&ldquo;下午三点村口开会讨论秋季土豆种植计划。&rdquo;\n村长接过指令条，满意地点点头：“好！解密成功！这套算法果然只有你能驾驭！” 说完，他背着手，迈着那种“绝世高手下山”的六亲不认步伐，慢悠悠地踱出了院子，甚至还哼起了不知名的小曲儿。\n">
 <title>leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-13/'>
+<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-13/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议">
+<link rel="stylesheet" href="/scss/style.min.86e4926d6336cd3b00711635ecc0740f3109784c840a3f4cd56f34c775673afa.css"><meta property='og:title' content="leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议">
 <meta property='og:description' content="🎮绝对防御！手动Hash与模运算的土豆级零信任协议 今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。\n“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”\n我接过那张手绘的权重表，嘴角抽搐：“村长，这都2026年了，您还在用手动哈希？连个JWT都不用？咱村不是刚通了5G吗，隔壁勇者团都用上OAuth2.0了。”\n村长捋了捋胡子，一脸高深莫测：“年轻人，这叫复古硬核加密。万一哪天基站被炸了，云计算挂了，咱村的秘密指令还得靠这张纸传。再说了，我这算法密钥只有咱俩知道——绝无第三方持有，零信任架构懂不懂？少废话，赶紧算！”\n我翻开手册，开头就写了三条让人血压飙升的规则：\n第一条，每个单词的“密码值”= 单词里每个字母在权重表中对应值的总和。\n我心中暗想，说得跟什么上古魔法似的，小学二年级的加法运算也敢叫加密。瞥了眼村长，他正自顾自地捋着胡子，仿佛这真的是什么惊天动地的黑科技。\n第二条，把总和对 26 取模，得到一个 0~25 的数字。\n我叹了口气，经典 % 26，取模压缩。村长您是不是觉得26个字母刚好能塞进一个byte的低5位？内存优化强迫症是吧？\n第三条，倒序映射： 0 → &lsquo;z&rsquo;, 1 → &lsquo;y&rsquo;, &hellip;, 25 → &lsquo;a&rsquo;。\n我盯着这行规则看了足足五秒钟，终于绷不住了：&ldquo;等等！正常人不都是 0→&lsquo;a&rsquo; 吗？为什么这里是反的？村长你是不是把ASCII表贴反了？还是说这是为了防止我们用 char + 'a' 一行搞定而故意加的debuff？！&rdquo;\n村长在旁边嘿嘿一笑：&ldquo;哦，那个啊……因为我觉得从z开始数比较有仪式感。你想啊，z是字母表的终点，从终点往起点映射，有一种‘落叶归根’的哲学意味。怎么，有意见？&rdquo;\n我深吸一口气，把到嘴边的吐槽硬生生咽了回去：&ldquo;没意见，您说了算。我写还不行吗。&rdquo;\n既然规则已经明确到这种程度，那还有什么好犹豫的？直接模拟就完事了！\nclass Solution: def mapWordWeight(self, words: List[str], weights: List[int]) -&gt; str: ans = [] ord_a = ord(&#39;a&#39;) ord_z = ord(&#39;z&#39;) for word in words: weight = sum(weights[ord(c) - ord_a] for c in word) % 26 ans.append(chr(ord_z - weight)) return &#39;&#39;.join(ans) 提交，AC，一气呵成。我把翻译出来的指令条递给村长——上面赫然写着：&ldquo;下午三点村口开会讨论秋季土豆种植计划。&rdquo;\n村长接过指令条，满意地点点头：“好！解密成功！这套算法果然只有你能驾驭！” 说完，他背着手，迈着那种“绝世高手下山”的六亲不认步伐，慢悠悠地踱出了院子，甚至还哼起了不知名的小曲儿。\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-13/'>
-<meta property='og:site_name' content='我的小站'>
+<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-13/'>
+<meta property='og:site_name' content='gugugu'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-13T22:13:24&#43;08:00'/><meta property='article:modified_time' content='2026-06-13T22:13:24&#43;08:00'/>
 <meta name="twitter:title" content="leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议">
 <meta name="twitter:description" content="🎮绝对防御！手动Hash与模运算的土豆级零信任协议 今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。\n“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”\n我接过那张手绘的权重表，嘴角抽搐：“村长，这都2026年了，您还在用手动哈希？连个JWT都不用？咱村不是刚通了5G吗，隔壁勇者团都用上OAuth2.0了。”\n村长捋了捋胡子，一脸高深莫测：“年轻人，这叫复古硬核加密。万一哪天基站被炸了，云计算挂了，咱村的秘密指令还得靠这张纸传。再说了，我这算法密钥只有咱俩知道——绝无第三方持有，零信任架构懂不懂？少废话，赶紧算！”\n我翻开手册，开头就写了三条让人血压飙升的规则：\n第一条，每个单词的“密码值”= 单词里每个字母在权重表中对应值的总和。\n我心中暗想，说得跟什么上古魔法似的，小学二年级的加法运算也敢叫加密。瞥了眼村长，他正自顾自地捋着胡子，仿佛这真的是什么惊天动地的黑科技。\n第二条，把总和对 26 取模，得到一个 0~25 的数字。\n我叹了口气，经典 % 26，取模压缩。村长您是不是觉得26个字母刚好能塞进一个byte的低5位？内存优化强迫症是吧？\n第三条，倒序映射： 0 → &lsquo;z&rsquo;, 1 → &lsquo;y&rsquo;, &hellip;, 25 → &lsquo;a&rsquo;。\n我盯着这行规则看了足足五秒钟，终于绷不住了：&ldquo;等等！正常人不都是 0→&lsquo;a&rsquo; 吗？为什么这里是反的？村长你是不是把ASCII表贴反了？还是说这是为了防止我们用 char + 'a' 一行搞定而故意加的debuff？！&rdquo;\n村长在旁边嘿嘿一笑：&ldquo;哦，那个啊……因为我觉得从z开始数比较有仪式感。你想啊，z是字母表的终点，从终点往起点映射，有一种‘落叶归根’的哲学意味。怎么，有意见？&rdquo;\n我深吸一口气，把到嘴边的吐槽硬生生咽了回去：&ldquo;没意见，您说了算。我写还不行吗。&rdquo;\n既然规则已经明确到这种程度，那还有什么好犹豫的？直接模拟就完事了！\nclass Solution: def mapWordWeight(self, words: List[str], weights: List[int]) -&gt; str: ans = [] ord_a = ord(&#39;a&#39;) ord_z = ord(&#39;z&#39;) for word in words: weight = sum(weights[ord(c) - ord_a] for c in word) % 26 ans.append(chr(ord_z - weight)) return &#39;&#39;.join(ans) 提交，AC，一气呵成。我把翻译出来的指令条递给村长——上面赫然写着：&ldquo;下午三点村口开会讨论秋季土豆种植计划。&rdquo;\n村长接过指令条，满意地点点头：“好！解密成功！这套算法果然只有你能驾驭！” 说完，他背着手，迈着那种“绝世高手下山”的六亲不认步伐，慢悠悠地踱出了院子，甚至还哼起了不知名的小曲儿。\n">
+    <link rel="shortcut icon" href="/favicon.svg" />
+
     </head>
     <body class="
     article-page
@@ -40,7 +42,7 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -69,8 +71,8 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">我的小站</a></h1>
-            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+            <h1 class="site-name"><a href="/">gugugu</a></h1>
+            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -144,6 +146,39 @@ unicode: "ecde"
         
         
         <li >
+            <a href='/projects/' >
+                
+                
+                
+                    <!--
+tags: [cube, app, application, package, container]
+version: "1.0"
+unicode: "ea45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+  <path d="M12 12l8 -4.5" />
+  <path d="M12 12l0 9" />
+  <path d="M12 12l-8 -4.5" />
+</svg>
+
+                
+                <span>项目</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/posts/' >
                 
                 
@@ -210,7 +245,7 @@ unicode: "ea45"
         
         
         <li >
-            <a href='/notes' >
+            <a href='/kids/' >
                 
                 
                 
@@ -237,7 +272,7 @@ unicode: "eb96"
 </svg>
 
                 
-                <span>笔记</span>
+                <span>趣学</span>
             </a>
         </li>
         
@@ -295,7 +330,7 @@ unicode: "eb49"
 
 
 
-                        <span>Dark Mode</span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -320,7 +355,7 @@ unicode: "eb49"
 
 
         </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
+        <h2 class="widget-title section-title">目录</h2>
         
         <div class="widget--toc">
             <nav id="TableOfContents">
@@ -347,8 +382,8 @@ unicode: "eb49"
             
             
             
-            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
-                Leetcode题解故事
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3/" style="background-color: hsl(227, 60%, 84%); color: hsl(227, 60%, 15%);">
+                Leetcode题解
             </a>
         
     </header>
@@ -378,7 +413,7 @@ unicode: "eb49"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-06-13T22:13:24&#43;08:00'>6月 13, 2026</time>
+                <time class="article-time--published" datetime='2026-06-13T22:13:24&#43;08:00'>Jun 13, 2026</time>
             </div>
         
 
@@ -393,7 +428,7 @@ unicode: "eb49"
 
 
                 <time class="article-time--reading">
-                    1 minute read
+                    1 min 阅读
                 </time>
             </div>
         
@@ -484,7 +519,7 @@ unicode: "eb49"
     
 
 <aside class="related-content--wrapper">
-    <h2 class="section-title">Related content</h2>
+    <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
             
@@ -617,12 +652,12 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 我的小站
+        2026 gugugu
     </section>
     
     <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -712,7 +747,7 @@ unicode: "eb49"
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2db790992f3b20090509a78a8809578bf0632ae99498dd4dc03d3f15ffe700f8.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -723,6 +758,64 @@ unicode: "eb49"
 
         document.head.appendChild(customFont);
     }());
+</script>
+<style>
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: star-fly 0.75s ease-out forwards;
+}
+@keyframes star-fly {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+    var COLORS = ['#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#FF9F43', '#F368E0', '#48DBFB'];
+    var SHAPES = [
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 0L14.59 8.41 23 12 14.59 15.59 12 24 9.41 15.59 1 12 9.41 8.41z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><circle cx="12" cy="12" r="10"/></svg>'
+    ];
+
+    document.addEventListener('click', function(e) {
+        var count = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < count; i++) {
+            var star = document.createElement('div');
+            star.className = 'click-star';
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var shape = SHAPES[Math.floor(Math.random() * SHAPES.length)].replace('CL', color);
+            var size = 8 + Math.floor(Math.random() * 14);
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+            var dist = 30 + Math.random() * 60;
+
+            star.style.left = (e.clientX - size / 2) + 'px';
+            star.style.top = (e.clientY - size / 2) + 'px';
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+            star.style.setProperty('--dy', (Math.sin(angle) * dist - 20) + 'px');
+            star.innerHTML = shape;
+            document.body.appendChild(star);
+            (function(el) {
+                setTimeout(function() { el.remove(); }, 800);
+            })(star);
+        }
+    });
+})();
+</script>
+<script>
+(function() {
+    document.querySelectorAll('.article-list article').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            var link = card.querySelector('.article-title a');
+            if (link) window.location = link.href;
+        });
+    });
+})();
 </script>
 
     </body>

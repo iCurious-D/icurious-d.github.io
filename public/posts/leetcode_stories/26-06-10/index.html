@@ -1,18 +1,20 @@
 <!DOCTYPE html>
-<html lang="zh" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-cn" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮从堆到树：一道题的两个平行宇宙 今天的任务卷轴——3691. 最大子数组总值 II——规则赫然写着：选恰好 k 个不同的非空子数组，可以重叠，同一个子数组不能被选择超过一次。求最大极差之和。\n我差点笑出声。这不就是老勇者昨天拿红笔在我羊皮纸上改出来的那道“如果加上约束”吗？连标点符号都没改！直接上昨天那套代码——隧道模型 + 贪心堆 + 稀疏表。稀疏表预处理 O(n log n)，每条隧道初始最深段入堆，候选池恒定 n 个，每次弹堆顶累加极差、同一隧道缩一格压回，k 次堆操作 O(k log n)。提交，AC，一气呵成。\n我往椅背上一靠，长长地舒了一口气。今天这副本过得这么快，说白了还得感谢老勇者昨天提前给我开的小灶，跟考前泄题似的。我严重怀疑这老头是策划部的内鬼。我端起茶杯，想着今天终于不用担心被弹脑瓜崩——毕竟答案是他自己教的，他总不能弹自己吧？\n茶杯刚端到嘴边，茶水表面映出一个熟悉的身影。我手一抖，滚烫的茶水差点浇在裤裆上。老勇者正站在我身后，低头看着我的屏幕，表情介于&quot;孺子可教&quot;和&quot;你还差得远&quot;之间。\n&ldquo;大、大师……&ldquo;我结结巴巴地说道，&ldquo;你怎么又来了？！这题不就是昨天你红笔改的那道吗，没加新约束，原封不动！我用的是你教的隧道模型加堆加稀疏表，一个变量都没改！&rdquo;\n&ldquo;别紧张。&ldquo;老勇者笑了笑，在我肩上轻轻拍了拍——终于不是弹脑瓜崩，&ldquo;昨天教你的，今天能直接用上，说明你记住了，理解了&rsquo;固定一端、贪心另一端&rsquo;的精髓。我来不是为了弹你，是来问你一个问题。&rdquo;\n&ldquo;问题？&ldquo;我心里咯噔一下，毕竟老勇者的&quot;问题&quot;通常意味着&quot;你又掉坑里了&quot;或者&quot;还有更优解&rdquo;。\n老勇者指了指我的代码：&ldquo;隧道模型加堆，k 次堆操作 O(k log n)，k 到十万的时候千万级操作量，常数拉满。如果哪天 k 飙到 10^6、10^7，你这个堆还撑得住吗？”\n我倒吸一口凉气。说实话，我压根没想过这个问题。能过就行，还要什么自行车？但老勇者这么一说，我突然意识到：这解法复杂度跟 k 线性相关，k 越大越慢。现在 k ≤ 10^5 能过，但如果 k 到了 10^6、10^7 呢？如果这是一道交互题，要求在线查询呢？\n&ldquo;真正的勇士，&ldquo;老勇者缓缓开口，&ldquo;敢于直面惨淡的复杂度，敢于正视淋漓的 TLE。如果有一种方法，复杂度跟 k 彻底解耦，能在 O(n log n) 的时间内解决，不管 k 有多大都稳如泰山——你想不想学？&rdquo;\n我手里的茶杯&quot;啪&quot;地掉在地上：&ldquo;O(n log n)？跟 k 无关？这都违反信息论了吧？！&rdquo;\n老勇者狡黠一笑，&rdquo;二分答案，上古时代用来处理 Top-K 问题的禁忌魔法。它的核心思想简单得反直觉：不直接找那 k 个子数组，而是先找到第 k 大的极差值到底是多少，然后分类统计。\n&ldquo;等等，你是说……我不需要知道前 k 名分别是谁，只需要知道第 k 名的分数是多少？” 我感觉自己的世界观在崩塌。\n">
 <title>leetcode3691从堆到树：一道题的两个平行宇宙</title>
 
-<link rel='canonical' href='http://localhost:1313/posts/leetcode_stories/26-06-10/'>
+<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-10/'>
 
-<link rel="stylesheet" href="/scss/style.min.485fb8eca8d71cfbdc6499aece42d19b996c3b02b731d4ad45d5bb33357d847d.css"><meta property='og:title' content="leetcode3691从堆到树：一道题的两个平行宇宙">
+<link rel="stylesheet" href="/scss/style.min.86e4926d6336cd3b00711635ecc0740f3109784c840a3f4cd56f34c775673afa.css"><meta property='og:title' content="leetcode3691从堆到树：一道题的两个平行宇宙">
 <meta property='og:description' content="🎮从堆到树：一道题的两个平行宇宙 今天的任务卷轴——3691. 最大子数组总值 II——规则赫然写着：选恰好 k 个不同的非空子数组，可以重叠，同一个子数组不能被选择超过一次。求最大极差之和。\n我差点笑出声。这不就是老勇者昨天拿红笔在我羊皮纸上改出来的那道“如果加上约束”吗？连标点符号都没改！直接上昨天那套代码——隧道模型 + 贪心堆 + 稀疏表。稀疏表预处理 O(n log n)，每条隧道初始最深段入堆，候选池恒定 n 个，每次弹堆顶累加极差、同一隧道缩一格压回，k 次堆操作 O(k log n)。提交，AC，一气呵成。\n我往椅背上一靠，长长地舒了一口气。今天这副本过得这么快，说白了还得感谢老勇者昨天提前给我开的小灶，跟考前泄题似的。我严重怀疑这老头是策划部的内鬼。我端起茶杯，想着今天终于不用担心被弹脑瓜崩——毕竟答案是他自己教的，他总不能弹自己吧？\n茶杯刚端到嘴边，茶水表面映出一个熟悉的身影。我手一抖，滚烫的茶水差点浇在裤裆上。老勇者正站在我身后，低头看着我的屏幕，表情介于&quot;孺子可教&quot;和&quot;你还差得远&quot;之间。\n&ldquo;大、大师……&ldquo;我结结巴巴地说道，&ldquo;你怎么又来了？！这题不就是昨天你红笔改的那道吗，没加新约束，原封不动！我用的是你教的隧道模型加堆加稀疏表，一个变量都没改！&rdquo;\n&ldquo;别紧张。&ldquo;老勇者笑了笑，在我肩上轻轻拍了拍——终于不是弹脑瓜崩，&ldquo;昨天教你的，今天能直接用上，说明你记住了，理解了&rsquo;固定一端、贪心另一端&rsquo;的精髓。我来不是为了弹你，是来问你一个问题。&rdquo;\n&ldquo;问题？&ldquo;我心里咯噔一下，毕竟老勇者的&quot;问题&quot;通常意味着&quot;你又掉坑里了&quot;或者&quot;还有更优解&rdquo;。\n老勇者指了指我的代码：&ldquo;隧道模型加堆，k 次堆操作 O(k log n)，k 到十万的时候千万级操作量，常数拉满。如果哪天 k 飙到 10^6、10^7，你这个堆还撑得住吗？”\n我倒吸一口凉气。说实话，我压根没想过这个问题。能过就行，还要什么自行车？但老勇者这么一说，我突然意识到：这解法复杂度跟 k 线性相关，k 越大越慢。现在 k ≤ 10^5 能过，但如果 k 到了 10^6、10^7 呢？如果这是一道交互题，要求在线查询呢？\n&ldquo;真正的勇士，&ldquo;老勇者缓缓开口，&ldquo;敢于直面惨淡的复杂度，敢于正视淋漓的 TLE。如果有一种方法，复杂度跟 k 彻底解耦，能在 O(n log n) 的时间内解决，不管 k 有多大都稳如泰山——你想不想学？&rdquo;\n我手里的茶杯&quot;啪&quot;地掉在地上：&ldquo;O(n log n)？跟 k 无关？这都违反信息论了吧？！&rdquo;\n老勇者狡黠一笑，&rdquo;二分答案，上古时代用来处理 Top-K 问题的禁忌魔法。它的核心思想简单得反直觉：不直接找那 k 个子数组，而是先找到第 k 大的极差值到底是多少，然后分类统计。\n&ldquo;等等，你是说……我不需要知道前 k 名分别是谁，只需要知道第 k 名的分数是多少？” 我感觉自己的世界观在崩塌。\n">
-<meta property='og:url' content='http://localhost:1313/posts/leetcode_stories/26-06-10/'>
-<meta property='og:site_name' content='我的小站'>
+<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-10/'>
+<meta property='og:site_name' content='gugugu'>
 <meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-10T16:10:20&#43;08:00'/><meta property='article:modified_time' content='2026-06-10T16:10:20&#43;08:00'/>
 <meta name="twitter:title" content="leetcode3691从堆到树：一道题的两个平行宇宙">
 <meta name="twitter:description" content="🎮从堆到树：一道题的两个平行宇宙 今天的任务卷轴——3691. 最大子数组总值 II——规则赫然写着：选恰好 k 个不同的非空子数组，可以重叠，同一个子数组不能被选择超过一次。求最大极差之和。\n我差点笑出声。这不就是老勇者昨天拿红笔在我羊皮纸上改出来的那道“如果加上约束”吗？连标点符号都没改！直接上昨天那套代码——隧道模型 + 贪心堆 + 稀疏表。稀疏表预处理 O(n log n)，每条隧道初始最深段入堆，候选池恒定 n 个，每次弹堆顶累加极差、同一隧道缩一格压回，k 次堆操作 O(k log n)。提交，AC，一气呵成。\n我往椅背上一靠，长长地舒了一口气。今天这副本过得这么快，说白了还得感谢老勇者昨天提前给我开的小灶，跟考前泄题似的。我严重怀疑这老头是策划部的内鬼。我端起茶杯，想着今天终于不用担心被弹脑瓜崩——毕竟答案是他自己教的，他总不能弹自己吧？\n茶杯刚端到嘴边，茶水表面映出一个熟悉的身影。我手一抖，滚烫的茶水差点浇在裤裆上。老勇者正站在我身后，低头看着我的屏幕，表情介于&quot;孺子可教&quot;和&quot;你还差得远&quot;之间。\n&ldquo;大、大师……&ldquo;我结结巴巴地说道，&ldquo;你怎么又来了？！这题不就是昨天你红笔改的那道吗，没加新约束，原封不动！我用的是你教的隧道模型加堆加稀疏表，一个变量都没改！&rdquo;\n&ldquo;别紧张。&ldquo;老勇者笑了笑，在我肩上轻轻拍了拍——终于不是弹脑瓜崩，&ldquo;昨天教你的，今天能直接用上，说明你记住了，理解了&rsquo;固定一端、贪心另一端&rsquo;的精髓。我来不是为了弹你，是来问你一个问题。&rdquo;\n&ldquo;问题？&ldquo;我心里咯噔一下，毕竟老勇者的&quot;问题&quot;通常意味着&quot;你又掉坑里了&quot;或者&quot;还有更优解&rdquo;。\n老勇者指了指我的代码：&ldquo;隧道模型加堆，k 次堆操作 O(k log n)，k 到十万的时候千万级操作量，常数拉满。如果哪天 k 飙到 10^6、10^7，你这个堆还撑得住吗？”\n我倒吸一口凉气。说实话，我压根没想过这个问题。能过就行，还要什么自行车？但老勇者这么一说，我突然意识到：这解法复杂度跟 k 线性相关，k 越大越慢。现在 k ≤ 10^5 能过，但如果 k 到了 10^6、10^7 呢？如果这是一道交互题，要求在线查询呢？\n&ldquo;真正的勇士，&ldquo;老勇者缓缓开口，&ldquo;敢于直面惨淡的复杂度，敢于正视淋漓的 TLE。如果有一种方法，复杂度跟 k 彻底解耦，能在 O(n log n) 的时间内解决，不管 k 有多大都稳如泰山——你想不想学？&rdquo;\n我手里的茶杯&quot;啪&quot;地掉在地上：&ldquo;O(n log n)？跟 k 无关？这都违反信息论了吧？！&rdquo;\n老勇者狡黠一笑，&rdquo;二分答案，上古时代用来处理 Top-K 问题的禁忌魔法。它的核心思想简单得反直觉：不直接找那 k 个子数组，而是先找到第 k 大的极差值到底是多少，然后分类统计。\n&ldquo;等等，你是说……我不需要知道前 k 名分别是谁，只需要知道第 k 名的分数是多少？” 我感觉自己的世界观在崩塌。\n">
+    <link rel="shortcut icon" href="/favicon.svg" />
+
     </head>
     <body class="
     article-page
@@ -40,7 +42,7 @@
     })();
 </script>
 <div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky ">
-    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="Toggle Menu">
+    <button class="hamburger hamburger--spin" type="button" id="toggle-menu" aria-label="切换菜单">
         <span class="hamburger-box">
             <span class="hamburger-inner"></span>
         </span>
@@ -69,8 +71,8 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">我的小站</a></h1>
-            <h2 class="site-description">喜欢讲故事的咕咕咕</h2>
+            <h1 class="site-name"><a href="/">gugugu</a></h1>
+            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
         </div>
     </header><ol class="menu-social">
             
@@ -144,6 +146,39 @@ unicode: "ecde"
         
         
         <li >
+            <a href='/projects/' >
+                
+                
+                
+                    <!--
+tags: [cube, app, application, package, container]
+version: "1.0"
+unicode: "ea45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="32"
+  height="32"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#607d8b"
+  stroke-width="1"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" />
+  <path d="M12 12l8 -4.5" />
+  <path d="M12 12l0 9" />
+  <path d="M12 12l-8 -4.5" />
+</svg>
+
+                
+                <span>项目</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/posts/' >
                 
                 
@@ -210,7 +245,7 @@ unicode: "ea45"
         
         
         <li >
-            <a href='/notes' >
+            <a href='/kids/' >
                 
                 
                 
@@ -237,7 +272,7 @@ unicode: "eb96"
 </svg>
 
                 
-                <span>笔记</span>
+                <span>趣学</span>
             </a>
         </li>
         
@@ -295,7 +330,7 @@ unicode: "eb49"
 
 
 
-                        <span>Dark Mode</span>
+                        <span>暗色模式</span>
                     </li>
                 
             </ol>
@@ -320,7 +355,7 @@ unicode: "eb49"
 
 
         </div>
-        <h2 class="widget-title section-title">Table of contents</h2>
+        <h2 class="widget-title section-title">目录</h2>
         
         <div class="widget--toc">
             <nav id="TableOfContents">
@@ -351,8 +386,8 @@ unicode: "eb49"
             
             
             
-            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3%E6%95%85%E4%BA%8B/" style="background-color: hsl(188, 60%, 84%); color: hsl(188, 60%, 15%);">
-                Leetcode题解故事
+            <a href="/categories/leetcode%E9%A2%98%E8%A7%A3/" style="background-color: hsl(227, 60%, 84%); color: hsl(227, 60%, 15%);">
+                Leetcode题解
             </a>
         
     </header>
@@ -382,7 +417,7 @@ unicode: "eb49"
   <path d="M3 11h16" />
   <path d="M18 16.496v1.504l1 1" />
 </svg>
-                <time class="article-time--published" datetime='2026-06-10T16:10:20&#43;08:00'>6月 10, 2026</time>
+                <time class="article-time--published" datetime='2026-06-10T16:10:20&#43;08:00'>Jun 10, 2026</time>
             </div>
         
 
@@ -397,7 +432,7 @@ unicode: "eb49"
 
 
                 <time class="article-time--reading">
-                    7 minute read
+                    7 min 阅读
                 </time>
             </div>
         
@@ -722,7 +757,7 @@ unicode: "eb49"
     
 
 <aside class="related-content--wrapper">
-    <h2 class="section-title">Related content</h2>
+    <h2 class="section-title">相关文章</h2>
     <div class="related-content">
         <div class="flex article-list--tile">
             
@@ -855,12 +890,12 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 我的小站
+        2026 gugugu
     </section>
     
     <section class="powerby">
-        Built with <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> <br />
-        Theme <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> designed by <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a>
+        使用 <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> 构建 <br />
+        主题 <b><a href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener" data-version="3.34.2">Stack</a></b> 由 <a href="https://jimmycai.com" target="_blank" rel="noopener">Jimmy</a> 设计
     </section>
 </footer>
 
@@ -950,7 +985,7 @@ unicode: "eb49"
                 src="https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js"integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z&#43;KMkF24hUW8WePSA9HM="crossorigin="anonymous"
                 
                 >
-            </script><script type="text/javascript" src="/ts/main.1e83c6934a4e4d8e25d1aae62be11cac1521a04cf5a0f4bbc4c44f3429595679.js" defer></script>
+            </script><script type="text/javascript" src="/ts/main.2db790992f3b20090509a78a8809578bf0632ae99498dd4dc03d3f15ffe700f8.js" defer></script>
 <script>
     (function () {
         const customFont = document.createElement('link');
@@ -961,6 +996,64 @@ unicode: "eb49"
 
         document.head.appendChild(customFont);
     }());
+</script>
+<style>
+.click-star {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    animation: star-fly 0.75s ease-out forwards;
+}
+@keyframes star-fly {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0) rotate(360deg); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+    var COLORS = ['#FFD700', '#FF6B6B', '#4ECDC4', '#A78BFA', '#FF9F43', '#F368E0', '#48DBFB'];
+    var SHAPES = [
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><path d="M12 0L14.59 8.41 23 12 14.59 15.59 12 24 9.41 15.59 1 12 9.41 8.41z"/></svg>',
+        '<svg viewBox="0 0 24 24" fill="CL"><circle cx="12" cy="12" r="10"/></svg>'
+    ];
+
+    document.addEventListener('click', function(e) {
+        var count = 8 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < count; i++) {
+            var star = document.createElement('div');
+            star.className = 'click-star';
+            var color = COLORS[Math.floor(Math.random() * COLORS.length)];
+            var shape = SHAPES[Math.floor(Math.random() * SHAPES.length)].replace('CL', color);
+            var size = 8 + Math.floor(Math.random() * 14);
+            var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+            var dist = 30 + Math.random() * 60;
+
+            star.style.left = (e.clientX - size / 2) + 'px';
+            star.style.top = (e.clientY - size / 2) + 'px';
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+            star.style.setProperty('--dy', (Math.sin(angle) * dist - 20) + 'px');
+            star.innerHTML = shape;
+            document.body.appendChild(star);
+            (function(el) {
+                setTimeout(function() { el.remove(); }, 800);
+            })(star);
+        }
+    });
+})();
+</script>
+<script>
+(function() {
+    document.querySelectorAll('.article-list article').forEach(function(card) {
+        card.addEventListener('click', function(e) {
+            if (e.target.closest('a')) return;
+            var link = card.querySelector('.article-title a');
+            if (link) window.location = link.href;
+        });
+    });
+})();
 </script>
 
     </body>
