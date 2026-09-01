@@ -1,6 +1,7 @@
 # hugo.yaml
 baseURL: http://icurious-d.github.io/  # CI 部署时会被 GitHub Actions 自动覆盖，无需手动修改
-locale: zh-cn      # 语言设为中文（匹配主题 i18n/zh-cn.yaml）
+defaultContentLanguage: zh-cn      # 默认语言，加载主题 i18n/zh-cn.yaml
+defaultContentLanguageInSubdir: false
 title: gugugu           # 网站标题
 # theme: hugo-theme-stack      # 主题名称，与模块名一致
 
