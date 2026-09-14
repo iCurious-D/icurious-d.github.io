@@ -1,4 +1,5 @@
 <article class="homepage-card">
+    <a class="homepage-card__link" href="{{ .RelPermalink }}" aria-label="{{ .Title }}"></a>
     <div class="homepage-card__content">
         {{ $icon := .Params.icon }}
         {{ if not $icon }}

@@ -450,16 +450,26 @@
         background: var(--card-background);
         box-shadow: var(--shadow-l1);
         transition: box-shadow 0.3s ease, border-left-color 0.3s ease;
+        position: relative;
 
         &:hover {
             border-left-color: var(--accent-color);
             box-shadow: var(--shadow-l2);
         }
 
+        &__link {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            border-radius: var(--card-border-radius);
+        }
+
         &__content {
             display: flex;
             flex-direction: column;
             gap: 16px;
+            position: relative;
+            z-index: 2;
         }
 
         &__title {

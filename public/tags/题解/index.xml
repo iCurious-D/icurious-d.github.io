@@ -6,7 +6,1142 @@
         <description>Recent content in 题解 on gugugu</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>zh-cn</language>
-        <lastBuildDate>Mon, 31 Aug 2026 10:55:45 +0800</lastBuildDate><atom:link href="http://localhost:1315/tags/%E9%A2%98%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 11 Sep 2026 15:23:01 +0800</lastBuildDate><atom:link href="http://localhost:1315/tags/%E9%A2%98%E8%A7%A3/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>leetcode3483 力扣发回血包，你还不接？ </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-11/</link>
+        <pubDate>Fri, 11 Sep 2026 15:23:01 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-11/</guid>
+        <description>&lt;h2 id=&#34;力扣发回血包你还不接&#34;&gt;力扣发回血包，你还不接？
+&lt;/h2&gt;&lt;p&gt;读完题干，你沉默了三秒。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;三位偶数、不能前导零、每个数字用一次、求不同数量。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;你开始怀疑自己是不是阅读理解退化了——毕竟上次做力扣还是昨天，而昨天的你还在二叉树上爬。今天它只是数三位偶数。&lt;/p&gt;
+&lt;p&gt;当你看到数据范围：&lt;code&gt;3 &amp;lt;= digits.length &amp;lt;= 10&lt;/code&gt;，你悟了。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;digits&lt;/code&gt; 最多 10 个数字，全排列选三个最多 &lt;code&gt;10P3 = 720&lt;/code&gt; 种。三位偶数从 &lt;code&gt;100&lt;/code&gt; 到 &lt;code&gt;998&lt;/code&gt;，总共也就 &lt;code&gt;450&lt;/code&gt; 个。&lt;/p&gt;
+&lt;p&gt;今天的力扣，是来给你发回血包的。&lt;/p&gt;
+&lt;p&gt;它甚至贴心到，把四种经典陷阱都塞进了示例里：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;[1,2,3,4]&lt;/code&gt; → 12：新手教程关。NPC 站桩让你练平A，有手就能过。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[0,2,2]&lt;/code&gt; → 2：边界关。0 想当百位，系统：你当 007 呢？前导零懂不懂？&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[6,6,6]&lt;/code&gt; → 1：库存关。三个 6 凑一个 666，老六独美。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;[1,3,5]&lt;/code&gt; → 0：劝退关。全奇数站一起，像极了一排 if 条件全不满足——直接 return 0。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;既然力扣今天这么坦诚，你也不搞什么组合数学分类讨论了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解法一：暴力美学——全排列一把梭&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;数据这么小，直接 &lt;code&gt;permutations&lt;/code&gt; 全排列选三个，拼成数，筛掉前导零，筛掉奇数，最后 &lt;code&gt;set&lt;/code&gt; 去重。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;totalNumbers&lt;/span&gt;(digits: List[int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; len(set(a &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; b &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; c 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                   &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; a, b, c &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; permutations(digits, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; a &lt;span style=&#34;color:#f92672&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;))    
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一行暴力解。属于是&amp;quot;我知道这题很水，所以我也懒得优化&amp;quot;的松弛感。&lt;/p&gt;
+&lt;p&gt;缺点是&amp;quot;全试一遍&amp;quot;会生成一堆废数——奇数、前导零、重复排列——然后再丢掉。&lt;/p&gt;
+&lt;p&gt;但话说回来，就 720 种情况，全试一遍怎么了？又不是 720 万种。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解法二：计数数组——逐位构造，零废操作&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;能不能不生成废数？能。&lt;/p&gt;
+&lt;p&gt;开一个长度为 10 的数组 &lt;code&gt;cnt&lt;/code&gt;，&lt;code&gt;cnt[d]&lt;/code&gt; 表示数字 &lt;code&gt;d&lt;/code&gt; 还剩几个没用。然后逐位选：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;百位：&lt;code&gt;1~9&lt;/code&gt;，有库存就选，天然没前导零&lt;/li&gt;
+&lt;li&gt;十位：&lt;code&gt;0~9&lt;/code&gt;，有库存就选，全场最自由的工位&lt;/li&gt;
+&lt;li&gt;个位：&lt;code&gt;0, 2, 4, 6, 8&lt;/code&gt;，只从偶数里挑，有库存就计数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;选一个扣一个库存，回溯加回来。&lt;/p&gt;
+&lt;p&gt;每个 &lt;code&gt;(百, 十, 个)&lt;/code&gt; 组合天然不重复，不需要 set 去重——属于是&amp;quot;我从不内耗，因为我根本不重复&amp;quot;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;totalNumbers&lt;/span&gt;(digits: List[int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cnt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; d &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; digits:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        cnt[d] &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; h &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;):  			&lt;span style=&#34;color:#75715e&#34;&gt;# 百位：1~9，不能前导零&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; cnt[h]: &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        cnt[h] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; t &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;):  			&lt;span style=&#34;color:#75715e&#34;&gt;# 十位：0~9，自由人&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; cnt[t]: &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cnt[t] &lt;span style=&#34;color:#f92672&#34;&gt;-=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; u &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;):  	&lt;span style=&#34;color:#75715e&#34;&gt;# 个位：必须是偶数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; cnt[u]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    ans &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cnt[t] &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        cnt[h] &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; ans
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;9 × 10 × 5 = 450&lt;/code&gt; 次操作，常数级复杂度。&lt;/p&gt;
+&lt;p&gt;今天力扣甚至没给你一个能超时的机会。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode2265 我在树下做了个梦，梦见自己被卷成了二叉树节点 </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-10/</link>
+        <pubDate>Thu, 10 Sep 2026 16:27:14 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-10/</guid>
+        <description>&lt;h2 id=&#34;我在树下做了个梦梦见自己被卷成了二叉树节点&#34;&gt;我在树下做了个梦，梦见自己被卷成了二叉树节点
+&lt;/h2&gt;&lt;hr&gt;
+&lt;p&gt;产品经理第 17 次改需求的时候，我正在改第 16 版的接口。&lt;/p&gt;
+&lt;p&gt;我是一个后端。这个职业的核心竞争力，就是永远比产品经理慢一版。&lt;/p&gt;
+&lt;p&gt;钉钉弹出来，我甚至不用点开就知道——又是“很简单”。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“这个统计功能很简单，就在树上数一下符合条件的节点数，明天早上老板要看，辛苦啦～”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;凌晨 2:47。我拿起咖啡又放下——心脏已经开始打碟，再灌一杯就是 ICU 直通车。&lt;/p&gt;
+&lt;p&gt;我关掉 IDE，决定下楼透口气。&lt;/p&gt;
+&lt;p&gt;凌晨的写字楼大堂空得像被格式化过。保安在打瞌睡，旋转门转得比我的职业发展还慢。我走到楼下那排梧桐树旁边，挑了棵最粗的靠着，打算眯五分钟。&lt;/p&gt;
+&lt;p&gt;然后，我睡着了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;入梦一棵树把我收了&#34;&gt;入梦：一棵树把我收了
+&lt;/h4&gt;&lt;p&gt;再睁眼的时候，我下意识去摸手机，想看看钉钉有没有炸。&lt;/p&gt;
+&lt;p&gt;结果摸到的不是手机，是一根草——比我胳膊还粗，叶片上的露水像一颗悬在半空的玻璃球。&lt;/p&gt;
+&lt;p&gt;我愣了两秒，坐起来，发现脚边的沙子像砖块，远处的草坪像原始森林，一只蚂蚁从旁边跑过，体型跟我差不多。&lt;/p&gt;
+&lt;p&gt;这什么魔幻剧情？！我变小了？&lt;/p&gt;
+&lt;p&gt;我恍惚地往后一靠——刚才那棵梧桐树的树干，现在就像一面墙，树皮纹路深得能攀岩。&lt;/p&gt;
+&lt;p&gt;然后我抬头，看到了更离谱的。&lt;/p&gt;
+&lt;p&gt;这棵树是&lt;strong&gt;倒过来长的&lt;/strong&gt;——根扎天上，枝叶铺地，像有人一键 &lt;code&gt;Ctrl+Z&lt;/code&gt; 到了盘古开天之前。树上传来一个声音，慢悠悠的，像从很深很深的调用栈底部冒上来：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“欢迎来到&lt;strong&gt;倒立二叉树宇宙&lt;/strong&gt;。我是根节点，你可以叫我 &lt;code&gt;root&lt;/code&gt;。”
+“你的工位已经分配好了，就在我下面那层。”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我循声找过去，倒垂的树干上坐着一个老头，两条腿悬在半空晃着——白胡子长得像没清理过的依赖链，老花镜后面的眼睛精得像个 debug 了三十年的老手。&lt;/p&gt;
+&lt;p&gt;“等等——” 我试图冷静下来：“我不是节点，我是后端工程师。”&lt;/p&gt;
+&lt;p&gt;老头冷笑了一声：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“后端？后端的世界，谁不是节点？”
+“你的直属领导是你的父节点，你的直属下属是你的子节点——一个左膀一个右臂。”
+“没有下属的就是叶子节点——底层打工人，背锅终点站。”
+“没有父节点的就是根节点——CEO，所有锅的最终归宿。”
+“你，早就活在一棵二叉树里了。”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我沉默了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;规则节点的价值对齐&#34;&gt;规则：节点的价值对齐
+&lt;/h4&gt;&lt;p&gt;老头扔给我一份《二叉树生存手册》，让我翻到第 2265 条：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;每个节点计算自己子树的平均值（&lt;strong&gt;向下取整&lt;/strong&gt;）。
+如果你的值恰好等于这个平均值，你就是&amp;quot;天选平均打工人&amp;quot;。
+如果不等——比平均高，卷王；比平均低，混子。统统要被喊去谈话。
+谈话内容通常是：“你对自己的定位是不是有点偏差？”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我心想，这不就是绩效考核？&lt;/p&gt;
+&lt;p&gt;老头瞅了我一眼：“什么考核，这叫‘节点价值对齐’。”&lt;/p&gt;
+&lt;p&gt;然后他指了指下面：“别愣了，你的左膀右臂已经在算了。”&lt;/p&gt;
+&lt;p&gt;我低头一看——脚底下还真挂着两个小节点，一左一右。左边那个节点工号 &lt;code&gt;8&lt;/code&gt;——正在掰手指：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;我子树有 &lt;code&gt;8, 0, 1&lt;/code&gt;，总和 9，3 个节点——&lt;code&gt;(9， 3)&lt;/code&gt;。平均 &lt;code&gt;9 // 3 = 3&lt;/code&gt;。我是 8，不等于 3，卷王。&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;他叹了口气，像极了上个月绩效 A 被老板偷偷喊过去的同事——太强了，强到团队平均配不上。&lt;/p&gt;
+&lt;p&gt;旁边右边那个工号 &lt;code&gt;5&lt;/code&gt;——淡定得多：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;我子树有 &lt;code&gt;5, 6&lt;/code&gt;，总和 11，2 个节点——&lt;code&gt;(11， 2)&lt;/code&gt;。平均 &lt;code&gt;11 // 2 = 5&lt;/code&gt;。我是 5，等于 5，天选。&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我注意到一个细节：&lt;code&gt;11 // 2 = 5&lt;/code&gt;，不是 5.5。&lt;strong&gt;向下取整&lt;/strong&gt;。小数点后面直接砍。&lt;/p&gt;
+&lt;p&gt;我：“所以绩效 3.9 的打工人，在公司眼里只有 3？”&lt;/p&gt;
+&lt;p&gt;老头：“只舍不入，你以为年终奖的 0.9 是白来的？”&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;递归层层甩锅的艺术&#34;&gt;递归：层层甩锅的艺术
+&lt;/h4&gt;&lt;p&gt;我还想吐槽，老头敲了敲树皮：“别光顾着笑，你那俩下属把数据包举半天了。”&lt;/p&gt;
+&lt;p&gt;我低头一看——左边工号 &lt;code&gt;8&lt;/code&gt; 手里攥着 &lt;code&gt;(9, 3)&lt;/code&gt;，右边工号 &lt;code&gt;5&lt;/code&gt; 手里攥着 &lt;code&gt;(11, 2)&lt;/code&gt;，俩人仰着头看我，表情像极了周五下午等我 code review 的实习生。&lt;/p&gt;
+&lt;p&gt;“&lt;strong&gt;后序遍历&lt;/strong&gt;的规矩，”老头说，“左右先算完，结果往上一交，就轮到你了。接住他俩的包，加上自己，算平均，判断，打包，往上传——这活你熟。”&lt;/p&gt;
+&lt;p&gt;他顿了顿，又补了一刀：“翻译成人话就是：先被左边下属折磨，再被右边下属折磨，最后自己折磨自己。”&lt;/p&gt;
+&lt;p&gt;我怀疑这老头是不是偷看了我的钉钉日志。&lt;/p&gt;
+&lt;p&gt;但他说得没错——我的左膀 &lt;code&gt;8&lt;/code&gt; 干的是这个，右臂 &lt;code&gt;5&lt;/code&gt; 干的也是这个，现在轮到我了，还是这个。整个团队做的都是同一件事，只不过每个人管的范围不一样。&lt;/p&gt;
+&lt;p&gt;这不就是递归吗？定义 &lt;code&gt;dfs(node)&lt;/code&gt;，给它一个节点，返回一个数据包 &lt;code&gt;(子树总和, 子树节点数)&lt;/code&gt;。左子树调一次，右子树调一次，等包到齐，加上自己，算完再往上传。&lt;/p&gt;
+&lt;p&gt;一层一层往上甩，谁也别想跑。&lt;/p&gt;
+&lt;p&gt;“就像层层甩锅——”我喃喃自语，“空节点没锅可背，返回 &lt;code&gt;(0, 0)&lt;/code&gt;。其它节点，左右两口锅全接住。”&lt;/p&gt;
+&lt;p&gt;老头点点头，但又很快纠正道：&amp;ldquo;我们二叉树的世界，可没有锅，只有数据包。”&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;averageOfSubtree&lt;/span&gt;(root: Optional[TreeNode]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dfs&lt;/span&gt;(node: TreeNode) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (int, int):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;nonlocal&lt;/span&gt; ans
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; node:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        left_sum, left_count &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dfs(node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;left)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        right_sum, right_count &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dfs(node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;right)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        total_sum &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; left_sum &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; right_sum &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        total_count &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; left_count &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; right_count &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        avg &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; total_sum &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; total_count
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; node&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;val &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; avg:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ans &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; total_sum, total_count
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dfs(root)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; ans
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;时间复杂度 O(n)，每个节点只被访问一次，每个节点只汇报一次。
+空间复杂度 O(h)，&lt;code&gt;h&lt;/code&gt; 是树高。递归深度就是树的高度——树有多深，锅就甩得有多远。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;梦醒风没接我的话&#34;&gt;梦醒：风没接我的话
+&lt;/h4&gt;&lt;p&gt;就在我准备问老头“那我到底算不算天选平均打工人”的时候，一阵风吹过。&lt;/p&gt;
+&lt;p&gt;我醒了。&lt;/p&gt;
+&lt;p&gt;我还是那棵梧桐树下，还是凌晨三点。保安的呼噜声从大堂里传出来，旋转门停在了一个尴尬的角度。&lt;/p&gt;
+&lt;p&gt;我摸了摸嘴角——没流口水，但脸上有树皮的印子。大概是睡着的时候拿脸蹭的。&lt;/p&gt;
+&lt;p&gt;起身之前，我好像听到风中隐约传来一句：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;“记住，二叉树的问题，大部分都能用递归解决。”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;我在心里默默接了一句：那产品经理的问题呢？&lt;/p&gt;
+&lt;p&gt;风没回答。大概是超时了。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3871 星星还没数，力扣先涨了十个数量级 </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-09/</link>
+        <pubDate>Wed, 09 Sep 2026 10:46:26 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-09/</guid>
+        <description>&lt;h2 id=&#34;星星还没数力扣先涨了十个数量级&#34;&gt;星星还没数，力扣先涨了十个数量级
+&lt;/h2&gt;&lt;p&gt;昨天(3870)的 &lt;code&gt;n&lt;/code&gt; 上限还是 &lt;code&gt;10^5&lt;/code&gt;，今天(3871)就膨胀到了 &lt;code&gt;10^15&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;好在你昨天多想了一步，段位线解法今天原装上场：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;countCommas&lt;/span&gt;(n: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    line &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; line &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; n:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ans &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; line &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        line &lt;span style=&#34;color:#f92672&#34;&gt;*=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; ans
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;10^15&lt;/code&gt; 也就五条段位线，循环五次就搞定。&lt;/p&gt;
+&lt;p&gt;女朋友凑过来：“昨天的题原封不动？力扣这是在水题吗？”&lt;/p&gt;
+&lt;p&gt;你义正严辞：“不，力扣是在考验我昨天是真懂还是假懂。”&lt;/p&gt;
+&lt;p&gt;她瞥了你一眼：“那你昨天在题解里写的那个一行代码呢？”&lt;/p&gt;
+&lt;p&gt;你抬头望天：“那个啊，那是限定皮肤，今天过期了。”&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3870 数星星？不如在力扣上数逗号 </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-08/</link>
+        <pubDate>Tue, 08 Sep 2026 13:45:14 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-08/</guid>
+        <description>&lt;h2 id=&#34;数星星不如在力扣上数逗号&#34;&gt;数星星？不如在力扣上数逗号
+&lt;/h2&gt;&lt;p&gt;“今晚月色真美，适合数星星。” 女朋友靠在阳台栏杆上，语气温柔。&lt;/p&gt;
+&lt;p&gt;你头也不回，键盘敲得飞起：“我在力扣上数逗号呢，没空。”&lt;/p&gt;
+&lt;p&gt;她愣了两秒，凑过来看了眼屏幕：“数逗号？就这？不是有手就行？”&lt;/p&gt;
+&lt;p&gt;你冷笑一声，默默把测试用例改成 &lt;code&gt;10^15&lt;/code&gt;，准备让她见识一下什么叫“电脑冒烟，图灵机落泪”。&lt;/p&gt;
+&lt;p&gt;结果她根本不给机会，白了你一眼：“你自己慢慢数吧。” 然后转身回屋。&lt;/p&gt;
+&lt;p&gt;你张了张嘴，心里暗自嘀咕：数逗号这件事，哪有那么简单。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;一python-其实早就替你打好逗号了&#34;&gt;一、Python 其实早就替你打好逗号了
+&lt;/h4&gt;&lt;p&gt;先说个冷知识：Python 的格式化字符串其实早就内置了千分位，一个 &lt;code&gt;:,&lt;/code&gt; 就排好。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1234567&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;  		&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#39;1,234,567&amp;#39; &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1234567.891&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;,.2f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; 	&lt;span style=&#34;color:#75715e&#34;&gt;# &amp;#39;1,234,567.89&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;能用现成的绝不手写，数逗号就是一句 &lt;code&gt;.count(&amp;quot;,&amp;quot;)&lt;/code&gt;：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;countCommas&lt;/span&gt;(n: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; sum(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;i&lt;span style=&#34;color:#e6db74&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;,&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;count(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, n &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一行交差，看起来完美。&lt;/p&gt;
+&lt;p&gt;但把 &lt;code&gt;n&lt;/code&gt; 换成 &lt;code&gt;10^15&lt;/code&gt; 试试——它不会报错，只是开始转圈，风扇起飞。按每秒处理一千万个数字来算，&lt;code&gt;10^15&lt;/code&gt; 次要跑三年多，期间还会顺手创建 &lt;code&gt;10^15&lt;/code&gt; 个临时字符串，GC 大概已经在后台崩了。&lt;/p&gt;
+&lt;p&gt;暴力解的价值不是通过，而是告诉你这条路有坑。不过，既然 &lt;code&gt;n&lt;/code&gt; 只有 &lt;code&gt;10^5&lt;/code&gt;，为什么不直接偷个懒？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;二面向数据范围编程的诱惑&#34;&gt;二、面向数据范围编程的诱惑
+&lt;/h4&gt;&lt;p&gt;你瞄了眼提示栏： &lt;code&gt;n &amp;lt;= 10^5&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;数学虽然已经还给体育老师，但这点规律还是看得出来的：&lt;code&gt;10^5&lt;/code&gt; 以内，只有 &lt;code&gt;1000&lt;/code&gt; 这一道坎。过了坎的每个数贡献一个逗号，没过坎的一毛不拔。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;countCommas&lt;/span&gt;(n: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; max(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, n&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;999&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;# 1 &amp;lt;= n &amp;lt;= 10^5&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一行，零循环，击败 100%。你甚至能想象女朋友看到这行代码的表情：“就这？一行？这不确实有手就行吗。”&lt;/p&gt;
+&lt;p&gt;但你清楚，这行代码就像纸糊的盾，只要数据范围一变，就会当场暴毙。&lt;/p&gt;
+&lt;p&gt;当然也可以一路硬编码下去，比如  &lt;code&gt;n &amp;lt;= 10^15&lt;/code&gt;：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;countCommas&lt;/span&gt;(n: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; (max(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;999&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; max(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;999_999&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; max(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;999_999_999&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; max(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;999_999_999_999&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; max(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;999_999_999_999_999&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但这已经不是在写算法了。这是在和数据范围玩“你变我也变”的猫鼠游戏。&lt;/p&gt;
+&lt;p&gt;有没有一种写法，不管 &lt;code&gt;n&lt;/code&gt; 是 &lt;code&gt;10^5&lt;/code&gt; 还是 &lt;code&gt;10^80&lt;/code&gt;，都能一招鲜吃遍天？&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;三别按玩家数按段位线数&#34;&gt;三、别按玩家数，按段位线数
+&lt;/h4&gt;&lt;p&gt;你决定不跟数据范围较劲了，转过头，重新审视逗号本身。&lt;/p&gt;
+&lt;p&gt;想象每个数字都是一个游戏玩家，逗号是它跨过&lt;strong&gt;段位线&lt;/strong&gt;后获得的战利品。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;0 ~ 999&lt;/code&gt;：黑铁选手，一条段位线都没跨过，逗号数 &lt;code&gt;0&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;1000&lt;/code&gt;：晋级白银，跨过第一条段位线，逗号数 &lt;code&gt;1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;1,000,000&lt;/code&gt;：晋级黄金，跨过第二条段位线，逗号数 &lt;code&gt;2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;1,000,000,000&lt;/code&gt;：晋级钻石，跨过第三条段位线，逗号数 &lt;code&gt;3&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;每乘以 &lt;code&gt;1000&lt;/code&gt;，就多一条段位线&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以一个数字的逗号数，其实就是它跨过了多少条段位线。&lt;/p&gt;
+&lt;p&gt;原来你是“按玩家数”：追着每个数字问：“哥们，你有几个逗号？”
+现在你改成“按段位线数”：每条段位线站出来算：“有多少个玩家过了我这条线？”&lt;/p&gt;
+&lt;p&gt;对于一条段位线 &lt;code&gt;T = 1000^k&lt;/code&gt;，所有满足 &lt;code&gt;T &amp;lt;= x &amp;lt;= n&lt;/code&gt; 的数字都跨过了它，也就是说这条段位线贡献了 &lt;code&gt;n - T + 1&lt;/code&gt; 个逗号。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;countCommas&lt;/span&gt;(n: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ans &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    line &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; line &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; n:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ans &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; line &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        line &lt;span style=&#34;color:#f92672&#34;&gt;*=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; ans
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;原来：&lt;code&gt;Σ(每个数字 num ) [ num 有多少个逗号]&lt;/code&gt;，项数是 &lt;code&gt;10^15&lt;/code&gt; 级。&lt;/p&gt;
+&lt;p&gt;现在：&lt;code&gt;Σ(每条段位线 1000^k) [有多少个数字跨过了它]&lt;/code&gt;，项数是 &lt;code&gt;log_1000(n)&lt;/code&gt; 级。&lt;/p&gt;
+&lt;p&gt;同一个答案，换个方向统计，项数从 &lt;code&gt;10^15&lt;/code&gt; 直接塌缩到 &lt;code&gt;5&lt;/code&gt;。就算 &lt;code&gt;n&lt;/code&gt; 取到可观测宇宙原子总数 &lt;code&gt;10^80&lt;/code&gt;，段位线也只有：&lt;code&gt;80 / 3 ≈ 27&lt;/code&gt;，二十七条。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;尾声&#34;&gt;尾声：
+&lt;/h4&gt;&lt;p&gt;你把最终的 &lt;code&gt;while&lt;/code&gt; 循环版本拿给女朋友看。&lt;/p&gt;
+&lt;p&gt;她扫了一眼：“所以你不是在数逗号，是在数段位线？”&lt;/p&gt;
+&lt;p&gt;你有点意外：“哟，悟性不错。”&lt;/p&gt;
+&lt;p&gt;她撇了撇嘴：“那数星星能不能也用这招？银河系有几千亿颗，一条一条旋臂数，会不会快一点？”&lt;/p&gt;
+&lt;p&gt;你盯着她看了两秒，战术沉默。&lt;/p&gt;
+&lt;p&gt;你当然想说：星星不排队，旋臂也不是阈值，这俩根本不是一个模型，但——你忍住了：“这么快就学会建模了？”&lt;/p&gt;
+&lt;p&gt;她头也不回：“废话，我段位比你高。”&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;彩蛋一千还是一这是个国际问题&#34;&gt;彩蛋：一千还是一？这是个国际问题
+&lt;/h4&gt;&lt;p&gt;在德国和许多欧洲国家，千位分隔符是&lt;code&gt;.&lt;/code&gt;句点 ，小数点分隔符是&lt;code&gt;,&lt;/code&gt;逗号。&lt;/p&gt;
+&lt;p&gt;对，世界就是这么奇妙：美国人写 &lt;code&gt;1,000.50&lt;/code&gt;，德国人写 &lt;code&gt;1.000,50&lt;/code&gt;——同一个数，标点符号各玩各的。&lt;/p&gt;
+&lt;p&gt;字符串 &lt;code&gt;1,000&lt;/code&gt; 在美国是一千，在德国那边可能被解析成 &lt;code&gt;1.000&lt;/code&gt;，也就是一。CSV 导入一下，财务对账直接差出三个数量级，Excel 看了都沉默。&lt;/p&gt;
+&lt;p&gt;下次解析 CSV 前，先问清楚：你是哪个国家的逗号？&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode940 字符串 DP 全家桶：今天轮到 940 </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-07/</link>
+        <pubDate>Mon, 07 Sep 2026 13:51:35 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-07/</guid>
+        <description>&lt;h2 id=&#34;字符串-dp-全家桶今天轮到-940&#34;&gt;字符串 DP 全家桶：今天轮到 940
+&lt;/h2&gt;&lt;p&gt;那位 HR 朋友今天又来了，消息更短，就俩字：“在吗？”&lt;/p&gt;
+&lt;p&gt;你回：“又裁？”&lt;/p&gt;
+&lt;p&gt;他甩来一个哭脸：“老板疯了。昨天好歹还给个目标 &lt;code&gt;t&lt;/code&gt;，今天直接问：所有可能的精简方案里，有多少种&lt;strong&gt;不一样&lt;/strong&gt;的结果？空公司不算。”&lt;/p&gt;
+&lt;p&gt;你：“数太大，还得对 &lt;code&gt;10^9+7&lt;/code&gt; 取模。”&lt;/p&gt;
+&lt;p&gt;他：“……你怎么知道？”&lt;/p&gt;
+&lt;p&gt;你没回，你在翻昨天那篇题解的最后一行——“再加个去重 → 940”。&lt;/p&gt;
+&lt;p&gt;flag 这玩意，立了果然是要还的。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;一难在哪排列组合不行吗&#34;&gt;一、难在哪？排列组合不行吗？
+&lt;/h4&gt;&lt;p&gt;初看这题，每个字符留或不留，&lt;code&gt;2^n&lt;/code&gt; 种组合，扣掉全删的 1 种，完事。&lt;/p&gt;
+&lt;p&gt;真这么简单，它就不会被标成 hard 了。&lt;/p&gt;
+&lt;p&gt;拿 &lt;code&gt;s = &amp;quot;aaa&amp;quot;&lt;/code&gt; 试刀：留第一个 &lt;code&gt;a&lt;/code&gt; 和第三个 &lt;code&gt;a&lt;/code&gt;，结果是 &lt;code&gt;&amp;quot;aa&amp;quot;&lt;/code&gt;；留第二个 &lt;code&gt;a&lt;/code&gt; 和第三个 &lt;code&gt;a&lt;/code&gt;，结果还是 &lt;code&gt;&amp;quot;aa&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;长得一样，只能算一种。&lt;/strong&gt; 所以答案不是 7，而是 3：&lt;code&gt;&amp;quot;a&amp;quot;&lt;/code&gt;、&lt;code&gt;&amp;quot;aa&amp;quot;&lt;/code&gt;、&lt;code&gt;&amp;quot;aaa&amp;quot;&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;把 7 种全造出来，扔进 &lt;code&gt;set&lt;/code&gt; 去重？内存条第一个跳出来罢工。&lt;code&gt;n&lt;/code&gt; 能到 2000，&lt;code&gt;2^2000&lt;/code&gt; 约等于 &lt;code&gt;10^602&lt;/code&gt;，可观测宇宙的原子总数也才 &lt;code&gt;10^80&lt;/code&gt;。枚举这条路，还没出发就被堵死了。&lt;/p&gt;
+&lt;p&gt;既然不能事后去重，那就得在计数的时候&lt;strong&gt;自带去重&lt;/strong&gt;。怎么做到？换个维度看问题——&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;二换一本账按结尾是谁分类&#34;&gt;二、换一本账：按“结尾是谁”分类
+&lt;/h4&gt;&lt;p&gt;任何一份非空花名册，它&lt;strong&gt;总有最后一个人&lt;/strong&gt;。这一点看似废话，却是破题的关键。&lt;/p&gt;
+&lt;p&gt;按“最后一个人是谁”来记账：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;f[c]&lt;/code&gt; = 以字符 &lt;code&gt;c&lt;/code&gt; 结尾的&lt;strong&gt;不同&lt;/strong&gt;子序列有多少个
+&lt;code&gt;total&lt;/code&gt; = 所有 &lt;code&gt;f[c]&lt;/code&gt; 的和，也就是当前所有不同非空子序列的总数&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;这个分法天然&lt;strong&gt;不重不漏&lt;/strong&gt;：一份花名册只有一个结尾字符，不可能同时被两个字母认领。&lt;strong&gt;分类标准本身就是去重&lt;/strong&gt;，不需要事后补救。&lt;/p&gt;
+&lt;p&gt;有了这个分类，接下来就可以从头过一遍名单，每遇到一个新员工 &lt;code&gt;c&lt;/code&gt;，问一句：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;这个新 c 能新开多少种以前没有的架构？&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所有用到新 &lt;code&gt;c&lt;/code&gt; 的架构，一定是“某个旧架构 + &lt;code&gt;c&lt;/code&gt;”的形式。旧架构可以是空，那就是光杆 &lt;code&gt;c&lt;/code&gt; 自己。旧架构一共有 &lt;code&gt;total&lt;/code&gt; 份，加上空，候选总数就是 &lt;code&gt;total + 1&lt;/code&gt; 份。&lt;/p&gt;
+&lt;p&gt;但小心，&lt;strong&gt;这些候选里，有些早就存在了&lt;/strong&gt;——旧架构 &lt;code&gt;(y + c)&lt;/code&gt; 本身就以 &lt;code&gt;c&lt;/code&gt; 结尾，那对于旧架构 &lt;code&gt;(y)&lt;/code&gt;，它接上新 &lt;code&gt;c&lt;/code&gt; ，得到的还是 &lt;code&gt;y + c&lt;/code&gt;，没有创造任何新东西。这样的旧架构有多少？恰好是 &lt;code&gt;f[c]&lt;/code&gt; 个，必须扣掉。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;new &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (total &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; f[c]   &lt;span style=&#34;color:#75715e&#34;&gt;# 所有旧架构+新c，扣掉已经以c结尾的旧账&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;f[c] &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; new                &lt;span style=&#34;color:#75715e&#34;&gt;# 以 c 结尾的架构增加&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;total &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; new               &lt;span style=&#34;color:#75715e&#34;&gt;# 总数增加&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一句话：&lt;strong&gt;新架构 = 光杆 c + 不以 c 结尾的旧架构接上 c&lt;/strong&gt;。旧的以 &lt;code&gt;c&lt;/code&gt; 结尾的架构不参与，因为它们接上 &lt;code&gt;c&lt;/code&gt; 只是把已有的架构再誊一遍，毫无创新。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;distinctSubseqII&lt;/span&gt;(s: str) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    mod &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    f &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;26&lt;/span&gt;          &lt;span style=&#34;color:#75715e&#34;&gt;# f[c]：以字符 c 结尾的不同子序列个数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;             &lt;span style=&#34;color:#75715e&#34;&gt;# 所有非空子序列的总数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; ch &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; s:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        c &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ord(ch) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; ord(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        new &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (total &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; f[c]) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; mod   &lt;span style=&#34;color:#75715e&#34;&gt;# 真正新增的架构数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        f[c] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (f[c] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; new) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; mod        &lt;span style=&#34;color:#75715e&#34;&gt;# 更新以 c 结尾的架构数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        total &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (total &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; new) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; mod      &lt;span style=&#34;color:#75715e&#34;&gt;# 更新总数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; total
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h4 id=&#34;三增量式与覆盖式&#34;&gt;三、增量式与覆盖式
+&lt;/h4&gt;&lt;p&gt;上面那种‘先算 &lt;code&gt;new&lt;/code&gt;，再加进 &lt;code&gt;f[c]&lt;/code&gt; 和 &lt;code&gt;total&lt;/code&gt;’的写法，叫&lt;strong&gt;增量式&lt;/strong&gt;。下面这种省掉 &lt;code&gt;new&lt;/code&gt; 的写法，叫&lt;strong&gt;覆盖式&lt;/strong&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;distinctSubseqII&lt;/span&gt;(s: str) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    mod &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    f &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;26&lt;/span&gt;          &lt;span style=&#34;color:#75715e&#34;&gt;# f[c]：以字符 c 结尾的不同子序列个数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    total &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;             &lt;span style=&#34;color:#75715e&#34;&gt;# 所有非空子序列的总数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; ch &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; s:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        c &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; ord(ch) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; ord(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        others &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; total &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; f[c]   &lt;span style=&#34;color:#75715e&#34;&gt;# 不以 c 结尾的数量，本轮不动&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        f[c] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; total        &lt;span style=&#34;color:#75715e&#34;&gt;# 注意：是 = ，不是 +=&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        total &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (f[c] &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; others) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; mod
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; total
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;数学上的覆盖式长这样：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;f[c]新 = f[c]旧 + new
+       = f[c]旧 + (total旧 - f[c]旧 + 1)
+       = total旧 + 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/blockquote&gt;
+&lt;p&gt;旧的 &lt;code&gt;f[c]&lt;/code&gt; 在化简里&lt;strong&gt;自己消失了&lt;/strong&gt;。新值把旧值完整包含在内，所以直接覆盖就行，不是数据丢失，是合并完成。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;total&lt;/code&gt; 同理：&lt;code&gt;total新 = others + f[c]新&lt;/code&gt;，一步到位。&lt;/p&gt;
+&lt;p&gt;两种写法结果完全一样，覆盖式就是增量式的压缩版。面试时先写增量式保命，聊嗨了再甩覆盖式展示内功。&lt;/p&gt;
+&lt;p&gt;无论用哪种写法，复杂度都一样：时间 &lt;code&gt;O(n)&lt;/code&gt;，扫一遍名单；空间 &lt;code&gt;O(26)&lt;/code&gt; 即 &lt;code&gt;O(1)&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;昨天 &lt;code&gt;O(m × n)&lt;/code&gt; 的记忆化搜索表，今天压成一条 26 格的数组——&lt;strong&gt;分类维度选对了，状态只剩一维，连递归都省了&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;彩蛋昨天立的-flag今天拔了&#34;&gt;彩蛋：昨天立的 flag，今天拔了
+&lt;/h4&gt;&lt;p&gt;昨天那份家族清单：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;加法数方案 → &lt;strong&gt;115 不同的子序列&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;换成 &lt;code&gt;max&lt;/code&gt; 求最长 → 1143 最长公共子序列&lt;/li&gt;
+&lt;li&gt;换成 &lt;code&gt;min&lt;/code&gt; 求最少删 → 583 两个字符串的删除操作&lt;/li&gt;
+&lt;li&gt;再加个去重 → &lt;strong&gt;940 不同的子序列 II&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;115 的问题是“&lt;strong&gt;你留不留&lt;/strong&gt;”，940 的问题是“&lt;strong&gt;你留了之后，跟别人一样吗&lt;/strong&gt;”。&lt;/p&gt;
+&lt;p&gt;下次再遇到字符串 DP，别急着写 &lt;code&gt;set&lt;/code&gt;。分类维度选对了，去重就是顺手的事。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode115 老板要精简架构，我掏出了递归 </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-06/</link>
+        <pubDate>Sun, 06 Sep 2026 13:47:59 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-06/</guid>
+        <description>&lt;h2 id=&#34;老板要精简架构我掏出了递归&#34;&gt;老板要精简架构，我掏出了递归
+&lt;/h2&gt;&lt;p&gt;你的朋友是HR，深夜发来一条消息，只有三个字：“救救我。”&lt;/p&gt;
+&lt;p&gt;你问：“怎么了？又有人仲裁？”&lt;/p&gt;
+&lt;p&gt;他甩过来一串名单：&lt;code&gt;s = &amp;quot;rabbbit&amp;quot;&lt;/code&gt;，紧接着补了一句：“老板说公司要精简，目标组织架构是 &lt;code&gt;t = &amp;quot;rabbit&amp;quot;&lt;/code&gt;。我数了一下，就裁一个人。可公司有&lt;strong&gt;三个一模一样的&lt;/strong&gt; &lt;code&gt;b&lt;/code&gt;，裁谁结果都一样。你说，这算几种裁法？”&lt;/p&gt;
+&lt;p&gt;你沉默了三秒，回他：“从 &lt;code&gt;s&lt;/code&gt; 里删掉一些字符，让剩下的正好是 &lt;code&gt;t&lt;/code&gt;，问有几种删法——这不就是力扣 115 吗？在 s 的子序列中统计 t 出现的个数。”&lt;/p&gt;
+&lt;p&gt;他秒回了个“对对对”，然后问：“所以到底怎么算？”&lt;/p&gt;
+&lt;p&gt;你盯着屏幕，敲回去一行字：“&lt;strong&gt;站到名单最后一个人面前，问他一句：你，留不留？&lt;/strong&gt;”&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;一从最后一个字符开始灵魂拷问&#34;&gt;一、从最后一个字符开始灵魂拷问
+&lt;/h4&gt;&lt;p&gt;&amp;ldquo;在 s 的子序列中统计 t 出现的个数&amp;rdquo;——注意，子序列不是子串，子串必须连续，子序列&lt;strong&gt;可以跳着挑&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;既然子序列可以跳着挑，那换个角度看：从 s 里选一些字符保留，等价于&lt;strong&gt;从 s 里删掉一些字符，让剩下的正好是 &lt;code&gt;t&lt;/code&gt;&lt;/strong&gt;。保留和删除是一体两面：你选哪些留，就等于决定哪些走。方案数完全一样，但“删”更直观——你不用管最后剩下谁，只要数哪些位置可以扔。&lt;/p&gt;
+&lt;p&gt;所以，站到字符串 &lt;code&gt;s&lt;/code&gt; 的最后一个字符上，比如 &lt;code&gt;&amp;quot;rabbbit&amp;quot;&lt;/code&gt; 的最后一个 &lt;code&gt;t&lt;/code&gt;，问它一句：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;&amp;ldquo;兄弟，你留不留？&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;它只有两条路可走：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;被裁掉&lt;/strong&gt;——滚蛋，问题缩小为：&lt;code&gt;s&lt;/code&gt; 少一个字符，&lt;code&gt;t&lt;/code&gt; 不变。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;留下来&lt;/strong&gt;——那它必须正好能顶 &lt;code&gt;t&lt;/code&gt; 的最后一个位置，也就是就是 &lt;code&gt;s[i] == t[j]&lt;/code&gt;。顶上了之后，问题缩小为：&lt;code&gt;s&lt;/code&gt; 少一个字符，&lt;code&gt;t&lt;/code&gt; 也少一个字符。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;这两条路&lt;strong&gt;互斥&lt;/strong&gt;——一个字符不可能既滚蛋又留下；同时&lt;strong&gt;穷尽&lt;/strong&gt;——要么滚蛋要么留下，没有第三选择。所以方案数就是：&lt;strong&gt;两种情况加起来&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;这就是&lt;strong&gt;加法原理&lt;/strong&gt;，简单到像你妈问你“吃不吃鸡蛋”：吃是一种，不吃是另一种，没有第三种可能。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;二把拷问写成一个递归函数&#34;&gt;二、把拷问写成一个递归函数
+&lt;/h4&gt;&lt;p&gt;单个字符的“留不留”搞清楚了。但名单上一串字符，不能只问最后一个，得&lt;strong&gt;从后往前挨个问过去&lt;/strong&gt;——因为每次问完一个，问题就缩小成‘前面那些人怎么凑剩下的岗位’，正好是&lt;strong&gt;递归&lt;/strong&gt;的子问题。&lt;/p&gt;
+&lt;p&gt;定义函数 &lt;code&gt;dfs(i, j)&lt;/code&gt;：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;用 s[0..i] 这些字符，凑出 t[0..j] 这些字符，有几种方案？&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;把上面那套“留不留”的决策逻辑翻译成递归，就三行：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 情况一：s[i] 不留，让前面的人自己想办法，问题缩小为 dfs(i-1, j)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;res &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dfs(i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, j)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 情况二：如果 s[i] 能留（s[i] == t[j]），就加上留它的方案数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; s[i] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; t[j]:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    res &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; dfs(i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, j &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;不留的情况 + 留的情况，互斥且穷尽，一个不多一个不少，加起来就是完整答案。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;三边界条件递归的刹车片&#34;&gt;三、边界条件——递归的“刹车片”
+&lt;/h4&gt;&lt;p&gt;递归不能一直套娃，得有个头。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;j &amp;lt; 0&lt;/code&gt;&lt;/strong&gt;：&lt;code&gt;j&lt;/code&gt; 掉到 -1，说明 &lt;code&gt;t&lt;/code&gt; 已经全凑好了，目标架构已经达成。&lt;code&gt;s&lt;/code&gt; 剩下的字符怎么办？&lt;strong&gt;全部删掉，得到空串&lt;/strong&gt;。空串是任何字符串的子序列，而且只有这一种凑法，所以返回 &lt;code&gt;1&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;i &amp;lt; j&lt;/code&gt;&lt;/strong&gt;：说明 &lt;code&gt;s&lt;/code&gt; 剩下的字符&lt;strong&gt;根本不够&lt;/strong&gt;凑出 &lt;code&gt;t&lt;/code&gt; 剩下的部分，巧妇难为无米之炊，直接返回 &lt;code&gt;0&lt;/code&gt;。就像公司只剩 3 个人，却要填 5 个岗，门都没有。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;两个边界 &lt;code&gt;return&lt;/code&gt; 谁写前面都行。因为当 &lt;code&gt;j&lt;/code&gt; 降到 -1 时，&lt;code&gt;i&lt;/code&gt; 至少也是 -1，此时 &lt;code&gt;i &amp;lt; j&lt;/code&gt; 不可能成立。&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;numDistinct&lt;/span&gt;(s: str, t: str) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;@cache&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dfs&lt;/span&gt;(i, j):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; j:          &lt;span style=&#34;color:#75715e&#34;&gt;# 字符不够，没法凑&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:          &lt;span style=&#34;color:#75715e&#34;&gt;# 目标完成，空串收工&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        res &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dfs(i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, j)               &lt;span style=&#34;color:#75715e&#34;&gt;# 情况1：不留 s[i]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; s[i] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; t[j]:                  &lt;span style=&#34;color:#75715e&#34;&gt;# 情况2：s[i] 能留（==t[j]）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            res &lt;span style=&#34;color:#f92672&#34;&gt;+=&lt;/span&gt; dfs(i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, j &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; res
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; dfs(len(s) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, len(t) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;@cache&lt;/code&gt;是 Python 的&lt;strong&gt;记忆化神器&lt;/strong&gt;，不加是指数级的递归树，加了塌成多项式：每个状态只算一次，快得飞起。&lt;/p&gt;
+&lt;p&gt;时间复杂度：&lt;code&gt;O(m × n)&lt;/code&gt;，空间复杂度：&lt;code&gt;O(m × n)&lt;/code&gt;。如果面试官逼你优化空间，可以改成自底向上的 DP，甚至压缩成一维数组。但把这个递归版本讲清楚，已经能拿下九成的面试了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;彩蛋换个运算符就是另一道题&#34;&gt;彩蛋：换个运算符，就是另一道题
+&lt;/h4&gt;&lt;p&gt;别急着划走。这套“最后一个字符留不留”的骨架，换个合并方式就能通吃一整族题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;加法数方案 → 本题 115&lt;/li&gt;
+&lt;li&gt;换成 &lt;code&gt;max&lt;/code&gt; 求最长（相等时再 +1）→ 1143 最长公共子序列&lt;/li&gt;
+&lt;li&gt;换成 &lt;code&gt;min&lt;/code&gt; 求最少删 → 583 两个字符串的删除操作&lt;/li&gt;
+&lt;li&gt;再加个去重 → 940 不同的子序列 II&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;同一个递归骨架，换换运算符，直接刷穿字符串 DP 全家桶。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3904 刷怪千倍，挥刀百万倍：这谁顶得住？</title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-05/</link>
+        <pubDate>Sat, 05 Sep 2026 09:57:26 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-05/</guid>
+        <description>&lt;h2 id=&#34;刷怪千倍挥刀百万倍这谁顶得住&#34;&gt;刷怪千倍，挥刀百万倍：这谁顶得住？
+&lt;/h2&gt;&lt;p&gt;3903 打完，3904 上线。题面一个字没动，示例一个数没换，力扣只在提示栏改了一行：
+&lt;code&gt;1 &amp;lt;= nums.length &amp;lt;= 10^5&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;这就像二周目重进副本：小怪的属性一个没改，血量攻击跟昨天一模一样，只是刷新数量从 100 变成 100000。&lt;/p&gt;
+&lt;p&gt;昨天那把 &amp;ldquo;每来一只怪就把全图重扫一遍&amp;quot;的刀，今天还敢用吗？&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;怪多一千倍，你的挥刀次数多&lt;strong&gt;一百万&lt;/strong&gt;倍。昨天那段五行的 Python 暴力：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; max(nums[:i&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; min(nums[i:]) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; k:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; i
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在&lt;code&gt;n = 10⁵&lt;/code&gt; 时，账单变成这样：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;时间&lt;/strong&gt;：&lt;code&gt;max&lt;/code&gt; 和 &lt;code&gt;min&lt;/code&gt; 每轮各扫一趟，O(n²) = &lt;strong&gt;10¹⁰ 次比较&lt;/strong&gt;。Python 解释执行大概每秒几千万次简单操作，你自己算这是几分钟还是几十分钟。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;内存流量&lt;/strong&gt;：&lt;code&gt;nums[:i+1]&lt;/code&gt; 和 &lt;code&gt;nums[i:]&lt;/code&gt; 每轮合计拷贝 &lt;code&gt;n+1&lt;/code&gt; 个槽位，这个数还得乘 10⁵ 轮，然后全部立刻扔给 GC。你写的不是算法，是垃圾焚烧发电。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;结论：二周目禁用法术——切片。谁用谁崩。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;正解后缀数组--滚动前缀&#34;&gt;正解：后缀数组 + 滚动前缀
+&lt;/h4&gt;&lt;p&gt;昨天已经剧透，今天就是实战。&lt;/p&gt;
+&lt;p&gt;后缀最小值倒着建好表，前缀最大值边扫边更新。时间 O(n)，空间 O(n)，数据翻一千倍，复杂度一位没动。&lt;/p&gt;
+&lt;p&gt;这就是最优解的复利：昨天多花的二十分钟，今天兑现成一道签到题。&lt;/p&gt;
+&lt;p&gt;显式循环版：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;firstStableIndex&lt;/span&gt;(nums: List[int], k: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(nums)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 后缀最小值：suf_min[i] = min(nums[i..n-1])&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    suf_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; n
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    suf_min[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nums[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        suf_min[i] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; min(suf_min[i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], nums[i])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 前缀最大值：滚动变量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    pre_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nums[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(nums):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; pre_max:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            pre_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; pre_max &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; suf_min[i] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; k:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;accumulate版：今天在 1e5 的数据下，它依然能打。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;firstStableIndex&lt;/span&gt;(nums: List[int], k: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    suf_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(accumulate(reversed(nums), min))[::&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, (pm, sm) &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(zip(accumulate(nums, max), suf_min)):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; pm &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; sm &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; k:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但注意，&lt;code&gt;[::-1]&lt;/code&gt; 是一次 O(n) 的拷贝，峰值内存会翻倍。在 1e5 下毫无压力，但如果哪天真搞成 1e7，就别炫技了，显式循环才是稳如老狗。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;好了，二周目通关。&lt;/p&gt;
+&lt;p&gt;昨天你学会了骨架子，今天你靠它硬扛了 1e5 的数据。&lt;/p&gt;
+&lt;p&gt;崩不崩的，&lt;code&gt;-1&lt;/code&gt; 永远是你背包里的回城卷轴。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3903 心态崩了？return -1 </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-04/</link>
+        <pubDate>Fri, 04 Sep 2026 12:50:31 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-04/</guid>
+        <description>&lt;h2 id=&#34;心态崩了return--1&#34;&gt;心态崩了？return -1
+&lt;/h2&gt;&lt;p&gt;想象一下：你正站在数组的第 &lt;code&gt;i&lt;/code&gt; 个位置上，左顾右盼。&lt;/p&gt;
+&lt;p&gt;往回看，有你一路走来的&lt;strong&gt;巅峰&lt;/strong&gt; &lt;code&gt;max(nums[0..i])&lt;/code&gt;；往前看，有你即将踏入的&lt;strong&gt;低谷&lt;/strong&gt; &lt;code&gt;min(nums[i..n-1])&lt;/code&gt;。两者的落差，就是你的&lt;strong&gt;不稳定值&lt;/strong&gt;——落差越大，心态越容易崩。&lt;/p&gt;
+&lt;p&gt;崩不崩的临界线叫 &lt;code&gt;k&lt;/code&gt;。落差不超 &lt;code&gt;k&lt;/code&gt;，你还能强装镇定；一旦超过，你当场崩给所有人看。&lt;/p&gt;
+&lt;p&gt;这里有个容易一眼扫过去的细节：&lt;code&gt;i&lt;/code&gt; 同时属于两边。这不是笔误——&lt;code&gt;i&lt;/code&gt;是你的现在，不能置身事外。&lt;/p&gt;
+&lt;p&gt;问你：从 0 往右走，&lt;strong&gt;第一个心态没崩的位置在哪&lt;/strong&gt;？找到就赶紧返回，别磨蹭。要是每个位置都能让你崩成渣，返回 &lt;code&gt;-1&lt;/code&gt;——这数组没救了，换个题目重新做人。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;一暴力切片题面的-python-直译&#34;&gt;一、暴力切片：题面的 Python 直译
+&lt;/h4&gt;&lt;p&gt;题目给了 &lt;code&gt;n ≤ 100&lt;/code&gt;，意思很明确：你随便写，别把服务器搞挂就行。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;firstStableIndex&lt;/span&gt;(self, nums: list[int], k: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(nums) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n): 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; max(nums[:i&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; min(nums[i:]) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; k: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;五行，收工。它的优点在于：跟题面完全对应，几乎不可能写错。但代价也很明显：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;nums[:i+1]&lt;/code&gt; 和 &lt;code&gt;nums[i:]&lt;/code&gt; 是&lt;strong&gt;切片拷贝&lt;/strong&gt;——每路过一个下标，就新建两个临时列表，把元素挨个搬一遍。GC 在后台忙得跟外卖小哥似的。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;max&lt;/code&gt; 和 &lt;code&gt;min&lt;/code&gt; 各扫一趟，每个 &lt;code&gt;i&lt;/code&gt; 都得从头数一遍。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;code&gt;n&lt;/code&gt; 个下标 × 每个 &lt;code&gt;O(n)&lt;/code&gt; = &lt;strong&gt;O(n²)&lt;/strong&gt;，外加 &lt;code&gt;n&lt;/code&gt; 轮纯搬运的内存开销。好在&lt;code&gt;n = 100&lt;/code&gt; ，一万次比较，力扣会放过你。但面试官要是看见你写这玩意儿，脸上可能会浮现一种&amp;quot;不稳定&amp;quot;的微笑。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;二从每次重算到一次算好边扫边用&#34;&gt;二、从“每次重算”到“一次算好，边扫边用”
+&lt;/h4&gt;&lt;p&gt;暴力的问题很明显：前缀最大值被从头重算了 &lt;code&gt;n&lt;/code&gt; 次；后缀最小值也被从头重算了 &lt;code&gt;n&lt;/code&gt; 次。&lt;/p&gt;
+&lt;p&gt;而这两个量偏偏都是&lt;strong&gt;增量可维护&lt;/strong&gt;的：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;往右走一步，前缀最大值要么不变，要么被新元素顶上去；&lt;/li&gt;
+&lt;li&gt;往右走一步，后缀少一个元素，最小值要么不变，要么变大。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;走一步就能更新的东西，凭什么每次从头数？&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优化思路一句话：后缀最小值先算好存起来，前缀最大值边走边算。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;为什么两者待遇不一样？因为要找的是&lt;strong&gt;最小下标&lt;/strong&gt;，判定必须正向扫：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;前缀最大值在正向扫时顺手产生，&lt;strong&gt;访问顺序 == 生成顺序&lt;/strong&gt;，一个滚动变量就够，犯不着开数组；&lt;/li&gt;
+&lt;li&gt;后缀最小值必须&lt;strong&gt;从右往左&lt;/strong&gt;才推得出来，跟正向扫的方向对不上，只能先建好数组备着。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;firstStableIndex&lt;/span&gt;(self, nums: list[int], k: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int: n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(nums)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(nums)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 后缀最小值：suf_min[i] = min(nums[i..n-1])，从右往左递推&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    suf_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; n
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    suf_min[n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nums[&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        suf_min[i] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; min(suf_min[i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], nums[i])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 前缀最大值：滚动变量，O(1) 空间&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    pre_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nums[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, x &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(nums):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; x &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; pre_max:                   
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            pre_max &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; pre_max &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; suf_min[i] &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; k:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; i   &lt;span style=&#34;color:#75715e&#34;&gt;# 正向扫，第一个命中就是最小下标&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;时间 O(n)，空间 O(n)——就一个后缀数组，前缀那边连数组都没开。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;三accumulate炫技可以稳住别浪&#34;&gt;三：accumulate：炫技可以，稳住别浪
+&lt;/h4&gt;&lt;p&gt;Python 的 &lt;code&gt;itertools.accumulate&lt;/code&gt; 可以写得非常优雅：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;firstStableIndex&lt;/span&gt;(self, nums: list[int], k: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 反向累积累 min 再翻回来，就是后缀最小值数组&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    suf_min &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; list(accumulate(reversed(nums), min))[::&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 正向累积累 max 就是前缀最大值序列，zip 到一起逐个判定&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, (pm, sm) &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(zip(accumulate(nums, max), suf_min)):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; pm &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; sm &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; k:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;accumulate&lt;/code&gt;  在 C 层跑，Python 解释器只管最后那趟 &lt;code&gt;zip&lt;/code&gt;，省了一整趟字节码循环；还自带哨兵——第一个输出就是第一个元素，反向边界自动填好，妈妈再也不用担心你把 &lt;code&gt;n-2&lt;/code&gt; 写成 &lt;code&gt;n-1&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;但天下没有免费的午餐，代价有两条。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;一是内存。&lt;/strong&gt; &lt;code&gt;[::-1]&lt;/code&gt; 是一次实打实的 O(n) 拷贝，那一瞬间峰值 &lt;strong&gt;2n&lt;/strong&gt;——旧列表还没被回收，新的已经生出来了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;二是改不动。&lt;/strong&gt; &lt;code&gt;zip&lt;/code&gt; 是个封闭结构，&lt;strong&gt;现在有多短，未来就有多难改&lt;/strong&gt;：想加第三个序列？想在条件里掺进 &lt;code&gt;i&lt;/code&gt; 本身？想顺手统计一下最小不稳定值？每一条都得把它拆开，退回显式循环。&lt;/p&gt;
+&lt;p&gt;至于面试——写顺了，面试官眼前一亮；写卡了，你俩一起进入&amp;quot;不稳定状态&amp;quot;。&lt;/p&gt;
+&lt;p&gt;建议：现场用显式版，全 accumulate 版留着发朋友圈。&lt;/p&gt;
+&lt;p&gt;成年人当然可以两个都写，甚至混着写（第一趟 accumulate 抢速度，第二趟显式循环留余地），看气氛。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;彩蛋这套骨架还能干什么&#34;&gt;彩蛋：这套骨架还能干什么？
+&lt;/h4&gt;&lt;p&gt;同一套“前缀最值 + 后缀最值”骨架，换个皮就是另一批题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;接雨水&lt;/strong&gt;：每格能接的水 = &lt;code&gt;min(左边最高, 右边最高) - 自己的高度&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;柱状图最大矩形&lt;/strong&gt;：本质上也是前后缀最值问题&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;买卖股票的最佳时机&lt;/strong&gt;：两个方向的最值在对撞&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;说到股票，这题在金融圈有个失散多年的兄弟：&lt;strong&gt;回撤（drawdown）&lt;/strong&gt;。&lt;code&gt;max(nums[0..i])&lt;/code&gt; 是持仓以来的最高净值，&lt;code&gt;min(nums[i..n-1])&lt;/code&gt; 是之后会跌到的最低谷，两者之差就是最坏情况下会亏多少。&lt;/p&gt;
+&lt;p&gt;风控部门每天盯的就是这个数。只不过，力扣版的回撤给你&lt;strong&gt;开了天眼&lt;/strong&gt;——提前知道谷底在哪，永远不会“抄底抄在半山腰”。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3876 昨天随便抓个奇数，今天得查最小值 </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-03/</link>
+        <pubDate>Thu, 03 Sep 2026 10:47:22 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-03/</guid>
+        <description>&lt;h2 id=&#34;昨天随便抓个奇数今天得查最小值&#34;&gt;昨天随便抓个奇数，今天得查最小值
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;昨天的我们还在为恒真命题欢呼，今天策划反手就是一个热更新：减法结果必须 ≥ 1。
+工具人不能随便抓了，得挑个“最菜”的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;第一步：昨天的套路，今天卡哪儿了？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;昨天的操作简单粗暴：只要有奇数，随便抓一个奇数当“工具人”，所有偶数减它变奇，打卡收工。&lt;/p&gt;
+&lt;p&gt;今天的题目多了个补丁：&lt;code&gt;nums1[i] - nums1[j] &amp;gt;= 1&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;这意味着减法结果必须为正。如果工具人奇数太大，某个偶数比它还小，那么 &lt;code&gt;偶数 - 奇数&lt;/code&gt; 就会变成负数，当场崩盘。所以，要让所有偶数都减得动它，这个工具人奇数必须比所有偶数都&lt;strong&gt;小&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二步：全场最“菜”的奇数&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;比所有偶数都小的奇数，只能是整个数组的&lt;strong&gt;最小值&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;于是，当数组的最小值是奇数时，它就是天选工具人：所有偶数都比它大，减出来必然 ≥ 1，且奇偶性翻转。完美，直接启动全奇策略：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;所有偶数：减去这个最小奇数 → 正数，奇偶性翻转为奇；&lt;/li&gt;
+&lt;li&gt;所有奇数：保持原样，本来就是奇数。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;第三步：一个奇数都没有？直接躺赢&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;整个数组全是偶数，那它本来就达成&amp;quot;全偶&amp;quot;目标了。照抄一遍，返回 True。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第四步：有奇有偶，最小却是偶数？这波寄了&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;此时，所有奇数都比这个最小偶数大。&lt;/p&gt;
+&lt;p&gt;走全奇路线：最小的偶数减任何奇数都变负，这队根本带不动。&lt;/p&gt;
+&lt;p&gt;走全偶路线呢？奇数想变偶数，得减去一个比它更小的奇数（奇 − 奇 = 偶，且差要为正）。可奇数堆里最小的那个奇数已经无人可减，只能原地干瞪眼。&lt;/p&gt;
+&lt;p&gt;两头堵死，只能老实返回 &lt;code&gt;false&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;结论&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;情况&lt;/th&gt;
+					&lt;th&gt;走哪条路&lt;/th&gt;
+					&lt;th&gt;答案&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;全是偶数&lt;/td&gt;
+					&lt;td&gt;本来就全偶，躺赢&lt;/td&gt;
+					&lt;td&gt;True&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;有奇数，且最小值是奇数&lt;/td&gt;
+					&lt;td&gt;最小值奇数当工具人，全队变奇&lt;/td&gt;
+					&lt;td&gt;True&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;有奇数，但最小值是偶数&lt;/td&gt;
+					&lt;td&gt;工具人失效，全奇全偶都走不通&lt;/td&gt;
+					&lt;td&gt;False&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;uniformArray&lt;/span&gt;(nums1: List[int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; bool:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 要么全偶，躺赢&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# 要么最小值是奇数，它来当“工具人”&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; all(num &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; num &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; nums1) &lt;span style=&#34;color:#f92672&#34;&gt;or&lt;/span&gt; min(nums1) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;昨天：无条件恒真，随便拉个奇数就能救场；
+今天：有条件恒真，最菜的是奇数才能带飞。
+策划：本次热更新修复了『躺赢』漏洞。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3875 只要有奇数，就能让全队变成奇数 </title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-02/</link>
+        <pubDate>Wed, 02 Sep 2026 10:23:46 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-02/</guid>
+        <description>&lt;h2 id=&#34;只要有奇数就能让全队变成奇数&#34;&gt;只要有奇数，就能让全队变成奇数
+&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;你以为这是一道构造题？不，它其实是一道“找工具人”的社会工程学题。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;第一步：忘掉数字，只看奇偶&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;题目给了两种操作：保持原值，或者减去另一个元素。&lt;/p&gt;
+&lt;p&gt;减法的奇偶性有什么规律？同奇偶相减得偶，异奇偶相减得奇。&lt;/p&gt;
+&lt;p&gt;数字具体多大根本不重要，真正在干活的只有奇偶性（parity）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第二步：一个&amp;quot;工具人&amp;quot;就能把全队 parity 统一改掉&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;题目说不同 &lt;code&gt;i&lt;/code&gt; 可以选同一个 &lt;code&gt;j&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;这意味着只要 &lt;code&gt;nums1&lt;/code&gt; 里有一个奇数，就能把它当成全队公用的&amp;quot;工具人&amp;quot;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;对每个偶数元素，让它减去这个工具奇数：偶 − 奇 = 奇。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对每个奇数元素，啥也不用干，它本来就是奇数。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;所以，只要数组里至少有一个奇数，&lt;strong&gt;全队变奇数&lt;/strong&gt;，收工。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;第三步：那要是没有奇数呢？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;如果整个数组一个奇数都没有，那说明它本来就是&lt;strong&gt;全偶数&lt;/strong&gt;。直接照抄，目标达成。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;结论&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;奇数个数&lt;/th&gt;
+					&lt;th&gt;走哪条路&lt;/th&gt;
+					&lt;th&gt;操作&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;0&lt;/td&gt;
+					&lt;td&gt;全偶数&lt;/td&gt;
+					&lt;td&gt;原数组已经全偶，直接躺平&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;≥ 1&lt;/td&gt;
+					&lt;td&gt;全奇数&lt;/td&gt;
+					&lt;td&gt;找一个奇数工具人，所有偶数减它&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;两种情况覆盖了所有输入，答案恒为 &lt;code&gt;true&lt;/code&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;uniformArray&lt;/span&gt;(nums1: List[int]) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; bool:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;横竖都是赢——&lt;strong&gt;有奇数就全奇，没奇数就全偶&lt;/strong&gt;。这题就是个披着构造题外衣的恒真命题。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>leetcode3568 赛博教室之BFS 影分身：能量条不够，分身来凑</title>
+        <link>http://localhost:1315/posts/leetcode_stories/26-09-01/</link>
+        <pubDate>Tue, 01 Sep 2026 14:20:52 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/leetcode_stories/26-09-01/</guid>
+        <description>&lt;h2 id=&#34;赛博教室之bfs-影分身能量条不够分身来凑&#34;&gt;赛博教室之BFS 影分身：能量条不够，分身来凑
+&lt;/h2&gt;&lt;p&gt;欢迎来到力扣 3568 的赛博教室。&lt;/p&gt;
+&lt;p&gt;你是一个能量条短得令人落泪的扫地机器人，面前是一张 &lt;code&gt;m x n&lt;/code&gt; 网格：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;&#39;S&#39;&lt;/code&gt;：你的出生点；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&#39;L&#39;&lt;/code&gt;：垃圾，必须捡；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&#39;R&#39;&lt;/code&gt;：充电桩，踩上去能量瞬间拉满；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&#39;X&#39;&lt;/code&gt;：空气墙别撞，绕道走；&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&#39;.&#39;&lt;/code&gt;：空地，啥也没有。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;每移动一格，掉 1 点能量，能量掉到 0 且此刻没在 &lt;code&gt;&#39;R&#39;&lt;/code&gt; 上，直接黑屏宕机。&lt;/p&gt;
+&lt;p&gt;你的目标只有一个：&lt;strong&gt;用最少的步数，捡完所有垃圾。&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;直线最短能量条教你做人&#34;&gt;直线最短？能量条教你做人
+&lt;/h4&gt;&lt;p&gt;你站在起点，环顾四周。如果能量无限，这就是个普通的网格最短路。&lt;/p&gt;
+&lt;p&gt;但现在能量条短得跟蚊子血似的，闷头硬冲的后果大概率是：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;走到一半，能量见底，前不着垃圾，后不着充电桩，只能仰天长叹：“早知道绕一下了……”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;能量限制让“走哪条路”变成了一个生存策略问题：贪心不行——你分不清哪个方向&amp;quot;更值&amp;quot;；DFS 也不行——一条道走到黑，能量耗尽才发现此路不通，连回头的电都没了。&lt;/p&gt;
+&lt;p&gt;于是你冷静下来，盘了盘局势：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;目标是&lt;strong&gt;最少移动次数&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;每一步代价都是 &lt;strong&gt;1&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;地图上所有可走格子构成一张&lt;strong&gt;无权图&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;经典的&lt;strong&gt;无权图最短路&lt;/strong&gt;问题。解决它的标配，正是 BFS。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;影分身之术bfs-逐层扩散&#34;&gt;&lt;strong&gt;影分身之术：BFS 逐层扩散&lt;/strong&gt;
+&lt;/h4&gt;&lt;p&gt;BFS 的精髓是&lt;strong&gt;逐层扩散&lt;/strong&gt;：第 0 层是起点，第 1 层是所有走 1 步能到的位置，第 2 层是所有走 2 步能到的位置……像水面波纹一样向外推。&lt;/p&gt;
+&lt;p&gt;你只要同时派出多个分身（别问扫地机器人怎么分身，问就是影分身之术），在同一层内同步探索所有可能的方向。如果某条路走 3 步就捡完所有垃圾，答案就是 3；不可能存在另一条路只走 2 步却更晚被发现——因为 2 步能到的位置在第 2 层就全部探过了。&lt;/p&gt;
+&lt;p&gt;这就是 BFS 的铁律：&lt;strong&gt;无权图上，先到即最优&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;分身装备三件套-和-背包压缩&#34;&gt;分身装备：“三件套” 和 背包压缩
+&lt;/h4&gt;&lt;p&gt;既然用 BFS，每个分身出发前都得背好三样东西：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;坐标&lt;/strong&gt; &lt;code&gt;(r, c)&lt;/code&gt;—— 我在哪&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;背包&lt;/strong&gt; &lt;code&gt;mask&lt;/code&gt;—— 捡了哪些垃圾&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;能量&lt;/strong&gt; &lt;code&gt;eng&lt;/code&gt;—— 还能走几步&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;位置好说， 能量也好说，都是整数。  问题出在“背包”——怎么存“哪些垃圾已经捡过”？&lt;/p&gt;
+&lt;p&gt;垃圾最多 10 个，每个垃圾只有两种状态：捡了 / 没捡：正好对应二进制的 10 个 bit。&lt;/p&gt;
+&lt;p&gt;用一个整数 &lt;code&gt;mask&lt;/code&gt; 的低 10 位表示背包：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第 &lt;code&gt;i&lt;/code&gt; 位为 1：第 &lt;code&gt;i&lt;/code&gt; 个垃圾已经入包；&lt;/li&gt;
+&lt;li&gt;全亮：&lt;code&gt;mask == (1 &amp;lt;&amp;lt; L) - 1&lt;/code&gt;，也就是 1023，通关。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一个整数搞定全部收集进度，掩码一扫，背包进度一目了然——别人翻包找道具，你直接读 bit。&lt;/p&gt;
+&lt;p&gt;把三件套打包成一个状态 &lt;code&gt;(r, c, mask, eng)&lt;/code&gt;，BFS 要干的事就一句话：&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;从起点出发，逐层向外扩散，每多走一步就多一层，第一次出现“背包全亮”的步数就是答案。&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;状态剪枝低能量分身原地出局&#34;&gt;状态剪枝：低能量分身，原地出局
+&lt;/h4&gt;&lt;p&gt;状态三件套是打包好了，但你掐指一算，发现一个可怕的事实：&lt;/p&gt;
+&lt;p&gt;位置最多 &lt;code&gt;m × n&lt;/code&gt; 个，背包最多 &lt;code&gt;2^L&lt;/code&gt; 种，能量最多 &lt;code&gt;E&lt;/code&gt; 档——三维一乘，状态数直接起飞。&lt;/p&gt;
+&lt;p&gt;分身越派越多，你很快注意到一个内卷惨案：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;两个分身到了同一个格子，背包进度一模一样，
+一个剩余能量 5，一个剩余能量 2。
+能量 2 的那位，可以直接出局了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;凭什么？能量 5 完全支配能量 2，低能量版本没有任何翻身的可能——它之后能走的所有路，能量 5 都能走，甚至还能多走几步——典型的&lt;strong&gt;状态支配&lt;/strong&gt;：如果状态 A 在所有维度上都不劣于状态 B，那么 B 就可以被安全淘汰。&lt;/p&gt;
+&lt;p&gt;于是你再整个小本本 &lt;code&gt;best&lt;/code&gt;，记录每个 &lt;code&gt;(位置, 背包)&lt;/code&gt; 组合见过的&lt;strong&gt;最大剩余能量&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;新分身如果能量不超过已有记录，直接淘汰，连入队的资格都没有。&lt;/p&gt;
+&lt;p&gt;有了这层剪枝，能量维度实际上被吞掉了——&lt;code&gt;best&lt;/code&gt; 只存每个 &lt;code&gt;(位置, 背包)&lt;/code&gt; 的最优能量值，状态数从 &lt;code&gt;位置 × 背包 × 能量&lt;/code&gt; 直接降到 &lt;code&gt;位置 × 背包&lt;/code&gt;，也就是 &lt;code&gt;m × n × 2^L&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;同状态只留最强打工人，其余全部内卷出局。&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;移动结算踩一格算一格&#34;&gt;移动结算：踩一格，算一格
+&lt;/h4&gt;&lt;p&gt;一切准备就绪，你深吸一口气，开始从起点逐层扩展。&lt;/p&gt;
+&lt;p&gt;每个分身每迈一步，都要走一遍标准的“踩格子结算流程”：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;先扣 1 点&lt;/strong&gt;：走一步掉一格电，天经地义。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;看看脚下&lt;/strong&gt;：
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;出界 / 撞 &lt;code&gt;&#39;X&#39;&lt;/code&gt;&lt;/strong&gt;—— 空气墙，此路不通，分身当场掉头（其实连格子都没进去）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;踩到 &lt;code&gt;&#39;R&#39;&lt;/code&gt;&lt;/strong&gt;—— 充电桩！能量瞬间回满，你长舒一口气：“还好有续命插座。”&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;踩到 &lt;code&gt;&#39;L&#39;&lt;/code&gt;&lt;/strong&gt;—— 垃圾入包，对应二进制位点亮，&lt;code&gt;mask&lt;/code&gt; 又丰满一格。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;啥也没有&lt;code&gt;.&lt;/code&gt;&lt;/strong&gt;—— 无事发生，继续赶路。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;检查通关&lt;/strong&gt;：mask 全亮了？别犹豫，直接 return 当前步数。BFS 逐层扩展，&lt;strong&gt;第一个摸到&amp;quot;全亮&amp;quot;的步数就是全局最优&lt;/strong&gt;，后面的层都不用看了。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;检查能量&lt;/strong&gt;：扣完能量后若是 0，且当前格子不是 &lt;code&gt;&#39;R&#39;&lt;/code&gt; → 寄，该分身从队列中移除（能量归零时只有踩在 &lt;code&gt;&#39;R&#39;&lt;/code&gt; 上才能续命回满）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;查小本本&lt;/strong&gt;：每个新状态入队前，先查 &lt;code&gt;best&lt;/code&gt; 小本本：如果同位置同背包已有更高能量，那这个弱鸡分身就别浪费队列空间了。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;注意，结算顺序很关键：第 3 步必须在第 4 步之前。 如果你先判能量再结算效果，就会在能量归零的那一刻错过 &amp;lsquo;R&amp;rsquo; 的续命和 &amp;lsquo;L&amp;rsquo; 的收集——死在终点线上，冤不冤？&lt;/p&gt;
+&lt;hr&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;Solution&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;minMoves&lt;/span&gt;(self, classroom: list[str], energy: int) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; int:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        m, n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(classroom), len(classroom[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        sr &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sc &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        garbage &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 先扫一遍地图：找到起点和所有垃圾&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(m):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(n):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; classroom[i][j] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;S&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    sr, sc &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; i, j
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;elif&lt;/span&gt; classroom[i][j] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;L&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    garbage&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append((i, j))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        L &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(garbage)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; L &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 没有垃圾，直接下班&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 给每个垃圾编号，方便位运算&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        garbage_id &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {(r, c): i &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, (r, c) &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(garbage)}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        full_mask &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; L) &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 全亮 = 1023，通关&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# BFS 队列：(行, 列, 背包, 能量, 步数)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        queue &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; deque([(sr, sc, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, energy, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# 内卷小本本：(位置, 背包) → 最大能量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        best &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; {(sr, sc, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;): energy}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        directions &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;while&lt;/span&gt; queue:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            r, c, mask, eng, steps &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; queue&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;popleft()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#75715e&#34;&gt;# 过期分身：已经被更强的同状态取代&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; best&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get((r, c, mask), &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; eng:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; dr, dc &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; directions:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                nr, nc &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; r &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; dr, c &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; dc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;# 出界或撞墙&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;not&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; nr &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; m &lt;span style=&#34;color:#f92672&#34;&gt;and&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; nc &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; n):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; classroom[nr][nc] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;X&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;# 移动消耗 1 点能量&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                neng &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; eng &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; neng &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 没电了，出局&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;# 充电桩回满&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; classroom[nr][nc] &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;R&amp;#39;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    neng &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; energy
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;# 垃圾入包&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                nmask &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; mask
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (nr, nc) &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; garbage_id:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    nmask &lt;span style=&#34;color:#f92672&#34;&gt;|=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&amp;lt;&lt;/span&gt; garbage_id[(nr, nc)])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;# 垃圾全捡完了，返回最少步数&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; nmask &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; full_mask:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; steps &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;# 能量归零且不在 R：不能继续移动&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; neng &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#66d9ef&#34;&gt;continue&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#75715e&#34;&gt;# 查小本本&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                key &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (nr, nc, nmask)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; neng &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; best&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;get(key, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    best[key] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; neng
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    queue&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append((nr, nc, nmask, neng, steps &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;# 队列清空仍未通关，无解&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;理论上三维 BFS 的状态数是： &lt;code&gt;O(m × n × 2^L × E)&lt;/code&gt;，其中 &lt;code&gt;E&lt;/code&gt; 是能量上限。但 &lt;code&gt;best&lt;/code&gt; 剪枝会把能量维度大幅压缩——同一个 &lt;code&gt;(位置, 背包)&lt;/code&gt; 只保留最大能量，低能量分身全部淘汰。在 &lt;code&gt;L ≤ 10&lt;/code&gt; 的约束下，实际跑的状态数远小于理论上限。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h4 id=&#34;尾声&#34;&gt;尾声
+&lt;/h4&gt;&lt;p&gt;你终于走出了这间赛博教室，能量条刚好停在 &lt;code&gt;1%&lt;/code&gt;，不多不少，够你回充电桩鞠个躬。&lt;/p&gt;
+&lt;p&gt;回头看了一眼，满地图的垃圾已经被捡得干干净净，连一点渣都不剩。&lt;/p&gt;
+&lt;p&gt;谁能想到，一条能量条短得像蚊子血的扫地机器人，靠着 &lt;strong&gt;BFS 影分身&lt;/strong&gt;、&lt;strong&gt;bitmask 收纳术&lt;/strong&gt; 和 &lt;strong&gt;内卷剪枝&lt;/strong&gt;，硬是走出了最优解。&lt;/p&gt;
+&lt;p&gt;所以说，能量少不是问题，路线骚才是关键。&lt;/p&gt;
+
+
+
+
+
+
+  
+  
+  
+
+
+&lt;p&gt;
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    &lt;img alt=&#34;知识共享许可协议&#34; style=&#34;border-width:0&#34; src=&#34;https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png&#34; /&gt;
+  &lt;/a&gt;
+  &lt;br /&gt;
+  本作品采用
+  &lt;a rel=&#34;license&#34; href=&#34;https://creativecommons.org/licenses/by-nc-nd/4.0/&#34;&gt;
+    知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议
+  &lt;/a&gt; 进行许可。
+&lt;/p&gt;
+</description>
+        </item>
+        <item>
         <title>leetcode2058 三节小火车狂飙链表：山顶谷底尖叫点，一个都别想跑</title>
         <link>http://localhost:1315/posts/leetcode_stories/26-08-31/</link>
         <pubDate>Mon, 31 Aug 2026 10:55:45 +0800</pubDate>

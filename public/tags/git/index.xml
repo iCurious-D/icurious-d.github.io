@@ -24,6 +24,915 @@
 &lt;/ul&gt;
 </description>
         </item>
+        <item>
+        <title>Git 快速上手：原理、命令与底层实现</title>
+        <link>http://localhost:1315/posts/ai_notes/git_note/</link>
+        <pubDate>Mon, 15 Dec 2025 14:38:11 +0800</pubDate>
+        
+        <guid>http://localhost:1315/posts/ai_notes/git_note/</guid>
+        <description>&lt;h2 id=&#34;git-快速上手原理命令与底层实现&#34;&gt;Git 快速上手：原理、命令与底层实现
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Git&lt;/strong&gt; 是现代软件开发中不可或缺的版本控制工具。
+本文简单梳理了 Git 的常用命令、核心原理、开发流程、最佳实践以及底层实现。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;一git-核心原理&#34;&gt;一、Git 核心原理
+&lt;/h3&gt;&lt;h4 id=&#34;1-三个区域与文件状态&#34;&gt;1. 三个区域与文件状态
+&lt;/h4&gt;&lt;p&gt;Git 管理文件时涉及三个区域：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;工作区（Working Directory）&lt;/strong&gt;：你正在编辑的文件，实际存在于磁盘上。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;暂存区（Staging Area / Index）&lt;/strong&gt;：存放即将提交的内容，对应 &lt;code&gt;.git/index&lt;/code&gt; 文件。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;版本库（Repository / Git Directory）&lt;/strong&gt;：存储所有提交历史，文件以对象形式保存在 &lt;code&gt;.git/objects&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;文件状态流转：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;未跟踪（Untracked）→ 已修改（Modified）→ 已暂存（Staged）→ 已提交（Committed）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;2-指针与提交对象&#34;&gt;2. 指针与提交对象
+&lt;/h4&gt;&lt;p&gt;Git 中核心是指针：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;HEAD&lt;/strong&gt;：指向当前分支（或直接指向提交，即 detached HEAD 状态）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分支（Branch）&lt;/strong&gt;：本质是指向提交对象的可变指针，存储在 &lt;code&gt;.git/refs/heads/&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;提交对象（Commit）&lt;/strong&gt;：包含树对象、父提交指针、作者信息等，通过父指针形成历史链。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;关键操作与指针移动：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git commit&lt;/code&gt;：创建新提交，分支指针前移。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git branch &amp;lt;name&amp;gt;&lt;/code&gt;：创建新指针。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git checkout &amp;lt;branch&amp;gt;&lt;/code&gt;：切换 HEAD 指向，更新工作区和暂存区。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git reset&lt;/code&gt;：移动分支指针，可选修改暂存区和工作区。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;3-合并策略&#34;&gt;3. 合并策略
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;(1) 快进合并（Fast-forward）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;当目标分支的历史完全包含当前分支时，只需将指针直接前移，无新提交产生。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;A&amp;mdash;B  main
+&lt;br&gt;
+C&amp;mdash;D  feature
+→ git merge feature （在 main 上）
+A&amp;mdash;B&amp;mdash;C&amp;mdash;D  main, feature&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;(2) 三方合并（Three-way Merge）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;两个分支都有新提交时，Git 找到共同祖先，结合三方内容合并，若有冲突需手动解决，最终产生合并提交（两个父提交）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(3) 变基（Rebase）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;将当前分支的提交依次重新应用到目标分支之上，生成新提交，历史线性化。&lt;strong&gt;注意：不要在公共分支上使用 rebase&lt;/strong&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;4-远程协作原理&#34;&gt;4. 远程协作原理
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;远程分支（&lt;code&gt;origin/*&lt;/code&gt;）是本地存储的远程状态快照。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git fetch&lt;/code&gt; 只更新远程分支指针，不合并。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git pull&lt;/code&gt; = &lt;code&gt;fetch&lt;/code&gt; + &lt;code&gt;merge&lt;/code&gt;（或 &lt;code&gt;rebase&lt;/code&gt;）。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git push&lt;/code&gt; 推送本地提交并更新远程分支，若远程有新提交会被拒绝。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;二开发流程实战模拟&#34;&gt;二、开发流程实战模拟
+&lt;/h3&gt;&lt;p&gt;假设使用 &lt;strong&gt;Feature Branch Workflow&lt;/strong&gt; + &lt;strong&gt;Pull Request&lt;/strong&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 1：克隆远程仓库&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone https://github.com/team/project.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd project
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 或已有仓库，更新主分支&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git pull --ff-only
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 2：创建特性分支&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch -c feature/login
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 3：开发、检查、提交&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git status
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git diff
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add -p
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 修改文件后&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add login.html login.js
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git diff --cached
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;feat: add login page&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 4：推送分支到远程&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 4.1 获取主分支新变化并整合&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git fetch origin
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git rebase origin/main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 4.2 运行项目测试，通过后推送&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push -u origin feature/login
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 5：创建 Pull Request 并合并&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 在托管平台创建 PR/MR，进行评审review 后合并（通常采用 merge commit 或 squash）。&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 6：合并完成后更新本地主分支&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git pull origin main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# git pull --ff-only&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 7：删除特性分支&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git branch -d feature/login          &lt;span style=&#34;color:#75715e&#34;&gt;# 本地删除&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push origin --delete feature/login  &lt;span style=&#34;color:#75715e&#34;&gt;# 远程删除（可选）&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# git fetch --prune origin&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 8：处理合并冲突&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch feature/login
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git merge main        &lt;span style=&#34;color:#75715e&#34;&gt;# 出现冲突&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 手动编辑冲突文件，删除标记&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add login.js
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit            &lt;span style=&#34;color:#75715e&#34;&gt;# 完成合并&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 9：打标签与发布&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git tag -a v1.0.0 -m &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Release version 1.0.0&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push origin v1.0.0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 10：回滚错误提交&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 公共分支推荐 revert&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git revert &amp;lt;commit-hash&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push origin main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 本地未推送可用 reset&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git reset --hard HEAD~1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 步骤 11：使用 stash 临时保存工作&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git stash push -m &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;WIP: login feature&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# ... 处理紧急任务 ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch feature/login
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git stash pop
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;h3 id=&#34;三分支切换的最佳实践&#34;&gt;三、分支切换的最佳实践
+&lt;/h3&gt;&lt;p&gt;切换分支时，&lt;strong&gt;最好确保工作区干净&lt;/strong&gt;，或明确处理未提交修改。&lt;/p&gt;
+&lt;h4 id=&#34;1-检查状态&#34;&gt;1. 检查状态
+&lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git status
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;2-处理未提交修改&#34;&gt;2. 处理未提交修改
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;有修改且目标分支无冲突&lt;/strong&gt;：使用 &lt;code&gt;git stash&lt;/code&gt; 临时保存。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;有修改且目标分支有冲突&lt;/strong&gt;：Git 会阻止切换，必须 stash 或 commit。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;工作区干净&lt;/strong&gt;：直接切换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;3-推荐流程&#34;&gt;3. 推荐流程
+&lt;/h4&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git status
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git stash push -m &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;WIP: xxx&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch &amp;lt;target-branch&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# 在目标分支工作...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git switch &amp;lt;original-branch&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git stash pop
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;4-新命令-git-switch-和-git-restore&#34;&gt;4. 新命令 &lt;code&gt;git switch&lt;/code&gt; 和 &lt;code&gt;git restore&lt;/code&gt;
+&lt;/h4&gt;&lt;p&gt;Git 2.23 引入了两个专注命令，拆分 &lt;code&gt;checkout&lt;/code&gt; 的职责：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;git switch&lt;/code&gt;&lt;/strong&gt;：只管分支切换与创建。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git switch &amp;lt;branch&amp;gt;&lt;/code&gt; 切换分支&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git switch -c &amp;lt;branch&amp;gt;&lt;/code&gt; 创建并切换&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;git restore&lt;/code&gt;&lt;/strong&gt;：只管恢复文件。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git restore &amp;lt;file&amp;gt;&lt;/code&gt; 丢弃工作区修改&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git restore --staged &amp;lt;file&amp;gt;&lt;/code&gt; 取消暂存&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git restore --source=&amp;lt;commit&amp;gt; &amp;lt;file&amp;gt;&lt;/code&gt; 从历史恢复文件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;使用新命令语义更清晰，降低误操作风险。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;四git-底层实现深度解析&#34;&gt;四、Git 底层实现深度解析
+&lt;/h3&gt;&lt;p&gt;Git 本质是一个&lt;strong&gt;内容寻址文件系统&lt;/strong&gt;，底层是键值存储。&lt;/p&gt;
+&lt;h4 id=&#34;1-对象模型&#34;&gt;1. 对象模型
+&lt;/h4&gt;&lt;p&gt;&lt;strong&gt;(1) Blob 对象&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;存储文件内容，不含文件名或路径。内容相同则哈希相同，自动去重。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(2) Tree 对象&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;存储目录结构和文件名到 blob / 子 tree 的映射，类似于目录快照。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(3) Commit 对象&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;包含指向顶层 tree 的哈希、父提交哈希、作者信息、提交信息等。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;(4) Tag 对象&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;轻量标签只创建引用；附注标签创建对象，包含额外信息，可签名。&lt;/p&gt;
+&lt;h4 id=&#34;2-内容寻址存储&#34;&gt;2. 内容寻址存储
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;对象文件名 = 内容 SHA-1 哈希，存储在 &lt;code&gt;.git/objects/xx/yyyy...&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;内容不可变，哈希保证完整性。&lt;/li&gt;
+&lt;li&gt;松散对象使用 zlib 压缩。&lt;/li&gt;
+&lt;li&gt;打包文件（packfile）使用 delta 压缩，附有 .idx 索引。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;3-索引文件暂存区&#34;&gt;3. 索引文件（暂存区）
+&lt;/h4&gt;&lt;p&gt;&lt;code&gt;.git/index&lt;/code&gt; 是二进制文件，存储路径到 blob 哈希的映射，代表下一次提交的快照。本质是一个&lt;strong&gt;哈希表&lt;/strong&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;4-引用系统&#34;&gt;4. 引用系统
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;分支：&lt;code&gt;.git/refs/heads/&amp;lt;branch&amp;gt;&lt;/code&gt;，指向提交。&lt;/li&gt;
+&lt;li&gt;远程分支：&lt;code&gt;.git/refs/remotes/&amp;lt;remote&amp;gt;/&amp;lt;branch&amp;gt;&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;标签：&lt;code&gt;.git/refs/tags/&amp;lt;tag&amp;gt;&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;HEAD：符号引用，指向当前分支或直接指向提交。&lt;/li&gt;
+&lt;li&gt;引用过多时会打包到 &lt;code&gt;.git/packed-refs&lt;/code&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;5-对象打包与垃圾回收&#34;&gt;5. 对象打包与垃圾回收
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git gc&lt;/code&gt;：打包松散对象、清理不可达对象、压缩引用。&lt;/li&gt;
+&lt;li&gt;packfile 对相似对象进行 delta 压缩，大幅减小体积。&lt;/li&gt;
+&lt;li&gt;不可达对象最终由 &lt;code&gt;git prune&lt;/code&gt; 或 &lt;code&gt;git gc&lt;/code&gt; 清理。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;6-常用命令底层调用链&#34;&gt;6. 常用命令底层调用链
+&lt;/h4&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;git add &amp;lt;file&amp;gt;&lt;/code&gt;：计算文件哈希 → 写入 blob（若不存在）→ 更新索引。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git commit&lt;/code&gt;：从索引生成 tree → 创建 commit → 更新分支引用。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git checkout &amp;lt;branch&amp;gt;&lt;/code&gt;：读取目标 commit 的 tree → 更新索引和工作区 → 更新 HEAD。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git status&lt;/code&gt;：比较 HEAD、索引和工作区，报告差异。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;五git-常用命令速览&#34;&gt;五、Git 常用命令速览
+&lt;/h3&gt;&lt;p&gt;以下命令覆盖了实际项目 90% 以上的 Git 操作。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1. 初始化、克隆与配置&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;场景&lt;/th&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+					&lt;th&gt;说明&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;初始化仓库&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git init&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;在当前目录创建 Git 仓库&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;克隆项目&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git clone &amp;lt;url&amp;gt;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;获取仓库并配置远程关联&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;配置提交者姓名&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git config --global user.name &amp;quot;Your Name&amp;quot;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;设置默认提交者姓名&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;配置提交者邮箱&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git config --global user.email &amp;quot;you@example.com&amp;quot;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;设置默认提交者邮箱&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看配置及来源&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git config --list --show-origin&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;排查配置被哪里覆盖&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看远程仓库&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git remote -v&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;查看拉取与推送地址&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;添加远程仓库&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git remote add origin &amp;lt;url&amp;gt;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;常用于本地项目首次关联远程&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;修改远程地址&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git remote set-url origin &amp;lt;url&amp;gt;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;仓库迁移、HTTPS/SSH 切换&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;2. 日常开发：查看、暂存、提交&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;场景&lt;/th&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+					&lt;th&gt;说明&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看当前状态&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git status&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;当前分支、暂存、未暂存、未跟踪文件&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;简洁查看状态&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git status -sb&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;日常高频&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看尚未暂存的修改&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git diff&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;工作区与暂存区比较&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看即将提交的修改&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git diff --cached&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;暂存区与 &lt;code&gt;HEAD&lt;/code&gt; 比较&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看相对上次提交的全部已跟踪修改&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git diff HEAD&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;工作区与 &lt;code&gt;HEAD&lt;/code&gt; 比较&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;暂存指定文件&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git add &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;精确控制提交范围&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;暂存整个仓库的变化&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git add -A&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;包括新增、修改、删除&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;按修改块暂存&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git add -p&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;将混在一起的修改拆成独立提交&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;提交&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git commit -m &amp;quot;feat: add login&amp;quot;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;创建本地提交&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;修改最近一次提交&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git commit --amend&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;替换最近一次提交&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;只修改最近一次提交信息&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git commit --amend -m &amp;quot;new message&amp;quot;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;前提是没有意外暂存的内容&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;典型流程：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git status
+git diff
+git add -p
+git diff --cached
+git commit -m &amp;#34;fix: handle expired token&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;3. 分支：创建、切换、删除&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;场景&lt;/th&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看本地分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git branch&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看远程跟踪分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git branch -r&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看本地与远程跟踪分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git branch -a&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看分支跟踪关系&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git branch -vv&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;创建并切换功能分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git switch -c feature/login&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;切换已有分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git switch main&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;从远程分支创建本地跟踪分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git switch --track origin/feature/login&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;重命名当前分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git branch -m new-name&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;安全删除本地分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git branch -d feature/login&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;强制删除本地分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git branch -D feature/login&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;删除远程分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git push origin --delete feature/login&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;分支本质上是指向提交的可移动引用&lt;/strong&gt;，创建分支不需要复制整个项目。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git checkout&lt;/code&gt; 同时承担切换分支、恢复文件等职责；&lt;code&gt;switch&lt;/code&gt; 专门用于切换分支，&lt;code&gt;restore&lt;/code&gt; 用于恢复文件。&lt;/li&gt;
+&lt;li&gt;带着未提交修改有时也能切换分支；如果切换会覆盖这些修改，Git 通常会阻止操作。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-d&lt;/code&gt; 会做合并状态检查；&lt;code&gt;-D&lt;/code&gt; 跳过该检查。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;4. 远程协作：fetch、pull、push&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;场景&lt;/th&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+					&lt;th&gt;说明&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;获取远程更新&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git fetch origin&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;下载对象并更新远程跟踪引用&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;获取更新并清理失效的远程跟踪分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git fetch --prune origin&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;清理远程已删除分支的本地跟踪引用&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;拉取并使用 merge 整合&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git pull --no-rebase&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;明确使用合并策略&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;拉取并使用 rebase 整合&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git pull --rebase&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;将本地提交重放到上游之后&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;只接受快进更新&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git pull --ff-only&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;分支已分叉时直接失败&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;首次推送并设置上游&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git push -u origin feature/login&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;后续通常可直接 &lt;code&gt;git push&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;推送当前分支&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git push&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;具体目标受上游和配置影响&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;fetch&lt;/code&gt;：获取远程更新，通常不改变当前本地分支与工作区。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pull&lt;/code&gt;：先获取远程更新，再根据参数和配置整合到当前分支。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;**push 被拒绝怎么办？**先看报错。如果是远程有新提交导致非快进拒绝：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git fetch origin
+git rebase origin/feature/login
+# 如有冲突，解决后继续 rebase
+git push
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;也可以按团队规范使用 merge。&lt;strong&gt;不要把强推当作普通推送失败的默认解决方案。&lt;/strong&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;5. 合并分支：merge 和 rebase&lt;/strong&gt;&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 将功能分支合入主分支
+git switch main
+git merge feature/login
+
+# 在功能分支上吸收最新主分支
+git switch feature/login
+git fetch origin
+git rebase origin/main
+&lt;/code&gt;&lt;/pre&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;对比&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;merge&lt;/code&gt;&lt;/th&gt;
+					&lt;th&gt;&lt;code&gt;rebase&lt;/code&gt;&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;处理方式&lt;/td&gt;
+					&lt;td&gt;将两条历史汇合&lt;/td&gt;
+					&lt;td&gt;将提交重新应用到新基点上&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;已有提交身份&lt;/td&gt;
+					&lt;td&gt;保留&lt;/td&gt;
+					&lt;td&gt;被重放的提交通常获得新哈希&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;历史形态&lt;/td&gt;
+					&lt;td&gt;保留分叉与汇合关系&lt;/td&gt;
+					&lt;td&gt;适合形成线性历史&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;典型场景&lt;/td&gt;
+					&lt;td&gt;整合共享分支&lt;/td&gt;
+					&lt;td&gt;更新个人功能分支、整理提交&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;冲突处理&lt;/td&gt;
+					&lt;td&gt;一次合并过程&lt;/td&gt;
+					&lt;td&gt;可能在多个重放提交上分别处理&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;原始：
+A---B---C  main
+     \
+      D---E  feature
+
+merge：
+A---B---C-------M
+     \        /
+      D------E
+
+rebase：
+A---B---C---D&amp;#39;---E&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Fast-forward&lt;/strong&gt;：当前分支是目标分支的祖先时，只移动分支指针即可，无需合并提交。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git merge --no-ff feature/login&lt;/code&gt;：即使能够快进，也创建合并提交。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git merge --squash feature/login&lt;/code&gt;：将合并结果放入暂存区，随后自行提交；不会记录普通 merge 的双父提交关系。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;不要随意 rebase 他人正在基于其开发的共享历史。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;6. 冲突处理&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;merge 冲突处理流程：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git merge feature/login
+git status
+
+# 编辑冲突文件，确定最终内容，删除冲突标记
+
+git add &amp;lt;resolved-file&amp;gt;
+git merge --continue
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;放弃本次合并：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git merge --abort
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;rebase 冲突处理：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git rebase origin/main
+
+# 编辑并解决冲突
+git add &amp;lt;resolved-file&amp;gt;
+git rebase --continue
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;放弃本次变基：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git rebase --abort
+&lt;/code&gt;&lt;/pre&gt;&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;7. 撤销操作：restore、reset、revert【重点】&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;先判断：&lt;strong&gt;修改有没有提交？提交有没有共享？是否要保留代码？&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;场景&lt;/th&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+					&lt;th&gt;结果&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;放弃某个文件未暂存的修改&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git restore &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;用暂存区版本覆盖工作区文件&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;取消暂存，保留工作区修改&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git restore --staged &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;暂存区恢复为 &lt;code&gt;HEAD&lt;/code&gt; 版本&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;文件的暂存和工作区都恢复到上次提交&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git restore --source=HEAD --staged --worktree &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;丢弃该文件已暂存、未暂存修改&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;撤销最近提交，保留为已暂存修改&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git reset --soft HEAD~1&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;分支回退，暂存区和工作区保持&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;撤销最近提交，保留为未暂存修改&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git reset --mixed HEAD~1&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;分支回退，重置暂存区，保留工作区&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;回退提交并重置已跟踪内容&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git reset --hard HEAD~1&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;分支、暂存区、工作区都回退&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;撤销某次提交的效果并留下记录&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git revert &amp;lt;commit&amp;gt;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;创建反向提交&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;三种 reset 的核心区别：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;模式&lt;/th&gt;
+					&lt;th&gt;移动当前分支&lt;/th&gt;
+					&lt;th&gt;重置暂存区&lt;/th&gt;
+					&lt;th&gt;重置工作区&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;--soft&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;是&lt;/td&gt;
+					&lt;td&gt;否&lt;/td&gt;
+					&lt;td&gt;否&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;--mixed&lt;/code&gt;，默认&lt;/td&gt;
+					&lt;td&gt;是&lt;/td&gt;
+					&lt;td&gt;是&lt;/td&gt;
+					&lt;td&gt;否&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;--hard&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;是&lt;/td&gt;
+					&lt;td&gt;是&lt;/td&gt;
+					&lt;td&gt;是&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;reset&lt;/code&gt;：调整分支位置，常用于尚未共享的本地历史。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;revert&lt;/code&gt;：新增提交抵消旧提交的效果，常用于已经推送、多人协作的分支。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;reset --hard&lt;/code&gt; 会丢弃未提交的已跟踪修改，也可能删除妨碍恢复目标路径的未跟踪文件；执行前应明确要保留什么。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;8. 临时切任务：stash&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;场景：功能写到一半，需要临时修线上问题。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git stash push -u -m &amp;#34;login work in progress&amp;#34;
+git switch main
+
+# 完成其他工作后
+git switch feature/login
+git stash pop
+&lt;/code&gt;&lt;/pre&gt;&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+					&lt;th&gt;用途&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git stash list&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;查看暂存记录&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git stash show -p&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;查看最近一条记录的补丁&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git stash apply &#39;stash@{0}&#39;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;恢复指定记录，保留记录&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git stash pop&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;恢复最近记录，成功后删除记录&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git stash drop &#39;stash@{0}&#39;&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;删除指定记录&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;默认 stash 不包含未跟踪文件；&lt;code&gt;-u&lt;/code&gt; 包含未跟踪文件；&lt;code&gt;-a&lt;/code&gt; 还包含被忽略文件。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;apply&lt;/code&gt; 保留 stash，&lt;code&gt;pop&lt;/code&gt; 成功后删除。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pop&lt;/code&gt; 发生冲突时，stash 通常会保留，需要手动处理。&lt;/li&gt;
+&lt;li&gt;stash 更适合临时保存，不应代替长期提交与备份。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;9. 挑选提交：cherry-pick&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;场景：某个修复已经在开发分支完成，需要单独同步到发布分支。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git switch release/1.0
+git cherry-pick &amp;lt;commit&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;多个提交可以按顺序应用：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git cherry-pick &amp;lt;commit1&amp;gt; &amp;lt;commit2&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;发生冲突：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git add &amp;lt;resolved-file&amp;gt;
+git cherry-pick --continue
+
+# 或放弃
+git cherry-pick --abort
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;merge&lt;/code&gt; 整合分支历史；&lt;code&gt;cherry-pick&lt;/code&gt; 应用选定提交的变更。&lt;/li&gt;
+&lt;li&gt;一般会生成新提交，哈希通常不同。&lt;/li&gt;
+&lt;li&gt;目标提交可能依赖之前的代码，不能只看“这条提交改得少”就直接搬过去。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;10. 整理提交：交互式 rebase&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;场景：准备代码评审前，把多次零碎修正整理成有意义的提交。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git rebase -i HEAD~3
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;常见操作：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;操作&lt;/th&gt;
+					&lt;th&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;pick&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;保留提交&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;reword&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;修改提交说明&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;edit&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;暂停，修改该提交&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;squash&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;合并到上一条提交，并编辑说明&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;fixup&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;合并到上一条提交，通常丢弃本条说明&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;drop&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;删除该提交&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;经典问题：如何把最近三次提交合成一次？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;运行上面的命令，第一条保留 &lt;code&gt;pick&lt;/code&gt;，后两条改为 &lt;code&gt;squash&lt;/code&gt; 或 &lt;code&gt;fixup&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;如果已经推送，并且团队允许改写该功能分支：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git push --force-with-lease
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;--force-with-lease&lt;/code&gt; 会检查远程引用是否符合预期，比 &lt;code&gt;--force&lt;/code&gt; 更有保护，但&lt;strong&gt;不代表可以无条件改写共享分支&lt;/strong&gt;。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;11. 查询历史与定位问题&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;场景&lt;/th&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;简洁查看提交&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git log --oneline&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看分支提交图&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git log --oneline --graph --decorate --all&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看某次提交详情&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git show &amp;lt;commit&amp;gt;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看某个文件的历史&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git log -- &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;尝试跟踪文件重命名前的历史&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git log --follow -- &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;按提交说明搜索&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git log --grep=&amp;quot;login&amp;quot;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查找字符串出现次数发生变化的提交&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git log -S &amp;quot;functionName&amp;quot; -- &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查某些行最后由哪次提交修改&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git blame -L 10,30 -- &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;比较两个提交或分支的最终内容&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git diff main feature/login&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;看功能分支相对共同祖先的改动&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git diff main...feature/login&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;要区分 &lt;code&gt;log&lt;/code&gt; 与 &lt;code&gt;diff&lt;/code&gt;：&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+					&lt;th&gt;含义&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git log A..B&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;B 可达、A 不可达的提交&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git log A...B&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;只属于其中一侧历史的提交&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git diff A..B&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;比较 A、B 两个端点，等价于 &lt;code&gt;git diff A B&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;&lt;code&gt;git diff A...B&lt;/code&gt;&lt;/td&gt;
+					&lt;td&gt;比较 A、B 的共同祖先与 B&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;这是很容易混淆的面试题。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;12. 二分定位：bisect&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;场景：过去某个版本正常，现在有 bug，但不知道哪次提交引入。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git bisect start
+git bisect bad
+git bisect good &amp;lt;known-good-commit&amp;gt;
+
+# Git 切到一个中间提交，运行测试后标记：
+git bisect good
+# 或
+git bisect bad
+
+# 重复直到定位完成，最后退出：
+git bisect reset
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果有自动检测脚本：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git bisect run &amp;lt;test-command&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;使用二分法缩小范围。&lt;/li&gt;
+&lt;li&gt;自动测试退出码 &lt;code&gt;0&lt;/code&gt; 表示正常，&lt;code&gt;1–127&lt;/code&gt; 中除 &lt;code&gt;125&lt;/code&gt; 外表示有问题，&lt;code&gt;125&lt;/code&gt; 表示跳过。&lt;/li&gt;
+&lt;li&gt;需要稳定、可复现的判断标准，才容易得到可靠结果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;13. 误操作恢复：reflog&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;场景：误 reset、误删分支，或者 rebase 后想找回原来的提交。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git reflog
+
+# 找到原来的提交，先建立恢复分支
+git branch rescue &amp;lt;old-commit&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;log&lt;/code&gt; 查看提交历史。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;reflog&lt;/code&gt; 记录本地引用的移动，例如切分支、reset、rebase。&lt;/li&gt;
+&lt;li&gt;reflog 是本地记录，不会随普通 push 同步到远程。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;它不是万能撤销&lt;/strong&gt;：从未提交、被覆盖的工作区内容，不一定能找回。&lt;/li&gt;
+&lt;li&gt;记录会过期，不可达对象也可能被垃圾回收，不能当永久备份。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;14. 忽略文件与清理&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;场景：依赖目录、构建产物、本地配置不应该进入版本库。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;node_modules/
+dist/
+.env
+*.log
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果文件已经被跟踪：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git rm --cached .env
+git add .gitignore
+git commit -m &amp;#34;chore: stop tracking local environment file&amp;#34;
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;.gitignore&lt;/code&gt; 主要影响未跟踪文件，&lt;strong&gt;不能让已经跟踪的文件自动停止跟踪&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git rm --cached&lt;/code&gt; 从索引移除文件，保留本地文件。&lt;/li&gt;
+&lt;li&gt;停止跟踪不会清除历史里已有的文件内容。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;清理未跟踪文件：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git clean -nd   # 预览将删除哪些未跟踪文件和目录
+git clean -fd   # 执行删除
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;code&gt;-x&lt;/code&gt; 会把被忽略的文件也纳入清理范围，可能包括本地配置与依赖目录。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;15. 发布版本：tag&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+	&lt;thead&gt;
+			&lt;tr&gt;
+					&lt;th&gt;场景&lt;/th&gt;
+					&lt;th&gt;命令&lt;/th&gt;
+			&lt;/tr&gt;
+	&lt;/thead&gt;
+	&lt;tbody&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看标签&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git tag&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;创建附注标签&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git tag -a v1.2.0 -m &amp;quot;Release v1.2.0&amp;quot;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;给指定提交打标签&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git tag -a v1.2.0 &amp;lt;commit&amp;gt; -m &amp;quot;Release v1.2.0&amp;quot;&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;推送指定标签&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git push origin v1.2.0&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+			&lt;tr&gt;
+					&lt;td&gt;查看标签内容&lt;/td&gt;
+					&lt;td&gt;&lt;code&gt;git show v1.2.0&lt;/code&gt;&lt;/td&gt;
+			&lt;/tr&gt;
+	&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;分支会随新提交向前移动；标签通常固定标记一个版本。&lt;/li&gt;
+&lt;li&gt;轻量标签主要是引用；附注标签还保存标签者、说明等信息，并可签名。&lt;/li&gt;
+&lt;li&gt;普通分支推送不意味着所有标签都会同步，应明确推送所需标签。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;16. 多任务并行：worktree&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;场景：当前功能分支保留现场，同时在另一个目录修 bug 或查看其他版本。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;git worktree add -b hotfix/payment ../project-hotfix main
+git worktree list
+
+# 工作完成且目录状态允许时移除
+git worktree remove ../project-hotfix
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;它允许一个仓库拥有多个工作目录，各自具有独立的工作区和索引，共享对象库等仓库数据。同一个分支通常不能同时在多个 worktree 中检出。&lt;/p&gt;
+</description>
+        </item>
         
     </channel>
 </rss>
