@@ -1,4 +1,7 @@
 {{- $pages := where .Site.RegularPages "Type" "in" .Site.Params.mainSections -}}
+{{/* 刷题文章不在首页 mainSections 中，但保留在搜索索引里 */}}
+{{- $leetcode := where .Site.RegularPages "Type" "eq" "leetcode" -}}
+{{- $pages = $pages | union $leetcode -}}
 {{- $filtered := where $pages "Params.hidden" "!=" true -}}
 
 {{- $result := slice -}}

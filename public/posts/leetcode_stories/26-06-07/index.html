@@ -1,19 +1,37 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-CN" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8080&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 树根猎人：从一堆父子关系里揪出老祖宗 一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&ldquo;邻村要建棵树，你帮忙看看。&rdquo;\n&ldquo;建树？&ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：[parent, child, isLeft]。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。\n&ldquo;清官难断家务事，&ldquo;我把字条往桌上一拍，露出职业性的微笑，&ldquo;但算法能解父子局。&rdquo;\n说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：\n第一步：补全亲属关系网\n对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。\n第二步：找出老祖宗\n那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 child 位置上出现的都是娃，而只有老祖宗——那个从来没当过子女的人——永远不会出现在 child 位置上。所以策略很简单：把所有出现过的 child 收集到一个集合里，再遍历所有节点，哪个不在 child 集合里，哪个就是根。\n“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”\n我搓搓手，开始落代码，先准备两样东西：\n一个哈希表 nodes：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。 一个集合 children：专门登记所有当过娃的节点，用来筛根。这就是我们的&quot;有爹人士名单&rdquo;。 nodes = {} children = set() 接着，遍历 descriptions 里的每一条 [parent, child, isLeft]。对于 parent 和 child，先去 nodes 里查一下：没有就当场 new 一个 TreeNode 塞进去。然后，根据 isLeft 把 child 挂到 parent 左边或右边，父子关系定下来。最后把 child 扔进 children 集合，留个案底，证明这孩子有爹。\nfor parent, child, is_left in descriptions:\rif parent not in nodes:\rnodes[parent] = TreeNode(parent)\rif child not in nodes:\rnodes[child] = TreeNode(child)\rif is_left:\rnodes[parent].left = nodes[child]\relse:\rnodes[parent].right = nodes[child]\rchildren.add(child) 遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 children 集合里的人：\n">
 <title>leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗</title>
 
-<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-07/'>
+<link rel='canonical' href='http://localhost:8080/posts/leetcode_stories/26-06-07/'>
 
-<link rel="stylesheet" href="/scss/style.min.e3718dca5da4421a2de6926b9028c96a52143d8fb2646c50131f0200b4c918ae.css"><meta property='og:title' content="leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗">
+<link rel="stylesheet" href="/scss/style.min.e8fcb04e514917791bff6b0897dbef635aa7d7e71998bbc5e2bfd38006839194.css"><meta property='og:title' content="leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗">
 <meta property='og:description' content="🎮 树根猎人：从一堆父子关系里揪出老祖宗 一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&ldquo;邻村要建棵树，你帮忙看看。&rdquo;\n&ldquo;建树？&ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：[parent, child, isLeft]。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。\n&ldquo;清官难断家务事，&ldquo;我把字条往桌上一拍，露出职业性的微笑，&ldquo;但算法能解父子局。&rdquo;\n说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：\n第一步：补全亲属关系网\n对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。\n第二步：找出老祖宗\n那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 child 位置上出现的都是娃，而只有老祖宗——那个从来没当过子女的人——永远不会出现在 child 位置上。所以策略很简单：把所有出现过的 child 收集到一个集合里，再遍历所有节点，哪个不在 child 集合里，哪个就是根。\n“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”\n我搓搓手，开始落代码，先准备两样东西：\n一个哈希表 nodes：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。 一个集合 children：专门登记所有当过娃的节点，用来筛根。这就是我们的&quot;有爹人士名单&rdquo;。 nodes = {} children = set() 接着，遍历 descriptions 里的每一条 [parent, child, isLeft]。对于 parent 和 child，先去 nodes 里查一下：没有就当场 new 一个 TreeNode 塞进去。然后，根据 isLeft 把 child 挂到 parent 左边或右边，父子关系定下来。最后把 child 扔进 children 集合，留个案底，证明这孩子有爹。\nfor parent, child, is_left in descriptions:\rif parent not in nodes:\rnodes[parent] = TreeNode(parent)\rif child not in nodes:\rnodes[child] = TreeNode(child)\rif is_left:\rnodes[parent].left = nodes[child]\relse:\rnodes[parent].right = nodes[child]\rchildren.add(child) 遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 children 集合里的人：\n">
-<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-07/'>
-<meta property='og:site_name' content='gugugu'>
-<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-07T22:40:48&#43;08:00'/><meta property='article:modified_time' content='2026-06-07T22:40:48&#43;08:00'/>
+<meta property='og:url' content='http://localhost:8080/posts/leetcode_stories/26-06-07/'>
+<meta property='og:site_name' content='gugugu｜AI 应用工程师'>
+<meta property='og:type' content='article'><meta property='article:section' content='Leetcode' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-07T22:40:48&#43;08:00'/><meta property='article:modified_time' content='2026-06-07T22:40:48&#43;08:00'/><meta property='og:image' content='http://localhost:8080/img/avatar.jpg' />
 <meta name="twitter:title" content="leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗">
-<meta name="twitter:description" content="🎮 树根猎人：从一堆父子关系里揪出老祖宗 一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&ldquo;邻村要建棵树，你帮忙看看。&rdquo;\n&ldquo;建树？&ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：[parent, child, isLeft]。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。\n&ldquo;清官难断家务事，&ldquo;我把字条往桌上一拍，露出职业性的微笑，&ldquo;但算法能解父子局。&rdquo;\n说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：\n第一步：补全亲属关系网\n对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。\n第二步：找出老祖宗\n那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 child 位置上出现的都是娃，而只有老祖宗——那个从来没当过子女的人——永远不会出现在 child 位置上。所以策略很简单：把所有出现过的 child 收集到一个集合里，再遍历所有节点，哪个不在 child 集合里，哪个就是根。\n“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”\n我搓搓手，开始落代码，先准备两样东西：\n一个哈希表 nodes：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。 一个集合 children：专门登记所有当过娃的节点，用来筛根。这就是我们的&quot;有爹人士名单&rdquo;。 nodes = {} children = set() 接着，遍历 descriptions 里的每一条 [parent, child, isLeft]。对于 parent 和 child，先去 nodes 里查一下：没有就当场 new 一个 TreeNode 塞进去。然后，根据 isLeft 把 child 挂到 parent 左边或右边，父子关系定下来。最后把 child 扔进 children 集合，留个案底，证明这孩子有爹。\nfor parent, child, is_left in descriptions:\rif parent not in nodes:\rnodes[parent] = TreeNode(parent)\rif child not in nodes:\rnodes[child] = TreeNode(child)\rif is_left:\rnodes[parent].left = nodes[child]\relse:\rnodes[parent].right = nodes[child]\rchildren.add(child) 遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 children 集合里的人：\n">
+<meta name="twitter:description" content="🎮 树根猎人：从一堆父子关系里揪出老祖宗 一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&ldquo;邻村要建棵树，你帮忙看看。&rdquo;\n&ldquo;建树？&ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：[parent, child, isLeft]。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。\n&ldquo;清官难断家务事，&ldquo;我把字条往桌上一拍，露出职业性的微笑，&ldquo;但算法能解父子局。&rdquo;\n说白了，就是从一堆“谁是谁他爹”的八卦信息里重建完整的家族谱系。我理了理思路，这事分两步走：\n第一步：补全亲属关系网\n对着家谱名单，把每个人的直系亲属关系一条条补全——把每个节点造出来，顺便把父子指针挂上。这就像是给村里的每个人办身份证，然后记录他们的亲子关系。\n第二步：找出老祖宗\n那个只当爹、不当娃的根节点，就是我们要找的目标。在任一个三元组的 child 位置上出现的都是娃，而只有老祖宗——那个从来没当过子女的人——永远不会出现在 child 位置上。所以策略很简单：把所有出现过的 child 收集到一个集合里，再遍历所有节点，哪个不在 child 集合里，哪个就是根。\n“这不就是玩‘谁是卧底’吗？”我自言自语，“所有人都有爹，就他没有——那他就是老祖宗。”\n我搓搓手，开始落代码，先准备两样东西：\n一个哈希表 nodes：以节点值为 key，存节点对象。这就好比是村里的户口本，每个人都在这里登记。 一个集合 children：专门登记所有当过娃的节点，用来筛根。这就是我们的&quot;有爹人士名单&rdquo;。 nodes = {} children = set() 接着，遍历 descriptions 里的每一条 [parent, child, isLeft]。对于 parent 和 child，先去 nodes 里查一下：没有就当场 new 一个 TreeNode 塞进去。然后，根据 isLeft 把 child 挂到 parent 左边或右边，父子关系定下来。最后把 child 扔进 children 集合，留个案底，证明这孩子有爹。\nfor parent, child, is_left in descriptions:\rif parent not in nodes:\rnodes[parent] = TreeNode(parent)\rif child not in nodes:\rnodes[child] = TreeNode(child)\rif is_left:\rnodes[parent].left = nodes[child]\relse:\rnodes[parent].right = nodes[child]\rchildren.add(child) 遍历跑完，整棵树的骨架就全部搭好了。接下来找根——那个唯一没出现在 children 集合里的人：\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:8080/img/avatar.jpg' />
     <link rel="shortcut icon" href="/favicon.svg" />
+<meta name="author" content="gugugu">
+<meta name="theme-color" content="#34495e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#303030" media="(prefers-color-scheme: dark)">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "gugugu｜AI 应用工程师",
+  "url": "http://localhost:8080/",
+  "description": "AI 应用工程师作品集与技术博客，聚焦 RAG、Agent、LLM 评测和服务工程化。",
+  "author": {
+    "@type": "Person",
+    "name": "gugugu",
+    "url": "https://github.com/iCurious-D"
+  }
+}
+</script>
 
     </head>
     <body class="
@@ -71,45 +89,10 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">gugugu</a></h1>
-            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
+            <h1 class="site-name"><a href="/">gugugu｜AI 应用工程师</a></h1>
+            <h2 class="site-description">RAG / Agent / LLM Engineering</h2>
         </div>
-    </header><ol class="menu-social">
-            
-                <li>
-                    <a 
-                        href='https://github.com/iCurious-D'
-                        target="_blank"
-                        title="GitHub"
-                        rel="me"
-                    >
-                        
-                        
-                            <!--
-tags: [logo, website, hosting, project, programming, software, development]
-category: Brand
-version: "1.18"
-unicode: "ec1c"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
-
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
+    </header><ol class="menu" id="main-menu">
         
         
         
@@ -212,6 +195,19 @@ unicode: "f1e2"
         
         
         <li >
+            <a href='/leetcode/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+
+                
+                <span>刷题</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/tools' >
                 
                 
@@ -240,39 +236,6 @@ unicode: "ea45"
 
                 
                 <span>工具</span>
-            </a>
-        </li>
-        
-        
-        <li >
-            <a href='/kids/' >
-                
-                
-                
-                    <!--
-category: Document
-tags: [study, learn, diary, write, journal, page, paper, jot down]
-version: "1.3"
-unicode: "eb96"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />
-  <path d="M13 8l2 0" />
-  <path d="M13 12l2 0" />
-</svg>
-
-                
-                <span>趣学</span>
             </a>
         </li>
         
@@ -666,7 +629,7 @@ children = set()
     <section class="copyright">
         &copy; 
         
-        2026 gugugu
+        2026 gugugu｜AI 应用工程师
     </section>
     
     <section class="powerby">

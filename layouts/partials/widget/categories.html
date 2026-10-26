@@ -1,29 +1,19 @@
 {{- $context := .Context -}}
 {{- $limit := default 10 .Params.limit -}}
-<section class="widget categories-list">
+<section class="widget tagCloud">
+    <div class="widget-icon">
+        {{ partial "helper/icon" "categories" }}
+    </div>
     <h2 class="widget-title section-title">{{ T "widget.categoriesCloud.title" }}</h2>
 
-    <div class="categories-list-items">
+    <div class="tagCloud-tags">
+        {{/* 首页隐藏 Leetcode 题解分类（已有独立导航入口），突出 AI 相关分类 */}}
         {{ range first $limit $context.Site.Taxonomies.categories.ByCount }}
-            {{ $name := .Page.Title }}
-            {{ $nameLower := lower $name }}
-            {{ $icon := "📁" }}
-            {{ $class := "" }}
-            {{ if eq $nameLower "项目实战" }}
-                {{ $icon = "🛠️" }}
-                {{ $class = "categories-list-item--orange" }}
-            {{ else if eq $nameLower "ai 技术笔记" }}
-                {{ $icon = "🧩" }}
-                {{ $class = "categories-list-item--blue" }}
-            {{ else if eq $nameLower "leetcode题解" }}
-                {{ $icon = "📝" }}
-                {{ $class = "categories-list-item--green" }}
-            {{ end }}
-            <a href="{{ .Page.RelPermalink }}" class="categories-list-item {{ $class }}">
-                <span class="categories-list-item__icon">{{ $icon }}</span>
-                <span class="categories-list-item__name">{{ $name }}</span>
-                <span class="categories-list-item__count">{{ .Count }}</span>
+            {{ if ne .Page.Title "Leetcode题解" }}
+            <a href="{{ .Page.RelPermalink }}" class="font_size_{{ .Count }}">
+                {{ .Page.Title }}
             </a>
+            {{ end }}
         {{ end }}
     </div>
 </section>

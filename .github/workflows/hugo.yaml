@@ -33,13 +33,41 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
+      - name: Reject public placeholders
+        shell: bash
+        run: |
+          if grep -R -n --include='*.md' '【待补充' content; then
+            echo "Public content still contains placeholders."
+            exit 1
+          fi
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
         run: |
           hugo \
+            --cleanDestinationDir \
             --minify \
+            --printI18nWarnings \
+            --printPathWarnings \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+      - name: Verify key pages
+        shell: bash
+        run: |
+          test -s public/index.html
+          test -s public/about/index.html
+          test -s public/projects/knowledge_base_rag/index.html
+          test -s public/projects/deep_search/index.html
+          test -s public/search/index.html
+          test -s public/tags/index.html
+          test -s public/categories/index.html
+          test -s public/robots.txt
+          test -s public/sitemap.xml
+          test -s public/posts/leetcode_stories/26-10-02/index.html
+      - name: Check generated internal links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress --root-dir './public' './public/**/*.html'
+          fail: true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

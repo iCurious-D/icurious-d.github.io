@@ -1,19 +1,37 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-CN" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8080&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 空间复杂度O(1)？村长说这是节俭美德！\n“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：[10, 4, 8, 3]，“你看，这是咱村拔河比赛的对阵表！”\n我定睛一看，“这……不就是个数组吗？”\n“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”\n我挠挠头：“&hellip;&hellip;求每个位置的 |leftSum - rightSum| ？”\n“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”\n我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：\ndef leftRightDifference(nums): n = len(nums) left_sum = [0] * n right_sum = [0] * n # 从左到右，计算每个位置的左侧总和 for i in range(1, n): left_sum[i] = left_sum[i - 1] + nums[i - 1] # 从右到左，计算每个位置的右侧总和 for i in range(n - 2, -1, -1): right_sum[i] = right_sum[i + 1] + nums[i + 1] # 计算差值的绝对值 for i in range(n): answer[i] = abs(left_sum[i] - right_sum[i]) return answer 村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。\n“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——left_sum 、right_sum 、answer ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”\n我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。\n">
 <title>leetcode2574：空间复杂度O(1)？村长说这是节俭美德！</title>
 
-<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-06/'>
+<link rel='canonical' href='http://localhost:8080/posts/leetcode_stories/26-06-06/'>
 
-<link rel="stylesheet" href="/scss/style.min.e3718dca5da4421a2de6926b9028c96a52143d8fb2646c50131f0200b4c918ae.css"><meta property='og:title' content="leetcode2574：空间复杂度O(1)？村长说这是节俭美德！">
+<link rel="stylesheet" href="/scss/style.min.e8fcb04e514917791bff6b0897dbef635aa7d7e71998bbc5e2bfd38006839194.css"><meta property='og:title' content="leetcode2574：空间复杂度O(1)？村长说这是节俭美德！">
 <meta property='og:description' content="🎮 空间复杂度O(1)？村长说这是节俭美德！\n“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：[10, 4, 8, 3]，“你看，这是咱村拔河比赛的对阵表！”\n我定睛一看，“这……不就是个数组吗？”\n“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”\n我挠挠头：“&hellip;&hellip;求每个位置的 |leftSum - rightSum| ？”\n“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”\n我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：\ndef leftRightDifference(nums): n = len(nums) left_sum = [0] * n right_sum = [0] * n # 从左到右，计算每个位置的左侧总和 for i in range(1, n): left_sum[i] = left_sum[i - 1] + nums[i - 1] # 从右到左，计算每个位置的右侧总和 for i in range(n - 2, -1, -1): right_sum[i] = right_sum[i + 1] + nums[i + 1] # 计算差值的绝对值 for i in range(n): answer[i] = abs(left_sum[i] - right_sum[i]) return answer 村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。\n“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——left_sum 、right_sum 、answer ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”\n我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。\n">
-<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-06/'>
-<meta property='og:site_name' content='gugugu'>
-<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-06T12:36:25&#43;08:00'/><meta property='article:modified_time' content='2026-06-06T12:36:25&#43;08:00'/>
+<meta property='og:url' content='http://localhost:8080/posts/leetcode_stories/26-06-06/'>
+<meta property='og:site_name' content='gugugu｜AI 应用工程师'>
+<meta property='og:type' content='article'><meta property='article:section' content='Leetcode' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-06T12:36:25&#43;08:00'/><meta property='article:modified_time' content='2026-06-06T12:36:25&#43;08:00'/><meta property='og:image' content='http://localhost:8080/img/avatar.jpg' />
 <meta name="twitter:title" content="leetcode2574：空间复杂度O(1)？村长说这是节俭美德！">
-<meta name="twitter:description" content="🎮 空间复杂度O(1)？村长说这是节俭美德！\n“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：[10, 4, 8, 3]，“你看，这是咱村拔河比赛的对阵表！”\n我定睛一看，“这……不就是个数组吗？”\n“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”\n我挠挠头：“&hellip;&hellip;求每个位置的 |leftSum - rightSum| ？”\n“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”\n我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：\ndef leftRightDifference(nums): n = len(nums) left_sum = [0] * n right_sum = [0] * n # 从左到右，计算每个位置的左侧总和 for i in range(1, n): left_sum[i] = left_sum[i - 1] + nums[i - 1] # 从右到左，计算每个位置的右侧总和 for i in range(n - 2, -1, -1): right_sum[i] = right_sum[i + 1] + nums[i + 1] # 计算差值的绝对值 for i in range(n): answer[i] = abs(left_sum[i] - right_sum[i]) return answer 村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。\n“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——left_sum 、right_sum 、answer ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”\n我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。\n">
+<meta name="twitter:description" content="🎮 空间复杂度O(1)？村长说这是节俭美德！\n“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：[10, 4, 8, 3]，“你看，这是咱村拔河比赛的对阵表！”\n我定睛一看，“这……不就是个数组吗？”\n“肤浅！”村长指着纸上那排数字，表情像在解说世界杯决赛，“这叫‘平衡指数’！对于每个人，我要知道他左边所有人的体重之和，与右边所有人的体重之和，差距有多大！这样我才能调整阵容，让两边势均力敌！”\n我挠挠头：“&hellip;&hellip;求每个位置的 |leftSum - rightSum| ？”\n“对！”村长猛拍大腿，“就是这个意思！赶紧帮我算，下午就要贴对阵表了！”\n我把对阵表往桌上一摊，思路直白得像村口那条水泥路——先从左往右扫一遍，记下每个位置左边所有人的体重之和；再从右往左扫一遍，记下右边所有人的体重之和；最后逐个位置算差值取绝对值：\ndef leftRightDifference(nums): n = len(nums) left_sum = [0] * n right_sum = [0] * n # 从左到右，计算每个位置的左侧总和 for i in range(1, n): left_sum[i] = left_sum[i - 1] + nums[i - 1] # 从右到左，计算每个位置的右侧总和 for i in range(n - 2, -1, -1): right_sum[i] = right_sum[i + 1] + nums[i + 1] # 计算差值的绝对值 for i in range(n): answer[i] = abs(left_sum[i] - right_sum[i]) return answer 村长凑过来看了一眼，表情有点复杂，就像 code review 时发现了一段能跑但让人血压升高的代码。\n“小白啊，”他拍了拍桌上那张被我用掉的草稿纸，语气里透着一股“我不是心疼钱我是心疼资源”的味道，“拔河比赛有预赛、复赛、决赛三轮，每轮每个队伍你都给我开三张表——left_sum 、right_sum 、answer ——三轮下来草纸堆得比锅炉房还高。咱村的传统你忘了？！”\n我愣了一下。好家伙，三个数组一字排开，每个数组都要从头填到尾，内存占用都快赶上一支拔河队的完整档案了。而且整个过程走完，这些数组就成了再也没人翻看的旧档案——村长心疼钱，我还心疼那多余的内存分配呢。\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:8080/img/avatar.jpg' />
     <link rel="shortcut icon" href="/favicon.svg" />
+<meta name="author" content="gugugu">
+<meta name="theme-color" content="#34495e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#303030" media="(prefers-color-scheme: dark)">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "gugugu｜AI 应用工程师",
+  "url": "http://localhost:8080/",
+  "description": "AI 应用工程师作品集与技术博客，聚焦 RAG、Agent、LLM 评测和服务工程化。",
+  "author": {
+    "@type": "Person",
+    "name": "gugugu",
+    "url": "https://github.com/iCurious-D"
+  }
+}
+</script>
 
     </head>
     <body class="
@@ -71,45 +89,10 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">gugugu</a></h1>
-            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
+            <h1 class="site-name"><a href="/">gugugu｜AI 应用工程师</a></h1>
+            <h2 class="site-description">RAG / Agent / LLM Engineering</h2>
         </div>
-    </header><ol class="menu-social">
-            
-                <li>
-                    <a 
-                        href='https://github.com/iCurious-D'
-                        target="_blank"
-                        title="GitHub"
-                        rel="me"
-                    >
-                        
-                        
-                            <!--
-tags: [logo, website, hosting, project, programming, software, development]
-category: Brand
-version: "1.18"
-unicode: "ec1c"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
-
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
+    </header><ol class="menu" id="main-menu">
         
         
         
@@ -212,6 +195,19 @@ unicode: "f1e2"
         
         
         <li >
+            <a href='/leetcode/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+
+                
+                <span>刷题</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/tools' >
                 
                 
@@ -240,39 +236,6 @@ unicode: "ea45"
 
                 
                 <span>工具</span>
-            </a>
-        </li>
-        
-        
-        <li >
-            <a href='/kids/' >
-                
-                
-                
-                    <!--
-category: Document
-tags: [study, learn, diary, write, journal, page, paper, jot down]
-version: "1.3"
-unicode: "eb96"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />
-  <path d="M13 8l2 0" />
-  <path d="M13 12l2 0" />
-</svg>
-
-                
-                <span>趣学</span>
             </a>
         </li>
         
@@ -633,7 +596,7 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 gugugu
+        2026 gugugu｜AI 应用工程师
     </section>
     
     <section class="powerby">

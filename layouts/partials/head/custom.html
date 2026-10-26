@@ -1,0 +1,17 @@
+<meta name="author" content="{{ .Site.Params.author.name }}">
+<meta name="theme-color" content="#34495e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#303030" media="(prefers-color-scheme: dark)">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ .Site.Title | jsonify | safeJS }},
+  "url": {{ .Site.BaseURL | jsonify | safeJS }},
+  "description": {{ .Site.Params.description | jsonify | safeJS }},
+  "author": {
+    "@type": "Person",
+    "name": {{ .Site.Params.author.name | jsonify | safeJS }},
+    "url": "https://github.com/iCurious-D"
+  }
+}
+</script>

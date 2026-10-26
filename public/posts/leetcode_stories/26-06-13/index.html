@@ -1,19 +1,37 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-CN" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8080&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮绝对防御！手动Hash与模运算的土豆级零信任协议 今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。\n“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”\n我接过那张手绘的权重表，嘴角抽搐：“村长，这都2026年了，您还在用手动哈希？连个JWT都不用？咱村不是刚通了5G吗，隔壁勇者团都用上OAuth2.0了。”\n村长捋了捋胡子，一脸高深莫测：“年轻人，这叫复古硬核加密。万一哪天基站被炸了，云计算挂了，咱村的秘密指令还得靠这张纸传。再说了，我这算法密钥只有咱俩知道——绝无第三方持有，零信任架构懂不懂？少废话，赶紧算！”\n我翻开手册，开头就写了三条让人血压飙升的规则：\n第一条，每个单词的“密码值”= 单词里每个字母在权重表中对应值的总和。\n我心中暗想，说得跟什么上古魔法似的，小学二年级的加法运算也敢叫加密。瞥了眼村长，他正自顾自地捋着胡子，仿佛这真的是什么惊天动地的黑科技。\n第二条，把总和对 26 取模，得到一个 0~25 的数字。\n我叹了口气，经典 % 26，取模压缩。村长您是不是觉得26个字母刚好能塞进一个byte的低5位？内存优化强迫症是吧？\n第三条，倒序映射： 0 → &lsquo;z&rsquo;, 1 → &lsquo;y&rsquo;, &hellip;, 25 → &lsquo;a&rsquo;。\n我盯着这行规则看了足足五秒钟，终于绷不住了：&ldquo;等等！正常人不都是 0→&lsquo;a&rsquo; 吗？为什么这里是反的？村长你是不是把ASCII表贴反了？还是说这是为了防止我们用 char + 'a' 一行搞定而故意加的debuff？！&rdquo;\n村长在旁边嘿嘿一笑：&ldquo;哦，那个啊……因为我觉得从z开始数比较有仪式感。你想啊，z是字母表的终点，从终点往起点映射，有一种‘落叶归根’的哲学意味。怎么，有意见？&rdquo;\n我深吸一口气，把到嘴边的吐槽硬生生咽了回去：&ldquo;没意见，您说了算。我写还不行吗。&rdquo;\n既然规则已经明确到这种程度，那还有什么好犹豫的？直接模拟就完事了！\nclass Solution: def mapWordWeight(self, words: List[str], weights: List[int]) -&gt; str: ans = [] ord_a = ord(&#39;a&#39;) ord_z = ord(&#39;z&#39;) for word in words: weight = sum(weights[ord(c) - ord_a] for c in word) % 26 ans.append(chr(ord_z - weight)) return &#39;&#39;.join(ans) 提交，AC，一气呵成。我把翻译出来的指令条递给村长——上面赫然写着：&ldquo;下午三点村口开会讨论秋季土豆种植计划。&rdquo;\n村长接过指令条，满意地点点头：“好！解密成功！这套算法果然只有你能驾驭！” 说完，他背着手，迈着那种“绝世高手下山”的六亲不认步伐，慢悠悠地踱出了院子，甚至还哼起了不知名的小曲儿。\n">
 <title>leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议</title>
 
-<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-13/'>
+<link rel='canonical' href='http://localhost:8080/posts/leetcode_stories/26-06-13/'>
 
-<link rel="stylesheet" href="/scss/style.min.e3718dca5da4421a2de6926b9028c96a52143d8fb2646c50131f0200b4c918ae.css"><meta property='og:title' content="leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议">
+<link rel="stylesheet" href="/scss/style.min.e8fcb04e514917791bff6b0897dbef635aa7d7e71998bbc5e2bfd38006839194.css"><meta property='og:title' content="leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议">
 <meta property='og:description' content="🎮绝对防御！手动Hash与模运算的土豆级零信任协议 今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。\n“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”\n我接过那张手绘的权重表，嘴角抽搐：“村长，这都2026年了，您还在用手动哈希？连个JWT都不用？咱村不是刚通了5G吗，隔壁勇者团都用上OAuth2.0了。”\n村长捋了捋胡子，一脸高深莫测：“年轻人，这叫复古硬核加密。万一哪天基站被炸了，云计算挂了，咱村的秘密指令还得靠这张纸传。再说了，我这算法密钥只有咱俩知道——绝无第三方持有，零信任架构懂不懂？少废话，赶紧算！”\n我翻开手册，开头就写了三条让人血压飙升的规则：\n第一条，每个单词的“密码值”= 单词里每个字母在权重表中对应值的总和。\n我心中暗想，说得跟什么上古魔法似的，小学二年级的加法运算也敢叫加密。瞥了眼村长，他正自顾自地捋着胡子，仿佛这真的是什么惊天动地的黑科技。\n第二条，把总和对 26 取模，得到一个 0~25 的数字。\n我叹了口气，经典 % 26，取模压缩。村长您是不是觉得26个字母刚好能塞进一个byte的低5位？内存优化强迫症是吧？\n第三条，倒序映射： 0 → &lsquo;z&rsquo;, 1 → &lsquo;y&rsquo;, &hellip;, 25 → &lsquo;a&rsquo;。\n我盯着这行规则看了足足五秒钟，终于绷不住了：&ldquo;等等！正常人不都是 0→&lsquo;a&rsquo; 吗？为什么这里是反的？村长你是不是把ASCII表贴反了？还是说这是为了防止我们用 char + 'a' 一行搞定而故意加的debuff？！&rdquo;\n村长在旁边嘿嘿一笑：&ldquo;哦，那个啊……因为我觉得从z开始数比较有仪式感。你想啊，z是字母表的终点，从终点往起点映射，有一种‘落叶归根’的哲学意味。怎么，有意见？&rdquo;\n我深吸一口气，把到嘴边的吐槽硬生生咽了回去：&ldquo;没意见，您说了算。我写还不行吗。&rdquo;\n既然规则已经明确到这种程度，那还有什么好犹豫的？直接模拟就完事了！\nclass Solution: def mapWordWeight(self, words: List[str], weights: List[int]) -&gt; str: ans = [] ord_a = ord(&#39;a&#39;) ord_z = ord(&#39;z&#39;) for word in words: weight = sum(weights[ord(c) - ord_a] for c in word) % 26 ans.append(chr(ord_z - weight)) return &#39;&#39;.join(ans) 提交，AC，一气呵成。我把翻译出来的指令条递给村长——上面赫然写着：&ldquo;下午三点村口开会讨论秋季土豆种植计划。&rdquo;\n村长接过指令条，满意地点点头：“好！解密成功！这套算法果然只有你能驾驭！” 说完，他背着手，迈着那种“绝世高手下山”的六亲不认步伐，慢悠悠地踱出了院子，甚至还哼起了不知名的小曲儿。\n">
-<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-13/'>
-<meta property='og:site_name' content='gugugu'>
-<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-13T22:13:24&#43;08:00'/><meta property='article:modified_time' content='2026-06-13T22:13:24&#43;08:00'/>
+<meta property='og:url' content='http://localhost:8080/posts/leetcode_stories/26-06-13/'>
+<meta property='og:site_name' content='gugugu｜AI 应用工程师'>
+<meta property='og:type' content='article'><meta property='article:section' content='Leetcode' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-13T22:13:24&#43;08:00'/><meta property='article:modified_time' content='2026-06-13T22:13:24&#43;08:00'/><meta property='og:image' content='http://localhost:8080/img/avatar.jpg' />
 <meta name="twitter:title" content="leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议">
-<meta name="twitter:description" content="🎮绝对防御！手动Hash与模运算的土豆级零信任协议 今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。\n“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”\n我接过那张手绘的权重表，嘴角抽搐：“村长，这都2026年了，您还在用手动哈希？连个JWT都不用？咱村不是刚通了5G吗，隔壁勇者团都用上OAuth2.0了。”\n村长捋了捋胡子，一脸高深莫测：“年轻人，这叫复古硬核加密。万一哪天基站被炸了，云计算挂了，咱村的秘密指令还得靠这张纸传。再说了，我这算法密钥只有咱俩知道——绝无第三方持有，零信任架构懂不懂？少废话，赶紧算！”\n我翻开手册，开头就写了三条让人血压飙升的规则：\n第一条，每个单词的“密码值”= 单词里每个字母在权重表中对应值的总和。\n我心中暗想，说得跟什么上古魔法似的，小学二年级的加法运算也敢叫加密。瞥了眼村长，他正自顾自地捋着胡子，仿佛这真的是什么惊天动地的黑科技。\n第二条，把总和对 26 取模，得到一个 0~25 的数字。\n我叹了口气，经典 % 26，取模压缩。村长您是不是觉得26个字母刚好能塞进一个byte的低5位？内存优化强迫症是吧？\n第三条，倒序映射： 0 → &lsquo;z&rsquo;, 1 → &lsquo;y&rsquo;, &hellip;, 25 → &lsquo;a&rsquo;。\n我盯着这行规则看了足足五秒钟，终于绷不住了：&ldquo;等等！正常人不都是 0→&lsquo;a&rsquo; 吗？为什么这里是反的？村长你是不是把ASCII表贴反了？还是说这是为了防止我们用 char + 'a' 一行搞定而故意加的debuff？！&rdquo;\n村长在旁边嘿嘿一笑：&ldquo;哦，那个啊……因为我觉得从z开始数比较有仪式感。你想啊，z是字母表的终点，从终点往起点映射，有一种‘落叶归根’的哲学意味。怎么，有意见？&rdquo;\n我深吸一口气，把到嘴边的吐槽硬生生咽了回去：&ldquo;没意见，您说了算。我写还不行吗。&rdquo;\n既然规则已经明确到这种程度，那还有什么好犹豫的？直接模拟就完事了！\nclass Solution: def mapWordWeight(self, words: List[str], weights: List[int]) -&gt; str: ans = [] ord_a = ord(&#39;a&#39;) ord_z = ord(&#39;z&#39;) for word in words: weight = sum(weights[ord(c) - ord_a] for c in word) % 26 ans.append(chr(ord_z - weight)) return &#39;&#39;.join(ans) 提交，AC，一气呵成。我把翻译出来的指令条递给村长——上面赫然写着：&ldquo;下午三点村口开会讨论秋季土豆种植计划。&rdquo;\n村长接过指令条，满意地点点头：“好！解密成功！这套算法果然只有你能驾驭！” 说完，他背着手，迈着那种“绝世高手下山”的六亲不认步伐，慢悠悠地踱出了院子，甚至还哼起了不知名的小曲儿。\n">
+<meta name="twitter:description" content="🎮绝对防御！手动Hash与模运算的土豆级零信任协议 今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。\n“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”\n我接过那张手绘的权重表，嘴角抽搐：“村长，这都2026年了，您还在用手动哈希？连个JWT都不用？咱村不是刚通了5G吗，隔壁勇者团都用上OAuth2.0了。”\n村长捋了捋胡子，一脸高深莫测：“年轻人，这叫复古硬核加密。万一哪天基站被炸了，云计算挂了，咱村的秘密指令还得靠这张纸传。再说了，我这算法密钥只有咱俩知道——绝无第三方持有，零信任架构懂不懂？少废话，赶紧算！”\n我翻开手册，开头就写了三条让人血压飙升的规则：\n第一条，每个单词的“密码值”= 单词里每个字母在权重表中对应值的总和。\n我心中暗想，说得跟什么上古魔法似的，小学二年级的加法运算也敢叫加密。瞥了眼村长，他正自顾自地捋着胡子，仿佛这真的是什么惊天动地的黑科技。\n第二条，把总和对 26 取模，得到一个 0~25 的数字。\n我叹了口气，经典 % 26，取模压缩。村长您是不是觉得26个字母刚好能塞进一个byte的低5位？内存优化强迫症是吧？\n第三条，倒序映射： 0 → &lsquo;z&rsquo;, 1 → &lsquo;y&rsquo;, &hellip;, 25 → &lsquo;a&rsquo;。\n我盯着这行规则看了足足五秒钟，终于绷不住了：&ldquo;等等！正常人不都是 0→&lsquo;a&rsquo; 吗？为什么这里是反的？村长你是不是把ASCII表贴反了？还是说这是为了防止我们用 char + 'a' 一行搞定而故意加的debuff？！&rdquo;\n村长在旁边嘿嘿一笑：&ldquo;哦，那个啊……因为我觉得从z开始数比较有仪式感。你想啊，z是字母表的终点，从终点往起点映射，有一种‘落叶归根’的哲学意味。怎么，有意见？&rdquo;\n我深吸一口气，把到嘴边的吐槽硬生生咽了回去：&ldquo;没意见，您说了算。我写还不行吗。&rdquo;\n既然规则已经明确到这种程度，那还有什么好犹豫的？直接模拟就完事了！\nclass Solution: def mapWordWeight(self, words: List[str], weights: List[int]) -&gt; str: ans = [] ord_a = ord(&#39;a&#39;) ord_z = ord(&#39;z&#39;) for word in words: weight = sum(weights[ord(c) - ord_a] for c in word) % 26 ans.append(chr(ord_z - weight)) return &#39;&#39;.join(ans) 提交，AC，一气呵成。我把翻译出来的指令条递给村长——上面赫然写着：&ldquo;下午三点村口开会讨论秋季土豆种植计划。&rdquo;\n村长接过指令条，满意地点点头：“好！解密成功！这套算法果然只有你能驾驭！” 说完，他背着手，迈着那种“绝世高手下山”的六亲不认步伐，慢悠悠地踱出了院子，甚至还哼起了不知名的小曲儿。\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:8080/img/avatar.jpg' />
     <link rel="shortcut icon" href="/favicon.svg" />
+<meta name="author" content="gugugu">
+<meta name="theme-color" content="#34495e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#303030" media="(prefers-color-scheme: dark)">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "gugugu｜AI 应用工程师",
+  "url": "http://localhost:8080/",
+  "description": "AI 应用工程师作品集与技术博客，聚焦 RAG、Agent、LLM 评测和服务工程化。",
+  "author": {
+    "@type": "Person",
+    "name": "gugugu",
+    "url": "https://github.com/iCurious-D"
+  }
+}
+</script>
 
     </head>
     <body class="
@@ -71,45 +89,10 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">gugugu</a></h1>
-            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
+            <h1 class="site-name"><a href="/">gugugu｜AI 应用工程师</a></h1>
+            <h2 class="site-description">RAG / Agent / LLM Engineering</h2>
         </div>
-    </header><ol class="menu-social">
-            
-                <li>
-                    <a 
-                        href='https://github.com/iCurious-D'
-                        target="_blank"
-                        title="GitHub"
-                        rel="me"
-                    >
-                        
-                        
-                            <!--
-tags: [logo, website, hosting, project, programming, software, development]
-category: Brand
-version: "1.18"
-unicode: "ec1c"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
-
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
+    </header><ol class="menu" id="main-menu">
         
         
         
@@ -212,6 +195,19 @@ unicode: "f1e2"
         
         
         <li >
+            <a href='/leetcode/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+
+                
+                <span>刷题</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/tools' >
                 
                 
@@ -240,39 +236,6 @@ unicode: "ea45"
 
                 
                 <span>工具</span>
-            </a>
-        </li>
-        
-        
-        <li >
-            <a href='/kids/' >
-                
-                
-                
-                    <!--
-category: Document
-tags: [study, learn, diary, write, journal, page, paper, jot down]
-version: "1.3"
-unicode: "eb96"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />
-  <path d="M13 8l2 0" />
-  <path d="M13 12l2 0" />
-</svg>
-
-                
-                <span>趣学</span>
             </a>
         </li>
         
@@ -652,7 +615,7 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 gugugu
+        2026 gugugu｜AI 应用工程师
     </section>
     
     <section class="powerby">

@@ -1,19 +1,37 @@
 <!DOCTYPE html>
-<html lang="zh-cn" dir="ltr">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1315&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
+<html lang="zh-CN" dir="ltr">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=8080&amp;path=livereload" data-no-instant defer></script><meta charset='utf-8'>
 <meta name='viewport' content='width=device-width, initial-scale=1'><meta name='description' content="🎮 游乐园峰谷过山车：数位DP的修行 第一章：村长的新任务 &ldquo;小白！别睡了！有新任务了！&rdquo; 村长一脚踹开我家大门，手里挥舞着一份皱巴巴的羊皮卷轴。我一个激灵从床上弹起来，下意识就去摸魔法书——这开场白我太熟了，每次村长用这个句式，后面铁定跟着一道新题。\n“还记得算法乐园那个没设 base case 的‘递归过山车’吗？”他把卷轴拍在我桌上，“乐园那边连夜开了事故复盘会，紧急关停了项目，总算把老爷爷从轨道上救下来了。他们痛定思痛，在旁边新建了个项目，叫‘数位过山车’。”\n我拿起卷轴，村长继续解释：“ 这次项目上线前要做安全评估，再不敢直接莽了。新过山车的轨道由数字构成——每个数字就是一段铁轨，每一位是铁轨上的一个连接点。如果某一段连接点比两边都高，就是‘峰’；比两边都低，就是‘谷’。峰和谷太多意味着轨道起伏太剧烈，车开上去乘客容易被动升天，重蹈爷爷的覆辙。所以他们需要计算**‘波动值’**——也就是峰和谷的总数——来评估轨道安全性，决定安全带是用两根还是五根。”\n我瞅了眼卷轴，上面写着波动值的定义：\n峰：某一位数字严格大于左右两边——像山峰一样凸起来，在上面一览众山小。 谷：某一位数字严格小于左右两边——像山谷一样凹下去，在里头抬头望星空。 首尾两位不能算峰或谷——边界保护，毕竟第一个和最后一个连邻居都凑不齐。 少于3位的数字波动值为0——太短了没法波动\n“你的任务，” 村长用指关节敲了敲卷轴，“是计算区间 [num1, num2] 内所有数字的波动值之和。乐园那边要拿着这个数据去申请保险。”\n我盯着卷轴看了三秒，突然笑出声：“这不就是遍历每个数字，拿字符串滑窗检查一下峰和谷嘛。zip(s, s[1:], s[2:]) 三连滑窗，峰谷一眼扫完，比在游戏里开扫描模式还快。村长你是不是又在放水？”\n村长冷笑一声。那种笑容我见过——上次他给我推游乐园正式服 5×10⁴ 数据的时候，也是这副表情，像一个提前看过剧透的副本 Boss。“数据范围 num2 ≤ 10⁵，暴力当然能过。但我先给你打个预防针——说不定哪天范围就扩到 10¹⁸ 了呢？”\n说完，村长便甩袖而去。我透过窗户望了一眼算法乐园的方向，那座“数位过山车”的轨道已经在晨光中闪闪发亮——10⁵ 嘛，先暴力 AC 了再说。至于 10¹⁸……到时候再想呗，未来的我肯定有办法。实在不行，不还有老勇者嘛。\n第二章：暴力枚举——三连 zip 横扫千军 直接暴力：从 num1 一路遍历到 num2，每个数字转成字符串，然后掏出 Python 的 zip(s, s[1:], s[2:]) 三连滑窗，把连续三位 a、b、c 一次性拎出来。如果 a &gt; b &lt; c，说明 b 是个谷，轨道在这里砸了一个坑；如果 a &lt; b &gt; c，说明 b 是个峰，轨道在这里顶出一个包。每发现一个峰或谷，计数器加一。遍历完所有数字，返回总数完事。\ndef totalWaviness(num1: int, num2: int) -&gt; int: res = 0 for i in range(num1, num2 + 1): # 遍历区间内每个数字 s = str(i) # 转成字符串方便逐位访问 for a, b, c in zip(s, s[1:], s[2:]): # 滑动窗口取连续三位 if a &gt; b &lt; c: # 谷 res += 1 elif a &lt; b &gt; c: # 峰 res += 1 return res 写完一跑，秒出AC。zip(s, s[1:], s[2:]) 这个三连滑窗真是比德芙还丝滑——s 是原字符串，s[1:] 是从第二位开始的字符串，s[2:] 是从第三位开始的字符串，三个错位排列的字符串往 zip 里一塞，直接吐出所有连续三位的组合。时间复杂度 O(N·L)，N 是区间长度，L 是数字平均位数。10⁵ 个数字，每个最多六七位，总操作量撑死几十万次。\n">
 <title>leetcode3751：游乐园峰谷过山车</title>
 
-<link rel='canonical' href='http://localhost:1315/posts/leetcode_stories/26-06-04/'>
+<link rel='canonical' href='http://localhost:8080/posts/leetcode_stories/26-06-04/'>
 
-<link rel="stylesheet" href="/scss/style.min.e3718dca5da4421a2de6926b9028c96a52143d8fb2646c50131f0200b4c918ae.css"><meta property='og:title' content="leetcode3751：游乐园峰谷过山车">
+<link rel="stylesheet" href="/scss/style.min.e8fcb04e514917791bff6b0897dbef635aa7d7e71998bbc5e2bfd38006839194.css"><meta property='og:title' content="leetcode3751：游乐园峰谷过山车">
 <meta property='og:description' content="🎮 游乐园峰谷过山车：数位DP的修行 第一章：村长的新任务 &ldquo;小白！别睡了！有新任务了！&rdquo; 村长一脚踹开我家大门，手里挥舞着一份皱巴巴的羊皮卷轴。我一个激灵从床上弹起来，下意识就去摸魔法书——这开场白我太熟了，每次村长用这个句式，后面铁定跟着一道新题。\n“还记得算法乐园那个没设 base case 的‘递归过山车’吗？”他把卷轴拍在我桌上，“乐园那边连夜开了事故复盘会，紧急关停了项目，总算把老爷爷从轨道上救下来了。他们痛定思痛，在旁边新建了个项目，叫‘数位过山车’。”\n我拿起卷轴，村长继续解释：“ 这次项目上线前要做安全评估，再不敢直接莽了。新过山车的轨道由数字构成——每个数字就是一段铁轨，每一位是铁轨上的一个连接点。如果某一段连接点比两边都高，就是‘峰’；比两边都低，就是‘谷’。峰和谷太多意味着轨道起伏太剧烈，车开上去乘客容易被动升天，重蹈爷爷的覆辙。所以他们需要计算**‘波动值’**——也就是峰和谷的总数——来评估轨道安全性，决定安全带是用两根还是五根。”\n我瞅了眼卷轴，上面写着波动值的定义：\n峰：某一位数字严格大于左右两边——像山峰一样凸起来，在上面一览众山小。 谷：某一位数字严格小于左右两边——像山谷一样凹下去，在里头抬头望星空。 首尾两位不能算峰或谷——边界保护，毕竟第一个和最后一个连邻居都凑不齐。 少于3位的数字波动值为0——太短了没法波动\n“你的任务，” 村长用指关节敲了敲卷轴，“是计算区间 [num1, num2] 内所有数字的波动值之和。乐园那边要拿着这个数据去申请保险。”\n我盯着卷轴看了三秒，突然笑出声：“这不就是遍历每个数字，拿字符串滑窗检查一下峰和谷嘛。zip(s, s[1:], s[2:]) 三连滑窗，峰谷一眼扫完，比在游戏里开扫描模式还快。村长你是不是又在放水？”\n村长冷笑一声。那种笑容我见过——上次他给我推游乐园正式服 5×10⁴ 数据的时候，也是这副表情，像一个提前看过剧透的副本 Boss。“数据范围 num2 ≤ 10⁵，暴力当然能过。但我先给你打个预防针——说不定哪天范围就扩到 10¹⁸ 了呢？”\n说完，村长便甩袖而去。我透过窗户望了一眼算法乐园的方向，那座“数位过山车”的轨道已经在晨光中闪闪发亮——10⁵ 嘛，先暴力 AC 了再说。至于 10¹⁸……到时候再想呗，未来的我肯定有办法。实在不行，不还有老勇者嘛。\n第二章：暴力枚举——三连 zip 横扫千军 直接暴力：从 num1 一路遍历到 num2，每个数字转成字符串，然后掏出 Python 的 zip(s, s[1:], s[2:]) 三连滑窗，把连续三位 a、b、c 一次性拎出来。如果 a &gt; b &lt; c，说明 b 是个谷，轨道在这里砸了一个坑；如果 a &lt; b &gt; c，说明 b 是个峰，轨道在这里顶出一个包。每发现一个峰或谷，计数器加一。遍历完所有数字，返回总数完事。\ndef totalWaviness(num1: int, num2: int) -&gt; int: res = 0 for i in range(num1, num2 + 1): # 遍历区间内每个数字 s = str(i) # 转成字符串方便逐位访问 for a, b, c in zip(s, s[1:], s[2:]): # 滑动窗口取连续三位 if a &gt; b &lt; c: # 谷 res += 1 elif a &lt; b &gt; c: # 峰 res += 1 return res 写完一跑，秒出AC。zip(s, s[1:], s[2:]) 这个三连滑窗真是比德芙还丝滑——s 是原字符串，s[1:] 是从第二位开始的字符串，s[2:] 是从第三位开始的字符串，三个错位排列的字符串往 zip 里一塞，直接吐出所有连续三位的组合。时间复杂度 O(N·L)，N 是区间长度，L 是数字平均位数。10⁵ 个数字，每个最多六七位，总操作量撑死几十万次。\n">
-<meta property='og:url' content='http://localhost:1315/posts/leetcode_stories/26-06-04/'>
-<meta property='og:site_name' content='gugugu'>
-<meta property='og:type' content='article'><meta property='article:section' content='Posts' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-04T16:50:01&#43;08:00'/><meta property='article:modified_time' content='2026-06-04T16:50:01&#43;08:00'/>
+<meta property='og:url' content='http://localhost:8080/posts/leetcode_stories/26-06-04/'>
+<meta property='og:site_name' content='gugugu｜AI 应用工程师'>
+<meta property='og:type' content='article'><meta property='article:section' content='Leetcode' /><meta property='article:tag' content='技术' /><meta property='article:tag' content='题解' /><meta property='article:tag' content='故事' /><meta property='article:published_time' content='2026-06-04T16:50:01&#43;08:00'/><meta property='article:modified_time' content='2026-06-04T16:50:01&#43;08:00'/><meta property='og:image' content='http://localhost:8080/img/avatar.jpg' />
 <meta name="twitter:title" content="leetcode3751：游乐园峰谷过山车">
-<meta name="twitter:description" content="🎮 游乐园峰谷过山车：数位DP的修行 第一章：村长的新任务 &ldquo;小白！别睡了！有新任务了！&rdquo; 村长一脚踹开我家大门，手里挥舞着一份皱巴巴的羊皮卷轴。我一个激灵从床上弹起来，下意识就去摸魔法书——这开场白我太熟了，每次村长用这个句式，后面铁定跟着一道新题。\n“还记得算法乐园那个没设 base case 的‘递归过山车’吗？”他把卷轴拍在我桌上，“乐园那边连夜开了事故复盘会，紧急关停了项目，总算把老爷爷从轨道上救下来了。他们痛定思痛，在旁边新建了个项目，叫‘数位过山车’。”\n我拿起卷轴，村长继续解释：“ 这次项目上线前要做安全评估，再不敢直接莽了。新过山车的轨道由数字构成——每个数字就是一段铁轨，每一位是铁轨上的一个连接点。如果某一段连接点比两边都高，就是‘峰’；比两边都低，就是‘谷’。峰和谷太多意味着轨道起伏太剧烈，车开上去乘客容易被动升天，重蹈爷爷的覆辙。所以他们需要计算**‘波动值’**——也就是峰和谷的总数——来评估轨道安全性，决定安全带是用两根还是五根。”\n我瞅了眼卷轴，上面写着波动值的定义：\n峰：某一位数字严格大于左右两边——像山峰一样凸起来，在上面一览众山小。 谷：某一位数字严格小于左右两边——像山谷一样凹下去，在里头抬头望星空。 首尾两位不能算峰或谷——边界保护，毕竟第一个和最后一个连邻居都凑不齐。 少于3位的数字波动值为0——太短了没法波动\n“你的任务，” 村长用指关节敲了敲卷轴，“是计算区间 [num1, num2] 内所有数字的波动值之和。乐园那边要拿着这个数据去申请保险。”\n我盯着卷轴看了三秒，突然笑出声：“这不就是遍历每个数字，拿字符串滑窗检查一下峰和谷嘛。zip(s, s[1:], s[2:]) 三连滑窗，峰谷一眼扫完，比在游戏里开扫描模式还快。村长你是不是又在放水？”\n村长冷笑一声。那种笑容我见过——上次他给我推游乐园正式服 5×10⁴ 数据的时候，也是这副表情，像一个提前看过剧透的副本 Boss。“数据范围 num2 ≤ 10⁵，暴力当然能过。但我先给你打个预防针——说不定哪天范围就扩到 10¹⁸ 了呢？”\n说完，村长便甩袖而去。我透过窗户望了一眼算法乐园的方向，那座“数位过山车”的轨道已经在晨光中闪闪发亮——10⁵ 嘛，先暴力 AC 了再说。至于 10¹⁸……到时候再想呗，未来的我肯定有办法。实在不行，不还有老勇者嘛。\n第二章：暴力枚举——三连 zip 横扫千军 直接暴力：从 num1 一路遍历到 num2，每个数字转成字符串，然后掏出 Python 的 zip(s, s[1:], s[2:]) 三连滑窗，把连续三位 a、b、c 一次性拎出来。如果 a &gt; b &lt; c，说明 b 是个谷，轨道在这里砸了一个坑；如果 a &lt; b &gt; c，说明 b 是个峰，轨道在这里顶出一个包。每发现一个峰或谷，计数器加一。遍历完所有数字，返回总数完事。\ndef totalWaviness(num1: int, num2: int) -&gt; int: res = 0 for i in range(num1, num2 + 1): # 遍历区间内每个数字 s = str(i) # 转成字符串方便逐位访问 for a, b, c in zip(s, s[1:], s[2:]): # 滑动窗口取连续三位 if a &gt; b &lt; c: # 谷 res += 1 elif a &lt; b &gt; c: # 峰 res += 1 return res 写完一跑，秒出AC。zip(s, s[1:], s[2:]) 这个三连滑窗真是比德芙还丝滑——s 是原字符串，s[1:] 是从第二位开始的字符串，s[2:] 是从第三位开始的字符串，三个错位排列的字符串往 zip 里一塞，直接吐出所有连续三位的组合。时间复杂度 O(N·L)，N 是区间长度，L 是数字平均位数。10⁵ 个数字，每个最多六七位，总操作量撑死几十万次。\n">
+<meta name="twitter:description" content="🎮 游乐园峰谷过山车：数位DP的修行 第一章：村长的新任务 &ldquo;小白！别睡了！有新任务了！&rdquo; 村长一脚踹开我家大门，手里挥舞着一份皱巴巴的羊皮卷轴。我一个激灵从床上弹起来，下意识就去摸魔法书——这开场白我太熟了，每次村长用这个句式，后面铁定跟着一道新题。\n“还记得算法乐园那个没设 base case 的‘递归过山车’吗？”他把卷轴拍在我桌上，“乐园那边连夜开了事故复盘会，紧急关停了项目，总算把老爷爷从轨道上救下来了。他们痛定思痛，在旁边新建了个项目，叫‘数位过山车’。”\n我拿起卷轴，村长继续解释：“ 这次项目上线前要做安全评估，再不敢直接莽了。新过山车的轨道由数字构成——每个数字就是一段铁轨，每一位是铁轨上的一个连接点。如果某一段连接点比两边都高，就是‘峰’；比两边都低，就是‘谷’。峰和谷太多意味着轨道起伏太剧烈，车开上去乘客容易被动升天，重蹈爷爷的覆辙。所以他们需要计算**‘波动值’**——也就是峰和谷的总数——来评估轨道安全性，决定安全带是用两根还是五根。”\n我瞅了眼卷轴，上面写着波动值的定义：\n峰：某一位数字严格大于左右两边——像山峰一样凸起来，在上面一览众山小。 谷：某一位数字严格小于左右两边——像山谷一样凹下去，在里头抬头望星空。 首尾两位不能算峰或谷——边界保护，毕竟第一个和最后一个连邻居都凑不齐。 少于3位的数字波动值为0——太短了没法波动\n“你的任务，” 村长用指关节敲了敲卷轴，“是计算区间 [num1, num2] 内所有数字的波动值之和。乐园那边要拿着这个数据去申请保险。”\n我盯着卷轴看了三秒，突然笑出声：“这不就是遍历每个数字，拿字符串滑窗检查一下峰和谷嘛。zip(s, s[1:], s[2:]) 三连滑窗，峰谷一眼扫完，比在游戏里开扫描模式还快。村长你是不是又在放水？”\n村长冷笑一声。那种笑容我见过——上次他给我推游乐园正式服 5×10⁴ 数据的时候，也是这副表情，像一个提前看过剧透的副本 Boss。“数据范围 num2 ≤ 10⁵，暴力当然能过。但我先给你打个预防针——说不定哪天范围就扩到 10¹⁸ 了呢？”\n说完，村长便甩袖而去。我透过窗户望了一眼算法乐园的方向，那座“数位过山车”的轨道已经在晨光中闪闪发亮——10⁵ 嘛，先暴力 AC 了再说。至于 10¹⁸……到时候再想呗，未来的我肯定有办法。实在不行，不还有老勇者嘛。\n第二章：暴力枚举——三连 zip 横扫千军 直接暴力：从 num1 一路遍历到 num2，每个数字转成字符串，然后掏出 Python 的 zip(s, s[1:], s[2:]) 三连滑窗，把连续三位 a、b、c 一次性拎出来。如果 a &gt; b &lt; c，说明 b 是个谷，轨道在这里砸了一个坑；如果 a &lt; b &gt; c，说明 b 是个峰，轨道在这里顶出一个包。每发现一个峰或谷，计数器加一。遍历完所有数字，返回总数完事。\ndef totalWaviness(num1: int, num2: int) -&gt; int: res = 0 for i in range(num1, num2 + 1): # 遍历区间内每个数字 s = str(i) # 转成字符串方便逐位访问 for a, b, c in zip(s, s[1:], s[2:]): # 滑动窗口取连续三位 if a &gt; b &lt; c: # 谷 res += 1 elif a &lt; b &gt; c: # 峰 res += 1 return res 写完一跑，秒出AC。zip(s, s[1:], s[2:]) 这个三连滑窗真是比德芙还丝滑——s 是原字符串，s[1:] 是从第二位开始的字符串，s[2:] 是从第三位开始的字符串，三个错位排列的字符串往 zip 里一塞，直接吐出所有连续三位的组合。时间复杂度 O(N·L)，N 是区间长度，L 是数字平均位数。10⁵ 个数字，每个最多六七位，总操作量撑死几十万次。\n"><meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content='http://localhost:8080/img/avatar.jpg' />
     <link rel="shortcut icon" href="/favicon.svg" />
+<meta name="author" content="gugugu">
+<meta name="theme-color" content="#34495e" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#303030" media="(prefers-color-scheme: dark)">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "gugugu｜AI 应用工程师",
+  "url": "http://localhost:8080/",
+  "description": "AI 应用工程师作品集与技术博客，聚焦 RAG、Agent、LLM 评测和服务工程化。",
+  "author": {
+    "@type": "Person",
+    "name": "gugugu",
+    "url": "https://github.com/iCurious-D"
+  }
+}
+</script>
 
     </head>
     <body class="
@@ -71,45 +89,10 @@
         
         
         <div class="site-meta">
-            <h1 class="site-name"><a href="/">gugugu</a></h1>
-            <h2 class="site-description">AI Engineer / AIGC Builder</h2>
+            <h1 class="site-name"><a href="/">gugugu｜AI 应用工程师</a></h1>
+            <h2 class="site-description">RAG / Agent / LLM Engineering</h2>
         </div>
-    </header><ol class="menu-social">
-            
-                <li>
-                    <a 
-                        href='https://github.com/iCurious-D'
-                        target="_blank"
-                        title="GitHub"
-                        rel="me"
-                    >
-                        
-                        
-                            <!--
-tags: [logo, website, hosting, project, programming, software, development]
-category: Brand
-version: "1.18"
-unicode: "ec1c"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5" />
-</svg>
-
-                        
-                    </a>
-                </li>
-            
-        </ol><ol class="menu" id="main-menu">
+    </header><ol class="menu" id="main-menu">
         
         
         
@@ -212,6 +195,19 @@ unicode: "f1e2"
         
         
         <li >
+            <a href='/leetcode/' >
+                
+                
+                
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+
+                
+                <span>刷题</span>
+            </a>
+        </li>
+        
+        
+        <li >
             <a href='/tools' >
                 
                 
@@ -240,39 +236,6 @@ unicode: "ea45"
 
                 
                 <span>工具</span>
-            </a>
-        </li>
-        
-        
-        <li >
-            <a href='/kids/' >
-                
-                
-                
-                    <!--
-category: Document
-tags: [study, learn, diary, write, journal, page, paper, jot down]
-version: "1.3"
-unicode: "eb96"
--->
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width="32"
-  height="32"
-  viewBox="0 0 24 24"
-  fill="none"
-  stroke="#607d8b"
-  stroke-width="1"
-  stroke-linecap="round"
-  stroke-linejoin="round"
->
-  <path d="M6 4h11a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-11a1 1 0 0 1 -1 -1v-14a1 1 0 0 1 1 -1m3 0v18" />
-  <path d="M13 8l2 0" />
-  <path d="M13 12l2 0" />
-</svg>
-
-                
-                <span>趣学</span>
             </a>
         </li>
         
@@ -722,7 +685,7 @@ unicode: "eb49"
     <section class="copyright">
         &copy; 
         
-        2026 gugugu
+        2026 gugugu｜AI 应用工程师
     </section>
     
     <section class="powerby">

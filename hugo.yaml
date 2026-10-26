@@ -1,16 +1,27 @@
 # hugo.yaml
-baseURL: http://icurious-d.github.io/  # CI 部署时会被 GitHub Actions 自动覆盖，无需手动修改
+baseURL: https://icurious-d.github.io/  # CI 部署时会被 GitHub Actions 自动覆盖
 defaultContentLanguage: zh-cn      # 默认语言，加载主题 i18n/zh-cn.yaml
 defaultContentLanguageInSubdir: false
-title: gugugu           # 网站标题
+languages:
+  zh-cn:
+    label: 简体中文
+    locale: zh-CN
+    weight: 1
+enableRobotsTXT: true
+title: "gugugu｜AI 应用工程师"
 # theme: hugo-theme-stack      # 主题名称，与模块名一致
 
 # 首页文章列表的设置
-#paginate: 5                  # 每页显示5篇文章
 pagination:
-  pagerSize: 5
-# 禁用普通分类，仅使用标签
-disableKinds: ["taxonomy"]
+  pagerSize: 10    # Hugo 新版分页配置：每页 10 篇（tools 6 个工具单页展示）
+# 注意：不要禁用 taxonomy —— 文章卡片和右侧栏的分类/标签链接依赖
+# /categories/ 与 /tags/ 页面，禁用后这些链接会全部 404
+
+# LeetCode 文章已迁移至独立 section（content/leetcode/），
+# 用 permalinks 保持历史 URL 不变，避免外链与搜索引擎索引失效
+permalinks:
+  # :contentbasename 保持与旧目录结构一致的 URL（/posts/leetcode_stories/26-10-02/）
+  leetcode: /posts/leetcode_stories/:contentbasename/
 
 # 模块配置：指定主题的git仓库地址
 module:
@@ -38,18 +49,18 @@ menu:
       weight: 20
       params:
         icon: "article"       # 文章图标
+    - identifier: "leetcode"
+      name: "刷题"
+      url: "/leetcode/"
+      weight: 22
+      params:
+        icon: "code"          # 刷题图标
     - identifier: "tools"
       name: "工具"
       url: "/tools"
       weight: 25
       params:
         icon: "tools"
-    - identifier: "kids"
-      name: "趣学"
-      url: "/kids/"
-      weight: 28
-      params:
-        icon: "notes"
     - identifier: "about"
       name: "关于我"
       url: "/about/"
@@ -57,21 +68,26 @@ menu:
       params:
         icon: "user"          # 用户图标
 
-    # 社交链接配置(数组格式)
-    social:
-    - identifier: "github"
-      name: "GitHub"
-      url: "https://github.com/iCurious-D"   # 自己的 GitHub 链接
-      params:
-        icon: "brand-github"
 
 params:
   favicon: /favicon.svg   # 网站图标（emoji SVG）
+  description: "AI 应用工程师作品集与技术博客，聚焦 RAG、Agent、LLM 评测和服务工程化。"
+  author:
+    name: "gugugu"
+  featuredImageField: image
+  opengraph:
+    twitter:
+      card: summary_large_image
+  defaultImage:
+    opengraph:
+      enabled: true
+      local: true
+      src: img/avatar.jpg
 
-  # 侧边栏配置 (这是重点)
+  # 侧边栏配置
   sidebar:
     emoji: "✏️"
-    subtitle: "AI Engineer / AIGC Builder"  # 头像下方的个人签名
+    subtitle: "RAG / Agent / LLM Engineering"
     avatar:
       src: "img/avatar.jpg"          # 头像路径 (稍后会解释如何放置)
       # srcDark 用于暗色模式，可选用另一张图，可以不设置

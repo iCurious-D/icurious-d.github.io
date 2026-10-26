@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>技术 on gugugu</title>
-        <link>http://localhost:1315/tags/%E6%8A%80%E6%9C%AF/</link>
-        <description>Recent content in 技术 on gugugu</description>
+        <title>技术 on gugugu｜AI 应用工程师</title>
+        <link>http://localhost:8080/tags/%E6%8A%80%E6%9C%AF/</link>
+        <description>Recent content in 技术 on gugugu｜AI 应用工程师</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>zh-cn</language>
-        <lastBuildDate>Mon, 31 Aug 2026 10:55:45 +0800</lastBuildDate><atom:link href="http://localhost:1315/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" /><item>
+        <language>zh-CN</language>
+        <lastBuildDate>Mon, 31 Aug 2026 10:55:45 +0800</lastBuildDate><atom:link href="http://localhost:8080/tags/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>leetcode2058 三节小火车狂飙链表：山顶谷底尖叫点，一个都别想跑</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-31/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-31/</link>
         <pubDate>Mon, 31 Aug 2026 10:55:45 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-31/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-31/</guid>
         <description>&lt;p&gt;想象链表是一段过山车轨道，每个节点的值就是当前轨道的高度。&lt;/p&gt;
 &lt;p&gt;局部极大值 = 山顶尖叫点，局部极小值 = 谷底尖叫点。&lt;/p&gt;
 &lt;p&gt;我们要统计这些尖叫点之间的最小距离和最大距离。
@@ -93,10 +93,10 @@
         </item>
         <item>
         <title>leetcode2091 n 个小兵，有台词的只有俩 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-30/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-30/</link>
         <pubDate>Sun, 30 Aug 2026 11:11:58 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-30/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-30/</guid>
         <description>&lt;p&gt;一排数字小兵，从 &lt;code&gt;0&lt;/code&gt; 号位到 &lt;code&gt;n-1&lt;/code&gt; 号位依次排开。&lt;/p&gt;
 &lt;p&gt;系统告诉你：这排小兵里有一个 &lt;strong&gt;战力天花板&lt;/strong&gt;（最大值）和一个 &lt;strong&gt;战力地板&lt;/strong&gt;（最小值），你的任务是把这两位请出队列。&lt;/p&gt;
 &lt;p&gt;但规则极其不友好：你只能从 &lt;strong&gt;队伍最前面&lt;/strong&gt; 或 &lt;strong&gt;最后面&lt;/strong&gt; 动手，不能直接闪现到中间抓人。&lt;/p&gt;
@@ -171,10 +171,10 @@
         </item>
         <item>
         <title>leetcode2948 不用并查集，一把菜刀就够了 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-29/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-29/</link>
         <pubDate>Sat, 29 Aug 2026 22:39:57 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-29/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-29/</guid>
         <description>&lt;h2 id=&#34;不用并查集一把菜刀就够了&#34;&gt;&lt;strong&gt;不用并查集，一把菜刀就够了&lt;/strong&gt;
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;本文纯属虚构，如有雷同，那一定是菜市场真有人这么干。&lt;/p&gt;
@@ -308,10 +308,10 @@
         </item>
         <item>
         <title>leetcode3734 半个回文，一场贪心 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-28/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-28/</link>
         <pubDate>Fri, 28 Aug 2026 14:03:38 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-28/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-28/</guid>
         <description>&lt;h2 id=&#34;半个回文一场贪心&#34;&gt;半个回文，一场贪心
 &lt;/h2&gt;&lt;p&gt;给你两个字符串 &lt;code&gt;s&lt;/code&gt; 和 &lt;code&gt;target&lt;/code&gt;，要求把 &lt;code&gt;s&lt;/code&gt; 的字母重新排队，排出来的串得同时满足三个变态条件：&lt;/p&gt;
 &lt;blockquote&gt;
@@ -459,10 +459,10 @@
         </item>
         <item>
         <title>leetcode3720 一个字符的微更新：找到那个改变结局的存档点 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-27/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-27/</link>
         <pubDate>Thu, 27 Aug 2026 14:19:37 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-27/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-27/</guid>
         <description>&lt;h2 id=&#34;一个字符的微更新找到那个改变结局的存档点&#34;&gt;一个字符的微更新：找到那个改变结局的存档点
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;给你一堆字母（&lt;code&gt;s&lt;/code&gt;），排个序，刚好比 &lt;code&gt;target&lt;/code&gt; 大一点。&lt;/p&gt;
@@ -637,10 +637,10 @@
         </item>
         <item>
         <title>leetcode2904 “连续”两个字都怼到脸上了，还能不用滑动窗口？</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-26/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-26/</link>
         <pubDate>Wed, 26 Aug 2026 14:38:15 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-26/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-26/</guid>
         <description>&lt;h2 id=&#34;连续两个字都怼到脸上了还能不用滑动窗口&#34;&gt;“连续”两个字都怼到脸上了，还能不用滑动窗口？
 &lt;/h2&gt;&lt;p&gt;你是一个光荣的打工人。这个月的工作日志被系统无情地压成一串二进制：&lt;code&gt;1&lt;/code&gt; 是加班日（凌晨两点的灯是真的亮），&lt;code&gt;0&lt;/code&gt; 是没加班的日子——在老板眼里，没加班就是在摸鱼。&lt;/p&gt;
 &lt;p&gt;月底绩效面谈，老板翘着二郎腿，鼠标滚轮在你的日志上滚来滚去，突然停住，抛出个奇葩需求：&lt;/p&gt;
@@ -757,10 +757,10 @@
         </item>
         <item>
         <title>leetcode3718 倍数点名册：哈希占坑，线性抓人 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-25/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-25/</link>
         <pubDate>Tue, 25 Aug 2026 12:07:33 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-25/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-25/</guid>
         <description>&lt;h2 id=&#34;倍数点名册哈希占坑线性抓人&#34;&gt;倍数点名册：哈希占坑，线性抓人
 &lt;/h2&gt;&lt;p&gt;给你一个数组 &lt;code&gt;nums&lt;/code&gt; 和一个整数 &lt;code&gt;k&lt;/code&gt;，让你找最小的、没出现在 &lt;code&gt;nums&lt;/code&gt; 里的 &lt;code&gt;k&lt;/code&gt; 的正倍数。&lt;/p&gt;
 &lt;p&gt;换句话说，从 &lt;code&gt;k&lt;/code&gt; 开始，沿着 &lt;code&gt;k, 2k, 3k, …&lt;/code&gt; 一路检查，遇到第一个不在 &lt;code&gt;nums&lt;/code&gt; 里的数，返回就完了。这题简单到让人怀疑力扣今天是不是从“新手村”随机抽了一道来凑每日任务。&lt;/p&gt;
@@ -830,10 +830,10 @@
         </item>
         <item>
         <title>leetcode1872 聚会杀手锏3.0！石子合并游戏教你秒算结局 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-24/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-24/</link>
         <pubDate>Mon, 24 Aug 2026 20:34:29 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-24/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-24/</guid>
         <description>&lt;h2 id=&#34;聚会杀手锏30石子合并游戏教你秒算结局&#34;&gt;聚会杀手锏3.0！石子合并游戏教你秒算结局
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;朋友，上次用《求和游戏》三秒看穿胜负后，你在聚会上是不是已经成了&amp;quot;人形计算器&amp;quot;？别急，今天再升一级——《石子合并游戏》（LeetCode 1872）。这局看起来复杂得多：石子可以合并、可以分多轮、选择多到眼花。但真相是：&lt;strong&gt;不管双方怎么操作，所有可能的分数早就被一张表焊死了。&lt;/strong&gt; 学会这招，你依然是聚会上最恐怖的&amp;quot;结局预言家&amp;quot;。&lt;/p&gt;
@@ -1004,10 +1004,10 @@
         </item>
         <item>
         <title>leetcode1927 聚会杀手锏2.0！求和游戏教你三秒看穿胜负 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-23/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-23/</link>
         <pubDate>Sun, 23 Aug 2026 21:12:22 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-23/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-23/</guid>
         <description>&lt;h2 id=&#34;聚会杀手锏20求和游戏教你三秒看穿胜负&#34;&gt;聚会杀手锏2.0！求和游戏教你三秒看穿胜负
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;朋友，上次用《石子游戏》在聚会上大杀四方后，你的朋友是不是已经对你产生了警惕，甚至开始用“数学题”来防你？别慌，今天安利一款进阶版——《求和游戏》（LeetCode 1927）。它不再是“先手必胜”的傻瓜模式，而是需要你在开局前动动脑子，用小学数学判断这局能不能接。学会之后，你依然是聚会上最靓的“人形计算器”。&lt;/p&gt;
@@ -1148,10 +1148,10 @@
         </item>
         <item>
         <title>leetcode3622 数字和与数字积：一场关于整除的混合双打 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-22/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-22/</link>
         <pubDate>Sat, 22 Aug 2026 10:54:53 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-22/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-22/</guid>
         <description>&lt;h2 id=&#34;数字和与数字积一场关于整除的混合双打&#34;&gt;数字和与数字积：一场关于整除的混合双打
 &lt;/h2&gt;&lt;p&gt;你收到一个正整数 &lt;code&gt;n&lt;/code&gt;，和一个听起来像小学奥数热身赛的要求：&lt;/p&gt;
 &lt;blockquote&gt;
@@ -1212,10 +1212,10 @@
         </item>
         <item>
         <title>leetcode3116 在 LeetCode 银行数钱？醒醒，容斥原理教你做人 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-21/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-21/</link>
         <pubDate>Fri, 21 Aug 2026 17:31:28 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-21/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-21/</guid>
         <description>&lt;h2 id=&#34;在-leetcode-银行数钱醒醒容斥原理教你做人&#34;&gt;在 LeetCode 银行数钱？醒醒，容斥原理教你做人
 &lt;/h2&gt;&lt;p&gt;你有无限硬币，&lt;code&gt;n&lt;/code&gt; 种面额，每种都管够。这场景像极了你的白日梦：黑进银行金库，想拿多少拿多少，从此财务自由，走上人生巅峰。&lt;/p&gt;
 &lt;p&gt;醒醒！这是 LeetCode 银行，只提供题目，不提供提现服务。更离谱的是，它规定：&lt;strong&gt;一次只能花同一种面额，不能混搭&lt;/strong&gt;。两枚 3 元硬币加一枚 5 元硬币？叉出去！&lt;/p&gt;
@@ -1437,10 +1437,10 @@
         </item>
         <item>
         <title>leetcode3069 招聘只看 last？马太效应翻车实录 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-20/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-20/</link>
         <pubDate>Thu, 20 Aug 2026 10:34:30 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-20/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-20/</guid>
         <description>&lt;h2 id=&#34;招聘只看-last马太效应翻车实录&#34;&gt;招聘只看 last？马太效应翻车实录
 &lt;/h2&gt;&lt;p&gt;两家创业公司 arr1 和 arr2，抢人规则简单粗暴：&lt;/p&gt;
 &lt;blockquote&gt;
@@ -1556,10 +1556,10 @@
         </item>
         <item>
         <title>leetcode1386 电影院倒票指南：一排一个int </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-19/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-19/</link>
         <pubDate>Wed, 19 Aug 2026 14:41:05 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-19/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-19/</guid>
         <description>&lt;h2 id=&#34;电影院倒票指南一排一个int&#34;&gt;电影院倒票指南：一排一个int
 &lt;/h2&gt;&lt;p&gt;你是个有技术追求的黄牛。别人倒票靠嗓门，你倒票靠 &lt;strong&gt;bitmask&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;今天老板拍给你一张表：&lt;code&gt;reservedSeats&lt;/code&gt;，上面写着哪些座位已经被人订了。 然后甩下一句话：&lt;/p&gt;
@@ -1681,10 +1681,10 @@
         </item>
         <item>
         <title>leetcode3471 别滑了，滑窗滑了个寂寞 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-18/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-18/</link>
         <pubDate>Tue, 18 Aug 2026 11:48:48 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-18/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-18/</guid>
         <description>&lt;h2 id=&#34;别滑了滑窗滑了个寂寞&#34;&gt;&lt;strong&gt;别滑了，滑窗滑了个寂寞&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;你刷过无限滚动的瀑布流吧？屏幕一屏显示 k 条，往下滑一屏，新的进来旧的出去——这就是一个宽度为 k 的滑动窗口。&lt;/p&gt;
 &lt;p&gt;这题要你找：一个宽度为 k 的窗口从左滑到右，谁只被盖住过一次？&lt;/p&gt;
@@ -1738,10 +1738,10 @@
         </item>
         <item>
         <title>leetcode1563 MC劈石考验：暴力递归的救赎之路 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-17/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-17/</link>
         <pubDate>Mon, 17 Aug 2026 12:30:06 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-17/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-17/</guid>
         <description>&lt;h2 id=&#34;mc劈石考验暴力递归的救赎之路&#34;&gt;&lt;strong&gt;MC劈石考验：暴力递归的救赎之路&lt;/strong&gt;
 &lt;/h2&gt;&lt;h4 id=&#34;开局&#34;&gt;开局
 &lt;/h4&gt;&lt;p&gt;上次从末地回来，我做了一个决定：把 Bob 的 Discord 通知设为免打扰。&lt;/p&gt;
@@ -1972,10 +1972,10 @@ k=5: [6,2,3,4,5]  | [5]           sum_l=20, sum_r=5   → 拿 5   ← 白打工
         </item>
         <item>
         <title>leetcode2029 MC被三诅咒的末地石：余数才是本体 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-16/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-16/</link>
         <pubDate>Sun, 16 Aug 2026 12:31:33 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-16/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-16/</guid>
         <description>&lt;h2 id=&#34;mc被三诅咒的末地石余数才是本体&#34;&gt;&lt;strong&gt;MC被三诅咒的末地石：余数才是本体&lt;/strong&gt;
 &lt;/h2&gt;&lt;h4 id=&#34;开局&#34;&gt;&lt;strong&gt;开局&lt;/strong&gt;
 &lt;/h4&gt;&lt;p&gt;上次拆完塔，我以为这事翻篇了。&lt;/p&gt;
@@ -2135,10 +2135,10 @@ k=5: [6,2,3,4,5]  | [5]           sum_l=20, sum_r=5   → 拿 5   ← 白打工
         </item>
         <item>
         <title>leetcode3702 别 DP 了，踢个内鬼就行  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-15/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-15/</link>
         <pubDate>Sat, 15 Aug 2026 22:22:45 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-15/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-15/</guid>
         <description>&lt;h2 id=&#34;别-dp-了踢个内鬼就行&#34;&gt;别 DP 了，踢个内鬼就行
 &lt;/h2&gt;&lt;p&gt;你，冒险团团长，手握一份 &lt;code&gt;nums&lt;/code&gt; 花名册，每个数是队员的能量值。今天要带一支子序列队伍去打 XOR 魔王。&lt;/p&gt;
 &lt;p&gt;魔王有个被动：队伍 XOR 合体技为 0 就免疫，还会嘲讽你：&lt;/p&gt;
@@ -2224,10 +2224,10 @@ k=5: [6,2,3,4,5]  | [5]           sum_l=20, sum_r=5   → 拿 5   ← 白打工
         </item>
         <item>
         <title>leetcode3090 生存游戏续作：2958 换皮实锤，但真香  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-14/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-14/</link>
         <pubDate>Fri, 14 Aug 2026 10:42:23 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-14/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-14/</guid>
         <description>&lt;h2 id=&#34;生存游戏续作2958-换皮实锤但真香&#34;&gt;生存游戏续作：2958 换皮实锤，但真香
 &lt;/h2&gt;&lt;hr&gt;
 &lt;h4 id=&#34;开箱&#34;&gt;开箱
@@ -2305,10 +2305,10 @@ k=5: [6,2,3,4,5]  | [5]           sum_l=20, sum_r=5   → 拿 5   ← 白打工
         </item>
         <item>
         <title>leetcode2213 「算法竞技场 EP05」谁动了我的连续段——区间流 vs 线段树流，谁才是动态维护的神？  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-13/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-13/</link>
         <pubDate>Thu, 13 Aug 2026 15:38:41 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-13/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-13/</guid>
         <description>&lt;h2 id=&#34;算法竞技场-ep05谁动了我的连续段区间流-vs-线段树流谁才是动态维护的神&#34;&gt;「算法竞技场 EP05」谁动了我的连续段——区间流 vs 线段树流，谁才是动态维护的神？
 &lt;/h2&gt;&lt;p&gt;欢迎来到「算法竞技场」EP05！我是你们的主播——老白，人送外号“Hard 副本质检员，TLE 预言家”。前四期咱们从哈希圣光一路杀到莫比乌斯反演，从新手村教学干到数论降维打击，弹幕里天天有人喊：&amp;ldquo;老白能不能来一道&lt;strong&gt;数据结构题&lt;/strong&gt;？我想看动态维护！&amp;rdquo;&lt;/p&gt;
 &lt;p&gt;行，今天满足你们。&lt;/p&gt;
@@ -2646,10 +2646,10 @@ k=5: [6,2,3,4,5]  | [5]           sum_l=20, sum_r=5   → 拿 5   ← 白打工
         </item>
         <item>
         <title>leetcode2958 生存游戏教会我的事：右手捡，左手扔  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-12/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-12/</link>
         <pubDate>Wed, 12 Aug 2026 13:15:31 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-12/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-12/</guid>
         <description>&lt;h2 id=&#34;生存游戏教会我的事右手捡左手扔&#34;&gt;&lt;strong&gt;生存游戏教会我的事：右手捡，左手扔&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;我一睁眼，咸腥的海风灌进鼻腔。&lt;/p&gt;
 &lt;p&gt;头顶是毒辣的太阳，脚下是烫脚的沙滩。一条不知道谁架的、嘎吱作响的传送带，上面源源不断滑来各种物资——椰子、木板、铁片、药草、鱼干……品种丰富得像在逛拼多多的九块九包邮专区。&lt;/p&gt;
@@ -2751,10 +2751,10 @@ k=5: [6,2,3,4,5]  | [5]           sum_l=20, sum_r=5   → 拿 5   ← 白打工
         </item>
         <item>
         <title>leetcode2996 关于我给外甥出道算法题结果自己被KO这件事  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-11/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-11/</link>
         <pubDate>Tue, 11 Aug 2026 12:43:01 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-11/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-11/</guid>
         <description>&lt;h2 id=&#34;关于我给外甥出道算法题结果自己被ko这件事&#34;&gt;&lt;strong&gt;关于我给外甥出道算法题结果自己被KO这件事&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;放暑假第一天，我妈就把我遣送到了我姐家：“你外甥正在学奥数，你这个学计算机的舅舅正好陪他练练。”&lt;/p&gt;
 &lt;p&gt;翻译一下：免费陪练，专业对口。&lt;/p&gt;
@@ -2846,10 +2846,10 @@ k=5: [6,2,3,4,5]  | [5]           sum_l=20, sum_r=5   → 拿 5   ← 白打工
         </item>
         <item>
         <title>leetcode1510 MC博弈塔：必败态是稀缺资源  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-10/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-10/</link>
         <pubDate>Mon, 10 Aug 2026 13:12:37 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-10/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-10/</guid>
         <description>&lt;h2 id=&#34;mc博弈塔必败态是稀缺资源&#34;&gt;MC博弈塔：必败态是稀缺资源
 &lt;/h2&gt;&lt;h4 id=&#34;开局&#34;&gt;&lt;strong&gt;开局&lt;/strong&gt;
 &lt;/h4&gt;&lt;p&gt;我盯着屏幕上那个诡异的存档，后背有点发凉。&lt;/p&gt;
@@ -2976,10 +2976,10 @@ f[i]: F  T  F  T  T  F  T  F  T  T   F   T   F   T   T   F   T   F
         </item>
         <item>
         <title>leetcode1140 窗口对决：两个AI路由器的零和博弈  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-09/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-09/</link>
         <pubDate>Sun, 09 Aug 2026 20:11:07 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-09/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-09/</guid>
         <description>&lt;h2 id=&#34;窗口对决两个ai路由器的零和博弈&#34;&gt;窗口对决：两个AI路由器的零和博弈
 &lt;/h2&gt;&lt;h4 id=&#34;赛博空间--核心骨干网&#34;&gt;&lt;strong&gt;赛博空间 · 核心骨干网&lt;/strong&gt;
 &lt;/h4&gt;&lt;p&gt;链路那头，是一串排好队的数据包，每个数据包里都封印着价值不菲的信用点。&lt;/p&gt;
@@ -3138,10 +3138,10 @@ f[i]: F  T  F  T  T  F  T  F  T  T   F   T   F   T   T   F   T   F
         </item>
         <item>
         <title>leetcode3302 大内密探零零幺之密信风云  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-08/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-08/</link>
         <pubDate>Sat, 08 Aug 2026 20:26:11 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-08/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-08/</guid>
         <description>&lt;h2 id=&#34;大内密探零零幺之密信风云&#34;&gt;大内密探零零幺之密信风云
 &lt;/h2&gt;&lt;h4 id=&#34;序章任务下达&#34;&gt;序章·任务下达
 &lt;/h4&gt;&lt;p&gt;深夜，大内密探零零幺被长官从被窝里拎了出来。&lt;/p&gt;
@@ -3265,10 +3265,10 @@ f[i]: F  T  F  T  T  F  T  F  T  T   F   T   F   T   T   F   T   F
         </item>
         <item>
         <title>leetcode3348 赛博地牢 II：无零绝境   </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-07/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-07/</link>
         <pubDate>Fri, 07 Aug 2026 16:13:34 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-07/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-07/</guid>
         <description>&lt;h2 id=&#34;赛博地牢-ii无零绝境&#34;&gt;赛博地牢 II：无零绝境
 &lt;/h2&gt;&lt;h4 id=&#34;序章黑曜石门&#34;&gt;序章：黑曜石门
 &lt;/h4&gt;&lt;p&gt;黑曜石门通体流淌着暗红色的光脉，像是某种古老心脏的搏动。&lt;/p&gt;
@@ -3447,10 +3447,10 @@ t = 256 = 2×2×2×2×2×2×2×2
         </item>
         <item>
         <title>leetcode3345 赛博地牢：乘积谜锁   </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-06/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-06/</link>
         <pubDate>Thu, 06 Aug 2026 13:52:33 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-06/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-06/</guid>
         <description>&lt;h2 id=&#34;赛博地牢乘积谜锁&#34;&gt;赛博地牢：乘积谜锁
 &lt;/h2&gt;&lt;h4 id=&#34;序章地精守门&#34;&gt;序章：地精守门
 &lt;/h4&gt;&lt;p&gt;你刚传送进地牢，就看见一只绿皮地精翘着二郎腿坐在石门上。&lt;br&gt;
@@ -3556,10 +3556,10 @@ t = 256 = 2×2×2×2×2×2×2×2
         </item>
         <item>
         <title>leetcode3310 深夜运维惊魂：那个叫k的方法有毒  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-05/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-05/</link>
         <pubDate>Wed, 05 Aug 2026 12:31:04 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-05/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-05/</guid>
         <description>&lt;h2 id=&#34;深夜运维惊魂那个叫k的方法有毒&#34;&gt;深夜运维惊魂：那个叫k的方法有毒
 &lt;/h2&gt;&lt;p&gt;凌晨三点，你正做着美梦——梦见自己成了技术总监，手下管着100个程序员，每个人都在996，只有你在摸鱼。&lt;/p&gt;
 &lt;p&gt;突然，手机炸响。屏幕上赫然两个字：老板。&lt;/p&gt;
@@ -3637,10 +3637,10 @@ t = 256 = 2×2×2×2×2×2×2×2
         </item>
         <item>
         <title>leetcode3731 逃课逮捕令：从 list 遍历 到 Set 精准锁头  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-04/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-04/</link>
         <pubDate>Tue, 04 Aug 2026 11:54:27 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-04/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-04/</guid>
         <description>&lt;h2 id=&#34;逃课逮捕令从-list-遍历-到-set-精准锁头&#34;&gt;&lt;strong&gt;逃课逮捕令：从 list 遍历 到 Set 精准锁头&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;大家好，我是一只被导师临时抓来当助教的研二狗。&lt;br&gt;
 今天老板出差，留给我一张皱成抹布样的签到表，以及一句杀人诛心的话：&lt;/p&gt;
@@ -3703,10 +3703,10 @@ t = 256 = 2×2×2×2×2×2×2×2
         </item>
         <item>
         <title>leetcode1406 赌城风云·续：阿星的出师之战  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-03/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-03/</link>
         <pubDate>Mon, 03 Aug 2026 11:54:37 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-03/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-03/</guid>
         <description>&lt;h2 id=&#34;赌城风云续阿星的出师之战&#34;&gt;赌城风云·续：阿星的出师之战
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;又名：《阿星的单飞考试：递归会流鼻血，滚动数组才是王道》
@@ -3895,10 +3895,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode877 聚会杀手锏！石子游戏教你做一个没有感情的赢家  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-02/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-02/</link>
         <pubDate>Sun, 02 Aug 2026 11:54:42 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-02/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-02/</guid>
         <description>&lt;h2 id=&#34;聚会杀手锏石子游戏教你做一个没有感情的赢家&#34;&gt;聚会杀手锏！石子游戏教你做一个没有感情的赢家
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;朋友，你是否厌倦了在聚会上当小透明？玩狼人杀首夜被刀，打UNO被+4连环暴击，搓麻将点炮点到灵魂出窍…… 别再用运气解释人生了，今天，我要向你郑重安利一款物理引擎驱动、&lt;strong&gt;100%先手必胜&lt;/strong&gt;的聚会神作——《石子游戏》（又名 LeetCode 877）。
@@ -4004,10 +4004,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode486 净胜分心法：让你还没摸牌就知道会不会赢  </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-08-01/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-08-01/</link>
         <pubDate>Sat, 01 Aug 2026 16:41:42 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-08-01/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-08-01/</guid>
         <description>&lt;h2 id=&#34;净胜分心法让你还没摸牌就知道会不会赢&#34;&gt;净胜分心法：让你还没摸牌就知道会不会赢
 &lt;/h2&gt;&lt;hr&gt;
 &lt;h4 id=&#34;一牌桌之上零和博弈&#34;&gt;一、牌桌之上，零和博弈
@@ -4121,10 +4121,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3016 续 · 键盘上的权重战争 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-31/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-31/</link>
         <pubDate>Fri, 31 Jul 2026 11:25:17 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-31/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-31/</guid>
         <description>&lt;h2 id=&#34;续--键盘上的权重战争&#34;&gt;续 · 键盘上的权重战争
 &lt;/h2&gt;&lt;p&gt;窗外的雪还没停，赫尔辛基的冬天长得像没优化的冒泡排序。&lt;/p&gt;
 &lt;p&gt;昨天你用一套“贪心平摊”解决了 &lt;code&gt;nokiabest&lt;/code&gt; 的极限按键次数，这会儿正摸着 Nokia 3310 玩贪吃蛇——用 2、4、6、8 控制方向的经典游戏。&lt;/p&gt;
@@ -4221,10 +4221,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3014 穿越者的键盘革命：数学赢了，产品输了，历史笑了 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-30/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-30/</link>
         <pubDate>Thu, 30 Jul 2026 14:53:43 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-30/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-30/</guid>
         <description>&lt;h2 id=&#34;穿越者的键盘革命数学赢了产品输了历史笑了&#34;&gt;穿越者的键盘革命：数学赢了，产品输了，历史笑了
 &lt;/h2&gt;&lt;h4 id=&#34;序章--你醒在2003年的芬兰&#34;&gt;序章 · 你醒在2003年的芬兰
 &lt;/h4&gt;&lt;p&gt;眼前是灰白色的天花板，鼻腔里灌满了咖啡和焊锡的味道。一张戴着黑框眼镜的大脸突然怼到你面前，胸前工牌上写着 &lt;strong&gt;Nokia HQ — CEO&lt;/strong&gt;。&lt;/p&gt;
@@ -4319,10 +4319,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3518 强迫症整理圣手的字典序试炼（二）：第k小之章 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-29/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-29/</link>
         <pubDate>Wed, 29 Jul 2026 14:08:19 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-29/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-29/</guid>
         <description>&lt;h2 id=&#34;强迫症整理圣手的字典序试炼二第k小之章&#34;&gt;强迫症整理圣手的字典序试炼（二）：第k小之章
 &lt;/h2&gt;&lt;p&gt;我的室友阿整——江湖人称“整齐哥”——上一回用他那套“镜像分离·点名归位·定海神针”大法，轻松碾碎了&lt;strong&gt;第1小&lt;/strong&gt;回文排列的试炼。可就在他准备给信纸裱框时，背面浮现的太极图和那句“&lt;strong&gt;找第k小&lt;/strong&gt;”直接把他定在了原地，像一台突然蓝屏的精密仪器。&lt;/p&gt;
 &lt;p&gt;现在，他盯着那张挑不出半点排版毛病的信纸，瞳孔像失去焦距的镜头。空气凝固了整整十秒——对阿整来说，十秒够他把书架按索书号重排三遍。终于，他喉咙里挤出了一声近乎系统报错的叹息：&lt;/p&gt;
@@ -4515,10 +4515,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3517 强迫症整理圣手的字典序试炼 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-28/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-28/</link>
         <pubDate>Tue, 28 Jul 2026 12:06:53 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-28/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-28/</guid>
         <description>&lt;h2 id=&#34;强迫症整理圣手的字典序试炼&#34;&gt;强迫症整理圣手的字典序试炼
 &lt;/h2&gt;&lt;p&gt;故事开始前，先认识一下阿整&lt;/p&gt;
 &lt;p&gt;我的室友阿整，人送外号**“整齐哥”**，一个把“对称”二字刻进DNA的男人。&lt;/p&gt;
@@ -4618,10 +4618,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode1464 村长的自我修养：一次扫描擒二肥 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-27/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-27/</link>
         <pubDate>Mon, 27 Jul 2026 11:11:15 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-27/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-27/</guid>
         <description>&lt;h2 id=&#34;村长的自我修养一次扫描擒二肥&#34;&gt;村长的自我修养：一次扫描擒二肥
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;本文纯属虚构，如有雷同，那一定是你家猪昨晚托梦告诉我的。&lt;/p&gt;
@@ -4730,10 +4730,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode628 冲出混沌星域：三个天体的乘积弹弓 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-26/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-26/</link>
         <pubDate>Sun, 26 Jul 2026 16:02:35 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-26/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-26/</guid>
         <description>&lt;h2 id=&#34;冲出混沌星域三个天体的乘积弹弓&#34;&gt;&lt;strong&gt;冲出混沌星域：三个天体的乘积弹弓&lt;/strong&gt;
 &lt;/h2&gt;&lt;h4 id=&#34;序章3-燃料36-光年绝境&#34;&gt;&lt;strong&gt;序章：3% 燃料，3.6 光年绝境&lt;/strong&gt;
 &lt;/h4&gt;&lt;p&gt;2077 年，NASA 深空探索计划第 42 号任务。&lt;/p&gt;
@@ -4866,10 +4866,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3536 XOR 0.5秒通关的人脑，和需要跑个循环的CPU </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-25/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-25/</link>
         <pubDate>Sat, 25 Jul 2026 16:11:11 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-25/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-25/</guid>
         <description>&lt;h2 id=&#34;05秒通关的人脑和需要跑个循环的cpu&#34;&gt;&lt;strong&gt;0.5秒通关的人脑，和需要跑个循环的CPU&lt;/strong&gt;
 &lt;/h2&gt;&lt;h4 id=&#34;序章&#34;&gt;序章：
 &lt;/h4&gt;&lt;p&gt;凌晨3:17分，我的手机响了。是游戏服务器的监控告警——玩家背包系统出现异常数据，一堆装备ID（数字）混在一起，需要实时计算&amp;quot;哪两件装备搭配能产生最大战斗力&amp;quot;。&lt;/p&gt;
@@ -4989,10 +4989,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3514 XOR 宇宙观察日志-续篇：完美秩序的崩塌 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-24/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-24/</link>
         <pubDate>Fri, 24 Jul 2026 13:02:46 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-24/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-24/</guid>
         <description>&lt;h2 id=&#34;xor-宇宙观察日志-续篇完美秩序的崩塌&#34;&gt;XOR 宇宙观察日志-续篇：完美秩序的崩塌
 &lt;/h2&gt;&lt;h4 id=&#34;序章神秘信封&#34;&gt;序章：神秘信封
 &lt;/h4&gt;&lt;p&gt;组会结束后，我以为 XOR 宇宙的谜题已经画上了句号。三角形是最稳定的结构。三颗粒子遍历整个相空间。一切简洁、优雅、完满。&lt;/p&gt;
@@ -5099,10 +5099,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3513 XOR 宇宙观察日志：三颗粒子如何征服整个相空间 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-23/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-23/</link>
         <pubDate>Thu, 23 Jul 2026 13:04:01 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-23/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-23/</guid>
         <description>&lt;h2 id=&#34;xor-宇宙观察日志三颗粒子如何征服整个相空间&#34;&gt;&lt;strong&gt;XOR 宇宙观察日志：三颗粒子如何征服整个相空间&lt;/strong&gt;
 &lt;/h2&gt;&lt;h4 id=&#34;序章来自-x-3513-星系的考古发现&#34;&gt;&lt;strong&gt;序章：来自 X-3513 星系的考古发现&lt;/strong&gt;
 &lt;/h4&gt;&lt;p&gt;在遥远的 XOR 宇宙，物理规律与我们熟知的世界截然不同。那里的基本粒子不是夸克，而是&lt;strong&gt;整数&lt;/strong&gt;。它们之间的作用力只有一种——&lt;strong&gt;异或碰撞&lt;/strong&gt;。两颗粒子撞在一起，会瞬间融合成一颗全新的粒子，新粒子的数值恰好等于两颗原粒子按位异或的结果。用地球代码写出来，就是 &lt;code&gt;a ⊕ b&lt;/code&gt;。&lt;/p&gt;
@@ -5322,10 +5322,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3501 残卷再启新劫数，线段树中破查询 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-22/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-22/</link>
         <pubDate>Wed, 22 Jul 2026 16:03:45 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-22/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-22/</guid>
         <description>&lt;h3 id=&#34;残卷再启新劫数线段树中破查询&#34;&gt;&lt;strong&gt;残卷再启新劫数，线段树中破查询&lt;/strong&gt;
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;第一章：残卷天书藏玄机&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;《算法导论》残卷到手后，我依然没能从那六个字里参透更多东西——“考虑边界条件”。任码行说这是因为我拿到的是目录页，但我宁愿相信这是掌门的考验。&lt;/p&gt;
@@ -5523,10 +5523,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3499 夜探丹炉得天机，白嫖三剑破死局 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-21/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-21/</link>
         <pubDate>Tue, 21 Jul 2026 14:16:28 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-21/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-21/</guid>
         <description>&lt;h3 id=&#34;夜探丹炉得天机白嫖三剑破死局&#34;&gt;夜探丹炉得天机，白嫖三剑破死局
 &lt;/h3&gt;&lt;hr&gt;
 &lt;p&gt;&lt;strong&gt;第一章：夜半飞书领死命&lt;/strong&gt;&lt;/p&gt;
@@ -5646,10 +5646,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode1260 凌晨三点，面试官从终端里爬出来问我要 O(1) 解法 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-20/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-20/</link>
         <pubDate>Mon, 20 Jul 2026 12:56:07 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-20/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-20/</guid>
         <description>&lt;h2 id=&#34;凌晨三点面试官从终端里爬出来问我要-o1-解法&#34;&gt;凌晨三点，面试官从终端里爬出来问我要 O(1) 解法
 &lt;/h2&gt;&lt;p&gt;凌晨两点四十七，我还在改那个破游戏的截图生成器——明天产品要上线“通关炫耀图”，结果不管怎么存，截出来的网格都像被谁踹了一脚似的，集体往右窜了一格。右下角那个像素还总瞬移到左上角，害得测试小姐姐在群里连发三条“这截图是在玩华容道吗”。&lt;/p&gt;
 &lt;p&gt;盯了一晚上代码，循环、索引、数组边界全查了个遍，愣是没找到 bug。就在我准备把锅甩给“显卡驱动不兼容”的时候，屏幕上那张 3×3 的像素小人突然自己动了起来——每个格子像装了马达，咔咔整齐地往右挪一格；最右边那个掉了下去，从下一行最左边冒出来；右下角那个更离谱，直接一个闪现回到左上角。整个过程行云流水，比我手写的 for 循环利索多了。&lt;/p&gt;
@@ -5742,10 +5742,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode1081 栈神：绝版不能踢，这是江湖规矩不是抽卡游戏 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-19/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-19/</link>
         <pubDate>Sun, 19 Jul 2026 19:46:34 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-19/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-19/</guid>
         <description>&lt;h2 id=&#34;栈神绝版不能踢这是江湖规矩不是抽卡游戏&#34;&gt;&lt;strong&gt;栈神：绝版不能踢，这是江湖规矩不是抽卡游戏&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;那天凌晨，我正对着 LeetCode 1081 发呆，眼皮一沉，直接栽进键盘缝里。&lt;/p&gt;
 &lt;p&gt;再睁眼时，面前站着一排字母，领头的那个 &lt;strong&gt;c&lt;/strong&gt; 戴着墨镜，叼着牙签：“喂，你就是那个写了三千行 &lt;code&gt;if-else&lt;/code&gt; 的菜鸡？”&lt;/p&gt;
@@ -5810,10 +5810,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode1979 我的AI助手突然问我一道Easy题 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-18/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-18/</link>
         <pubDate>Sat, 18 Jul 2026 17:26:32 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-18/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-18/</guid>
         <description>&lt;h2 id=&#34;我的ai助手突然问我一道easy题&#34;&gt;&lt;strong&gt;我的AI助手突然问我一道Easy题&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;:) 事情发生在一个普通的周六下午。&lt;/p&gt;
 &lt;p&gt;你正瘫在椅子上，一边刷LeetCode每日任务，一边调试新开发的AI助手&amp;quot;小码&amp;quot;——这是你给公司MMO游戏做的智能NPC对话系统，目前还在内测阶段。&lt;/p&gt;
@@ -5983,10 +5983,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3312「算法竞技场 EP04」不会莫比乌斯也能过 Hard，手工容斥的正确打开方式！ </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-17/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-17/</link>
         <pubDate>Fri, 17 Jul 2026 16:01:09 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-17/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-17/</guid>
         <description>&lt;h2 id=&#34;算法竞技场-ep04不会莫比乌斯也能过-hard手工容斥的正确打开方式&#34;&gt;&lt;strong&gt;「算法竞技场 EP04」不会莫比乌斯也能过 Hard，手工容斥的正确打开方式！&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;欢迎来到「算法竞技场」EP04！我是你们的主播——老白。&lt;/p&gt;
 &lt;p&gt;（弹幕：老白你终于来了！EP03 的莫比乌斯反演把我 CPU 干烧了，我缓了三天才敢回来）
@@ -6235,10 +6235,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3867 穿回初中的我，今天在给语文题写复杂度分析 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-16/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-16/</link>
         <pubDate>Thu, 16 Jul 2026 12:35:32 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-16/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-16/</guid>
         <description>&lt;h2 id=&#34;穿回初中的我今天在给语文题写复杂度分析&#34;&gt;穿回初中的我，今天在给语文题写复杂度分析
 &lt;/h2&gt;&lt;p&gt;昨天那波操作让我一战成名——全班都知道了李码同学不仅会手搓空气，还能用&amp;quot;欧几里得算法&amp;quot;秒杀数学题。&lt;/p&gt;
 &lt;p&gt;今天，王老师又把我叫到了办公室。&lt;/p&gt;
@@ -6392,10 +6392,10 @@ f[i] = s[i] - （对手在剩余牌面里能拿到的最大总分）&lt;/p&gt;
         </item>
         <item>
         <title>leetcode3658 穿回初中的我，除了辣条什么都能优化 </title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-15/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-15/</link>
         <pubDate>Wed, 15 Jul 2026 11:29:04 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-15/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-15/</guid>
         <description>&lt;h2 id=&#34;穿回初中的我除了辣条什么都能优化&#34;&gt;穿回初中的我，除了辣条什么都能优化
 &lt;/h2&gt;&lt;p&gt;事情是这样的——&lt;br&gt;
 那天我加班到凌晨三点，正和一段祖传的“屎山代码”搏斗，突然眼前一黑，晕了过去。&lt;/p&gt;
@@ -6522,10 +6522,10 @@ S偶  =  (2 + 2n) × n ÷ 2
         </item>
         <item>
         <title>leetcode3336「算法竞技场 EP03」五大流派群殴 LeetCode 3336 实况直播吐血解说！</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-14/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-14/</link>
         <pubDate>Tue, 14 Jul 2026 19:56:20 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-14/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-14/</guid>
         <description>&lt;h2 id=&#34;算法竞技场-ep03五大流派群殴-leetcode-3336-实况直播吐血解说&#34;&gt;&lt;strong&gt;「算法竞技场 EP03」五大流派群殴 LeetCode 3336 实况直播吐血解说！&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;欢迎来到「算法竞技场」EP03！我是你们的主播——老白。先给错过前两期的观众补个课：EP01 我们围观了萌新被哈希圣光抬走，EP02 见证了四位选手在顺次数副本里花式炸鱼，难度曲线比我奶奶的血压还平稳。但今天，导演组直接空投了一颗&lt;strong&gt;数论炸弹&lt;/strong&gt;——&lt;strong&gt;LeetCode 3336：最大公约数相等的子序列数量&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;（弹幕：子序列 + GCD，这题明显是数学系派过来搞心态的卧底）
@@ -6934,10 +6934,10 @@ S偶  =  (2 + 2n) × n ÷ 2
         </item>
         <item>
         <title>leetcode1331 算法竞技场EP01：哈希流稳如老狗，二分流帅到飞起，你pick谁？</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-12/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-12/</link>
         <pubDate>Sun, 12 Jul 2026 20:05:52 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-12/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-12/</guid>
         <description>&lt;h2 id=&#34;算法竞技场ep01哈希流稳如老狗二分流帅到飞起你pick谁&#34;&gt;算法竞技场EP01：哈希流稳如老狗，二分流帅到飞起，你pick谁？
 &lt;/h2&gt;&lt;p&gt;欢迎来到 「算法竞技场」的直播间！我是你们的主播——老白。今天咱们不聊3A大作，来刷一个经典副本：&lt;strong&gt;LeetCode 1331：数组序号转换&lt;/strong&gt;。（弹幕：大师又在水题！）&lt;/p&gt;
 &lt;p&gt;别急别急，这副本看似新手村教学，但里面藏着一个专门坑害萌新的超时诅咒。今天的解说，我就带大家看看三位玩家分别是怎么挑战的——有人开场就被秒，有人无伤通关，还有人秀得BOSS头皮发麻。&lt;/p&gt;
@@ -7068,10 +7068,10 @@ S偶  =  (2 + 2n) × n ÷ 2
         </item>
         <item>
         <title>leetcode2685 策划：组队才有加成！图论：单节点也是完全图</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-11/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-11/</link>
         <pubDate>Sat, 11 Jul 2026 20:05:22 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-11/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-11/</guid>
         <description>&lt;h2 id=&#34;策划组队才有加成图论单节点也是完全图&#34;&gt;&lt;strong&gt;策划：组队才有加成！图论：单节点也是完全图&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;作为某氪金手游的掉落算法工程师，你的日常就是在概率和期望之间走钢丝，确保氪佬满意、白嫖党不至于删游、策划的 KPI 刚刚好。今天一大早，策划就带着一脸&amp;quot;我有好主意&amp;quot;的表情晃到你工位前。&lt;/p&gt;
 &lt;p&gt;“我们要搞个&amp;rsquo;固定队额外掉落加成系统！同一个队的人，如果彼此都配合过，就给他们额外的橙色装备掉率！”策划激情澎湃地比划，“这样玩家就会自发社交，我们的日活数据就好看了！”&lt;/p&gt;
@@ -7216,10 +7216,10 @@ S偶  =  (2 + 2n) × n ÷ 2
         </item>
         <item>
         <title>leetcode3534 排序破随机，倍增压长途——传送门最短距离的 O(n log n) 绝杀</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-10/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-10/</link>
         <pubDate>Fri, 10 Jul 2026 14:44:50 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-10/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-10/</guid>
         <description>&lt;h2 id=&#34;排序破随机倍增压长途传送门最短距离的-on-log-n-绝杀&#34;&gt;&lt;strong&gt;排序破随机，倍增压长途——传送门最短距离的 O(n log n) 绝杀&lt;/strong&gt;
 &lt;/h2&gt;&lt;h5 id=&#34;前情提要&#34;&gt;前情提要
 &lt;/h5&gt;&lt;p&gt;《数字大陆》的策划上次被你一句“图论是障眼法，数组才是本体”打击得不轻。据说那天下午，他一个人坐在会议室里，盯着美术画了三天的传送门网络图发了整整半小时呆。&lt;/p&gt;
@@ -7400,10 +7400,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3532 伪图论真数组：策划想做开放世界，我却发现它只是几个连续副本区</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-09/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-09/</link>
         <pubDate>Thu, 09 Jul 2026 12:44:26 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-09/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-09/</guid>
         <description>&lt;h2 id=&#34;伪图论真数组策划想做开放世界我却发现它只是几个连续副本区&#34;&gt;&lt;strong&gt;伪图论真数组：策划想做开放世界，我却发现它只是几个连续副本区&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;《数字大陆》的策划最近沉迷《只狼》，连着一周每天死五十次之后，他悟了——真正的游戏就该让玩家只能往前，不能回头。于是他拍板在新版本里塞了一张叫“勇者试炼·一条路走到黑”的地图：一条从西到东笔直延伸的长廊，依次排列着 &lt;code&gt;n&lt;/code&gt; 个副本关卡，编号 &lt;code&gt;0&lt;/code&gt; 到 &lt;code&gt;n-1&lt;/code&gt;。每个关卡蹲着一群怪物，战力值用 &lt;code&gt;nums[i]&lt;/code&gt; 表示。出于“玩家不能向下碾压”的执念，这条长廊的战力被设计成&lt;strong&gt;非递减&lt;/strong&gt;的——越往东怪越强。西边是战力 5 的史莱姆幼儿园，东边是战力 99999 的灭世魔龙战斗团，中间绝不会有“打完 BOSS 突然冒出三只新手村公鸡”的精神分裂体验。&lt;/p&gt;
 &lt;p&gt;今天早上，策划端着一杯冰美式准时出现在你工位旁，笑眯眯地把一份需求文档拍在你桌上。&lt;/p&gt;
@@ -7476,10 +7476,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3756 前缀和觉醒：十万查询瞬杀术，O(1)结印碾压群殴战场</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-08/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-08/</link>
         <pubDate>Wed, 08 Jul 2026 12:36:45 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-08/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-08/</guid>
         <description>&lt;h2 id=&#34;前缀和觉醒十万查询瞬杀术o1结印碾压群殴战场&#34;&gt;前缀和觉醒：十万查询瞬杀术，O(1)结印碾压群殴战场
 &lt;/h2&gt;&lt;h5 id=&#34;前情提要&#34;&gt;前情提要
 &lt;/h5&gt;&lt;p&gt;昨天那场「单存档修复战」（3754. 连接非零数字并乘以其数字和 I）你还记得吧？磁盘坏道像一群虚空寄生虫，往玩家数据里随地大小 &lt;code&gt;0&lt;/code&gt;。你祭出一套“纯数学流·逐位拆解连招”，平 A 带走全服第一氪佬的存档，操作秀得运维在群里连刷三个「大佬喝茶.jpg」。在你合上笔记本的瞬间，屏幕右下角又弹出运维的夺命连环消息——策划要在修复前先做一轮&lt;strong&gt;批量验伤&lt;/strong&gt;，十万个查询区间，每个截子串、去零、拼接、求和、对轰，算出纯净校验码，好按损坏程度发补偿钻石。&lt;/p&gt;
@@ -7588,10 +7588,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3754 幽灵数据净化器：逆序拆解不反序，边界兜底不判断</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-07/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-07/</link>
         <pubDate>Tue, 07 Jul 2026 12:50:52 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-07/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-07/</guid>
         <description>&lt;h2 id=&#34;幽灵数据净化器逆序拆解不反序边界兜底不判断&#34;&gt;幽灵数据净化器：逆序拆解不反序，边界兜底不判断
 &lt;/h2&gt;&lt;p&gt;你是一名 MMO 游戏的后端开发，今天凌晨，运维给你打了个紧急电话：&lt;/p&gt;
 &lt;blockquote&gt;
@@ -7684,10 +7684,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode1288 一刀流·区间清理术：排序定乾坤，贪心斩冗余</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-06/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-06/</link>
         <pubDate>Mon, 06 Jul 2026 10:42:26 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-06/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-06/</guid>
         <description>&lt;h2 id=&#34;一刀流区间清理术排序定乾坤贪心斩冗余&#34;&gt;🎮一刀流·区间清理术：排序定乾坤，贪心斩冗余
 &lt;/h2&gt;&lt;p&gt;你是一名区间猎人，猎头公会甩给你一张悬赏令：&lt;strong&gt;清理一批“地图上的套娃区间”&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;什么叫套娃区间？就是那些被其他区间完全罩住的倒霉蛋——比如 &lt;code&gt;[3,6)&lt;/code&gt; 被 &lt;code&gt;[2,8)&lt;/code&gt; 包得像俄罗斯套娃里的那个小娃娃，存在的唯一价值，就是被外面的老大哥代表。这种区间在地图里纯属“占着茅坑不拉屎”——明明霸着一组坐标，实际控制面积为零，纯粹浪费数据空间。不清理掉的话，策划又要开喷了：“你们的边界数据比我昨晚吃的麻辣烫还杂乱！”&lt;/p&gt;
@@ -7762,10 +7762,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode1310 两种DP，一把神装</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-05/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-05/</link>
         <pubDate>Sun, 05 Jul 2026 20:02:23 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-05/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-05/</guid>
         <description>&lt;h2 id=&#34;两种dp一把神装&#34;&gt;&lt;strong&gt;🎮两种DP，一把神装&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;你，一位身披重甲的骑士，站在城堡的&lt;strong&gt;右下角&lt;/strong&gt;（别问为什么不在正门，问就是策划设计的）。城堡的最深处——&lt;strong&gt;左上角&lt;/strong&gt;，藏着一把传说中的武器：“全服第一·金光闪闪·一刀999·屠龙宝刀”。装备就是尊严，皮肤就是战力，这把刀要是落入别人手里，你在服务器里的排名就得从“榜一大哥”变成“榜外小弟”。&lt;/p&gt;
 &lt;p&gt;但这座城堡有个变态设定：&lt;strong&gt;每个房间要么堆着金币（数字 1~9），要么蹲着一只打呼噜的精英怪（障碍 X），而且你的重甲只允许三个移动方向——向上、向左、向左上角斜走。&lt;/strong&gt; 向下？不存在的，骑士的尊严不允许走回头路，况且甲胄太重，下楼梯膝盖受不了。&lt;/p&gt;
@@ -7922,10 +7922,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode2492 图鉴更新：不找路径，只扫连通块，并查集一键通关</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-04/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-04/</link>
         <pubDate>Sat, 04 Jul 2026 20:22:54 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-04/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-04/</guid>
         <description>&lt;h2 id=&#34;图鉴更新不找路径只扫连通块并查集一键通关&#34;&gt;&lt;strong&gt;🎮图鉴更新：不找路径，只扫连通块，并查集一键通关&lt;/strong&gt;
 &lt;/h2&gt;&lt;p&gt;你是一名资深运维，信奉&amp;quot;预判风险就是节约生命&amp;quot;，技能树上最亮眼的天赋就是在服务器崩溃前把锅甩出去。这天运维小哥丢来一个任务：从&lt;strong&gt;1 号测试机&lt;/strong&gt;，一路 SSH 到&lt;strong&gt;n 号生产机&lt;/strong&gt;，中间跳板机的安全系数 &lt;code&gt;distance&lt;/code&gt; 一个比一个离谱——数字越小越刺激，敲个回车就可能蓝屏、宕机、主板升天。整条链路的安全性由最烂那台跳板机决定（木桶效应，也是生产事故的第一块多米诺），崩了你会被截图挂上 Slack &lt;code&gt;#incident-recap&lt;/code&gt; 频道循环处刑。&lt;/p&gt;
 &lt;p&gt;你的任务说白了就是：&lt;strong&gt;所有可能跳转路径里，最坏能踩到多烂的跳板机&lt;/strong&gt;——也就是最小安全系数的&lt;strong&gt;最小值&lt;/strong&gt;。为什么求下限？因为甩锅要趁早。只要你摸清全网最脆的那台机器，就能理直气壮输出：&lt;/p&gt;
@@ -8121,10 +8121,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3286 DAG 阈值猎杀：二分特工的探针三连击</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-03/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-03/</link>
         <pubDate>Fri, 03 Jul 2026 16:56:44 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-03/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-03/</guid>
         <description>&lt;h2 id=&#34;dag-阈值猎杀二分特工的探针三连击&#34;&gt;🎮DAG 阈值猎杀：二分特工的探针三连击！
 &lt;/h2&gt;&lt;p&gt;你是一名网络特工，代号“二分”——不是因为你长得二分，而是你解决问题时总喜欢把答案劈成两半，逼它自己招供。今天你接到的任务比以往更离谱：从总部 &lt;code&gt;0&lt;/code&gt; 号节点出发，穿越一张由单向光缆编织的有向无环图（DAG），抵达最后一处未被黑客攻破的数据中心 &lt;code&gt;n-1&lt;/code&gt;。沿途的中转服务器，有些还在线（&lt;code&gt;online[i]=true&lt;/code&gt;），有些已经挂了。节点之间由单向光缆连接，每条光缆上都贴着一张维修价签 &lt;code&gt;cost&lt;/code&gt;，明码标价。&lt;/p&gt;
 &lt;p&gt;上司甩给你一笔可怜的预算 &lt;code&gt;k&lt;/code&gt;，要你挑一条路，把沿途经过的光缆通通维护一遍。规矩很明确：总花费不许超支，沿途服务器必须在线——你总不能对着一台冒烟的机柜敲 ping 吧。&lt;/p&gt;
@@ -8358,10 +8358,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3286 0-1网格求生指南：血条战士 01-BFS 的觉醒</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-02/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-02/</link>
         <pubDate>Thu, 02 Jul 2026 12:27:54 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-02/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-02/</guid>
         <description>&lt;h2 id=&#34;0-1网格求生指南血条战士-01-bfs-的觉醒&#34;&gt;🎮0-1网格求生指南：血条战士 01-BFS 的觉醒！
 &lt;/h2&gt;&lt;p&gt;你是一个 &lt;strong&gt;血条战士&lt;/strong&gt;，初始满血 &lt;strong&gt;health&lt;/strong&gt; 点。你站在矩形网格的左上角 &lt;code&gt;(0,0)&lt;/code&gt;，准备冲向右下角的传送门 &lt;code&gt;(m-1,n-1)&lt;/code&gt;。 网格里只有两种地板：绿草地 &lt;code&gt;0&lt;/code&gt; 和陷阱 &lt;code&gt;1&lt;/code&gt;。踩到绿草地，毫发无伤；踩到陷阱，当场 &lt;code&gt;-1&lt;/code&gt; 血。&lt;/p&gt;
 &lt;p&gt;规则很残酷：&lt;strong&gt;任何时候你的血量必须大于 0&lt;/strong&gt;，一旦血条见底，直接原地去世。就算冲到传送门前，踏进去那一刻血量也得 &amp;gt;0，否则倒在终点线上也算输。&lt;/p&gt;
@@ -8493,10 +8493,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode2812 地牢逃生指南：论如何优雅地绕开所有小偷</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-07-01/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-07-01/</link>
         <pubDate>Wed, 01 Jul 2026 14:15:55 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-07-01/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-07-01/</guid>
         <description>&lt;h2 id=&#34;地牢逃生指南论如何优雅地绕开所有小偷&#34;&gt;🎮地牢逃生指南：论如何优雅地绕开所有小偷
 &lt;/h2&gt;&lt;p&gt;你是一名勇者，代号“零”，此刻正站在一座 &lt;strong&gt;n × n&lt;/strong&gt; 地牢&lt;code&gt;grid&lt;/code&gt;的左上角 &lt;code&gt;(0,0)&lt;/code&gt;。地牢的某些格子里藏着面目可憎的&lt;strong&gt;小偷&lt;/strong&gt;（&lt;code&gt;grid[r][c] = 1&lt;/code&gt;），他们不偷装备，专偷你辛苦攒下的金币。你的任务是从 &lt;code&gt;(0,0)&lt;/code&gt; 走到右下角的出口 &lt;code&gt;(n-1, n-1)&lt;/code&gt;。移动规则很传统：上下左右随便走，但不能斜着飞（地牢天花板太矮，轻功施展不开）。最关键的是：你希望整条路尽可能远离小偷。毕竟离小偷越近，你的钱包就越危险。&lt;/p&gt;
 &lt;p&gt;那么问题来了：怎么衡量一条路够不够&amp;quot;安全&amp;quot;？&lt;/p&gt;
@@ -8703,10 +8703,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode1358 滑动窗口的一体两面：追安全点 vs 数左端点</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-30/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-30/</link>
         <pubDate>Tue, 30 Jun 2026 11:28:05 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-30/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-30/</guid>
         <description>&lt;h2 id=&#34;滑动窗口的一体两面追安全点-vs-数左端点&#34;&gt;滑动窗口的一体两面：追安全点 vs 数左端点
 &lt;/h2&gt;&lt;p&gt;有一个笔直的街道上住着 &lt;strong&gt;n&lt;/strong&gt; 个居民，每个居民只会塞给你一种魔法糖果：&lt;strong&gt;a 糖&lt;/strong&gt;、&lt;strong&gt;b 糖&lt;/strong&gt;或 &lt;strong&gt;c 糖&lt;/strong&gt;。你是一个勇者，想要挑战一个成就：“在一次&lt;strong&gt;连续&lt;/strong&gt;的逛街中，收集齐a、b、c 三种糖果”。规则很简单：你从某个起点居民开始，一路往东走，到某个终点居民结束。如果在这段路程中，你的口袋里三种糖至少各有一颗，就算一次成功的逛街。你想知道整条街上一共有多少种成功的逛街方案（不同的起点‑终点组合）。&lt;/p&gt;
 &lt;hr&gt;
@@ -8795,10 +8795,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode1967 村长云服务器 IV：当暴力美学遇上AC自动机</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-29/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-29/</link>
         <pubDate>Mon, 29 Jun 2026 15:03:17 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-29/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-29/</guid>
         <description>&lt;h3 id=&#34;村长云服务器-iv当暴力美学遇上ac自动机&#34;&gt;💻村长云服务器 IV：当暴力美学遇上AC自动机！
 &lt;/h3&gt;&lt;p&gt;村长抱着那台熟悉的二手服务器冲进院子，机箱上的标签从&amp;rsquo;村长云服务器·公测版&amp;rsquo; 又升级成了&amp;rsquo;&amp;lsquo;村长云服务器·旗舰版&amp;rsquo;&amp;rsquo;——手写字歪歪扭扭，一看就是老头自己拿马克笔描的。风扇还是那个风扇，嗡嗡声堪比直升机，升了版本号没升硬件，典型的“软件升级，硬件抗压”。&lt;/p&gt;
 &lt;p&gt;“小白！老板娘说抽奖系统现在流量暴涨，用户发的弹幕里老有人刷敏感词！什么&amp;rsquo;代抽&amp;rsquo;、&amp;lsquo;外挂&amp;rsquo;、&amp;lsquo;假一赔十&amp;rsquo;——把评论区搞得乌烟瘴气！”村长把显示器往桌上一搁，屏幕上滚动着一条超长弹幕文本，旁边密密麻麻列着一百多个敏感词，从&amp;quot;代抽&amp;quot;到&amp;quot;假货&amp;quot;，从&amp;quot;退款&amp;quot;到&amp;quot;差评&amp;quot;，琳琅满目，活像一本黑话词典。&lt;/p&gt;
@@ -8965,10 +8965,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode1846 数组变形记：从混乱到有序的贪心进化</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-28/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-28/</link>
         <pubDate>Sun, 28 Jun 2026 16:41:39 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-28/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-28/</guid>
         <description>&lt;h2 id=&#34;数组变形记从混乱到有序的贪心进化&#34;&gt;数组变形记：从混乱到有序的贪心进化
 &lt;/h2&gt;&lt;p&gt;你是一个肝帝玩家，背包里塞满了各种等级的装备——从+1的破烂新手剑到+999的传说级神器，应有尽有。&lt;/p&gt;
 &lt;p&gt;游戏规则：&lt;/p&gt;
@@ -9082,10 +9082,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3020 平方峰过山车：平方峰上顶点单，指数飞升序列短</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-27/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-27/</link>
         <pubDate>Sat, 27 Jun 2026 17:53:51 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-27/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-27/</guid>
         <description>&lt;h2 id=&#34;平方峰过山车平方峰上顶点单指数飞升序列短&#34;&gt;🎢平方峰过山车：平方峰上顶点单，指数飞升序列短
 &lt;/h2&gt;&lt;p&gt;今天一早，村长的飞鸽传书就砸在我桌上——那个奇奇怪怪游乐园又来新活了。上次锯齿过山车的奖金还没结清呢，这次又搞了个什么姐妹项目——平方峰过山车！&lt;/p&gt;
 &lt;p&gt;“又是过山车？这游乐园是跟过山车杠上了还是预算只够建一种项目？” 我展开任务书，只见上面画着一张极其诡异的设计图——轨道中间高、两边低，还不是均匀分布的，像一座被镜子对折过的陡峭山峰！&lt;/p&gt;
@@ -9178,10 +9178,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3739 村长云服务器 II：三年日志又何妨，哈希O(n)镇全场</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-26/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-26/</link>
         <pubDate>Fri, 26 Jun 2026 11:25:42 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-26/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-26/</guid>
         <description>&lt;h2 id=&#34;-村长云服务器-ii三年日志又何妨哈希on镇全场&#34;&gt;🖥️ 村长云服务器 II：三年日志又何妨，哈希O(n)镇全场
 &lt;/h2&gt;&lt;p&gt;上回说到，村长的二手服务器靠着我从暴力到前缀和再到哈希增量的三重大法稳住了阵脚，故障窗口一个不少全揪了出来。老头抱着服务器乐颠颠地去找老板娘邀功。我当时拍着胸脯吹了牛，说三十年也照跑不误。&lt;/p&gt;
 &lt;p&gt;才过了一天，牛就真找上门了。今天一大早，村长又抱着那台熟悉的二手服务器冲进来，机箱上的标签竟从“村长云服务器·内测版”升级成了“村长云服务器·公测版”，只是那风扇的咆哮声听起来，像是随时准备原地起飞。&lt;/p&gt;
@@ -9255,10 +9255,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3737 村长云服务器危机：从暴力枚举到哈希增量的三重奏</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-25/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-25/</link>
         <pubDate>Thu, 25 Jun 2026 14:12:59 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-25/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-25/</guid>
         <description>&lt;h2 id=&#34;-村长云服务器危机从暴力枚举到哈希增量的三重奏&#34;&gt;🎮 村长云服务器危机：从暴力枚举到哈希增量的三重奏
 &lt;/h2&gt;&lt;p&gt;“小白！我搞了台二手服务器！” 今天一大早，村长抱着一个嗡嗡作响的铁盒子冲进来，机箱风扇发出拖拉机般的轰鸣声。机箱上贴着歪歪扭扭的标签——村长云服务器·内测版，旁边还画了一个丑萌丑萌的云朵图案。&lt;/p&gt;
 &lt;p&gt;他把显示器往桌上一搁，屏幕上是一条不断刷新的日志流，每行要么是绿色的&amp;quot;SUCCESS&amp;quot;，要么是红色的 &amp;ldquo;FAIL&amp;rdquo;，密密麻麻地滚动着，像黑客帝国里的代码雨。&lt;/p&gt;
@@ -9390,10 +9390,10 @@ pos[0] = 2
         </item>
         <item>
         <title>leetcode3700 锯齿过山车·续：数量飙十亿，矩阵快速幂！</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-24/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-24/</link>
         <pubDate>Wed, 24 Jun 2026 17:20:11 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-24/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-24/</guid>
         <description>&lt;h2 id=&#34;-锯齿过山车续数量飙十亿矩阵快速幂&#34;&gt;🎢 锯齿过山车·续：数量飙十亿，矩阵快速幂！
 &lt;/h2&gt;&lt;p&gt;上回说到，我用&lt;strong&gt;前缀和加原地滚动&lt;/strong&gt;，把计算锯齿过山车轨道方案数的复杂度从 O(nk²) 压到了 O(nk)，村长乐颠颠地去游乐园领赏金了。老勇者临走时扔下一句：“如果n飙到10^6，前缀和也不够用，那就得上矩阵快速幂了。”&lt;/p&gt;
 &lt;p&gt;我本以为这只是老勇者随口一提的“远期预告”，毕竟谁能闲着没事建一条十亿个节点的过山车？&lt;/p&gt;
@@ -9606,10 +9606,10 @@ C 是 k×k 的上三角全 1 矩阵（C[i] [j]=1 当且仅当 j &amp;gt; i）
         </item>
         <item>
         <title>leetcode3699 锯齿过山车：从暴力O(nk²)到原地滚动的三轮进化</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-23/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-23/</link>
         <pubDate>Tue, 23 Jun 2026 16:26:37 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-23/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-23/</guid>
         <description>&lt;h2 id=&#34;锯齿过山车从暴力onk到原地滚动的三轮进化&#34;&gt;🎮锯齿过山车：从暴力O(nk²)到原地滚动的三轮进化
 &lt;/h2&gt;&lt;p&gt;烈日当空，连村里那只掉毛信鸽都热得趴在窗台上，仿佛随时会触发什么 &lt;code&gt;HeatStrokeException&lt;/code&gt;。我正把头伸进锅炉房里仅存的阴凉角落，院门又被“砰”地一脚踹开了。&lt;/p&gt;
 &lt;p&gt;“小白！游乐园那边来大工程了！” 村长一个滑铲冲进了屋。他满头大汗，手里举着一张画得歪歪扭扭的过山车设计图，上面密密麻麻的折线，看起来就像是我昨晚熬夜打排位时的心电图。&lt;/p&gt;
@@ -9836,10 +9836,10 @@ C 是 k×k 的上三角全 1 矩阵（C[i] [j]=1 当且仅当 j &amp;gt; i）
         </item>
         <item>
         <title>leetcode1189 木桶短板定产量，Counter 计数展风光</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-22/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-22/</link>
         <pubDate>Mon, 22 Jun 2026 11:32:53 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-22/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-22/</guid>
         <description>&lt;h2 id=&#34;木桶短板定产量counter-计数展风光&#34;&gt;🎮木桶短板定产量，Counter 计数展风光
 &lt;/h2&gt;&lt;p&gt;今天，村长又双叒叕发布了个所谓的“简单日常任务”——说是野外刷新了一批&lt;strong&gt;字母史莱姆&lt;/strong&gt;，这玩意儿打死之后不掉金币，只疯狂掉落小写字母碎片。只要集齐一套 &amp;ldquo;balloon&amp;rdquo; 的碎片，就能搓出一个&lt;strong&gt;气球炸弹&lt;/strong&gt;，用来炸开村东头那个卡了三个版本的传送门。&lt;/p&gt;
 &lt;p&gt;“小白啊，背包 text 里已经攒了一堆碎片了，赶紧算算能搓几个炸弹。”村长叼着烟斗，头也不抬地疯狂画饼。&lt;/p&gt;
@@ -9915,10 +9915,10 @@ C 是 k×k 的上三角全 1 矩阵（C[i] [j]=1 当且仅当 j &amp;gt; i）
         </item>
         <item>
         <title>leetcode1833 贪心扫货不迟疑，计数先求最大值</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-21/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-21/</link>
         <pubDate>Sun, 21 Jun 2026 16:36:06 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-21/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-21/</guid>
         <description>&lt;h2 id=&#34;-贪心扫货不迟疑计数先求最大值&#34;&gt;🎮 贪心扫货不迟疑，计数先求最大值
 &lt;/h2&gt;&lt;p&gt;炎炎夏日，Tony同学热得快要融化了。他冲进雪糕店，发现货架上摆着n支雪糕，每支价格不同（&lt;code&gt;costs[i]&lt;/code&gt;）。站在冰柜前，Tony双眼放光，脑海里只有一个声音在回荡：&lt;strong&gt;“买到最多数量的雪糕！”&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;但问题来了——Tony摸了摸口袋，只有 coins 块现金，如何在预算内实现雪糕自由？&lt;/p&gt;
@@ -10012,10 +10012,10 @@ C 是 k×k 的上三角全 1 矩阵（C[i] [j]=1 当且仅当 j &amp;gt; i）
         </item>
         <item>
         <title>leetcode1840 十亿高楼莫开阵，万点锚链定乾坤</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-20/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-20/</link>
         <pubDate>Sat, 20 Jun 2026 22:40:44 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-20/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-20/</guid>
         <description>&lt;h2 id=&#34;-十亿高楼莫开阵万点锚链定乾坤&#34;&gt;🎮 十亿高楼莫开阵，万点锚链定乾坤
 &lt;/h2&gt;&lt;p&gt;你是一个刚拿到城市规划师资格证的新人，市长给了你一个看似简单的任务：&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&amp;ldquo;小伙子，给你 n 块地，给我建一排楼。记住三条规矩：&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
@@ -10149,10 +10149,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode1732 莫道水题无意义，心态修炼在其中</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-19/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-19/</link>
         <pubDate>Fri, 19 Jun 2026 23:32:30 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-19/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-19/</guid>
         <description>&lt;h2 id=&#34;莫道水题无意义心态修炼在其中&#34;&gt;🎮莫道水题无意义，心态修炼在其中
 &lt;/h2&gt;&lt;p&gt;清晨的阳光刚透过窗帘缝隙，我正沉浸在&amp;quot;泡面配码，法力无边&amp;quot;的晨间仪式中，窗户再次传来了那熟悉的&amp;quot;砰&amp;quot;的一声闷响。那只掉毛的信鸽又一次精准地砸在了我的键盘旁边——差点把我的 Enter 键给砸飞了。&lt;/p&gt;
 &lt;p&gt;我熟练地抽出纸条，村长的狂草一如既往地奔放：&amp;ldquo;小白！今天给你来个休闲养生局！自行车手骑行问题，求最高海拔！简单题，签到题，送分题！别问为什么又是签到，问就是端午节福利大礼包！&amp;rdquo;&lt;/p&gt;
@@ -10219,10 +10219,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode1344 钟面追及本寻常，惊觉快慢指针藏</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-18/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-18/</link>
         <pubDate>Thu, 18 Jun 2026 11:29:57 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-18/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-18/</guid>
         <description>&lt;h2 id=&#34;钟面追及本寻常惊觉快慢指针藏&#34;&gt;🎮钟面追及本寻常，惊觉快慢指针藏
 &lt;/h2&gt;&lt;p&gt;我盯着屏幕上村长新发来的任务卷轴，眉头皱得能夹死一只苍蝇。&lt;/p&gt;
 &lt;p&gt;“时钟指针的夹角……” 我念出声来，“给你两个数 hour 和 minutes，请返回在时钟上，由给定时间的时针和分针组成的较小角的角度？” 我揉了揉眼睛，把卷轴翻来覆去看了三遍，就……一个钟？&lt;/p&gt;
@@ -10291,10 +10291,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode3614 倒转乾坤寻真身，去冗存真见精神</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-17/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-17/</link>
         <pubDate>Wed, 17 Jun 2026 12:08:54 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-17/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-17/</guid>
         <description>&lt;h2 id=&#34;倒转乾坤寻真身去冗存真见精神&#34;&gt;🎮倒转乾坤寻真身，去冗存真见精神
 &lt;/h2&gt;&lt;p&gt;早上，我刚把一碗热气腾腾的泡面端上桌，准备享受这碳水与油脂交织的美好清晨，窗户又发出了熟悉的“砰砰”声。我眼疾手快地把碗往旁边一挪，果不其然，那只掉毛的信鸽像一架失去动力的无人机，精准地砸向桌面。&lt;/p&gt;
 &lt;p&gt;“你就不能换个着陆点？”我把鸽子往旁边拨了拨，熟练地抽出它嘴里叼着的羊皮纸。展开一看，村长的狂草再次扑面而来：“小白！字母大陆又更新了！这次不要求返回整个密文，只要求返回最终密文的第 k 个字母（下标从 0 开始）！如果 k 越界了，就返回一个 &lt;code&gt;.&lt;/code&gt;！另外，字符串长度上限已经放宽到 10^5 ，祝你好运！”&lt;/p&gt;
@@ -10434,10 +10434,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode3612 正序模拟过试炼，空间逆推破天机</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-16/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-16/</link>
         <pubDate>Tue, 16 Jun 2026 12:56:34 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-16/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-16/</guid>
         <description>&lt;h2 id=&#34;-正序模拟过试炼空间逆推破天机&#34;&gt;🎮 正序模拟过试炼，空间逆推破天机
 &lt;/h2&gt;&lt;p&gt;距离上次在字母大陆抓“双面间谍”已经过去好一阵子了。我本以为那片大陆的服务器早已关服，大家各自安好。没想到今天一大早，我正蹲在火炉边嗦泡面，窗户就被啄得砰砰作响——一只明显没睡醒的鸽子叼着封信，扑腾了两下，精准地一头栽进了我的泡面碗里。&lt;/p&gt;
 &lt;p&gt;我捞出那封湿漉漉的羊皮纸信，展开一看，上面赫然是村长那仿佛被狗啃过一样的狂草：“小白！字母大陆更新资料片了！那些字母不知道怎么搞的，混进了一批‘魔法操作符’——星号、井号和百分号。现在整条字符串就像被施了咒一样，你得按照规则从左到右处理每个字符，才能还原出最终的真言！规则如下——”&lt;/p&gt;
@@ -10513,10 +10513,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode2095 快慢指针找前驱，虚拟节点消特判</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-15/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-15/</link>
         <pubDate>Mon, 15 Jun 2026 12:36:59 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-15/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-15/</guid>
         <description>&lt;h2 id=&#34;-快慢指针找前驱虚拟节点消特判&#34;&gt;🎮 快慢指针找前驱，虚拟节点消特判
 &lt;/h2&gt;&lt;p&gt;昨天村长把“对称之盾”爆出来后，乐得像个两百斤的傻子。听说他那 Steam Deck 的风扇嗡嗡转了一宿，隔着半堵墙都能听见装备界面循环播放的BGM。今天一大早，我正蹲在锅炉边添柴，寻思着要不要摸个鱼，院门“砰”地一声又被一脚踹开。&lt;/p&gt;
 &lt;p&gt;“小白！出Bug了！”村长冲进来，屏幕上还是昨天那条魔法项链，但这次画风突变——项链正中间的环正在疯狂闪烁刺眼的红光，还伴随着刺耳的警报声。&lt;/p&gt;
@@ -10593,10 +10593,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode2130 快慢指针拆项链，递归回溯借东风</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-14/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-14/</link>
         <pubDate>Sun, 14 Jun 2026 12:37:13 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-14/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-14/</guid>
         <description>&lt;h2 id=&#34;快慢指针拆项链递归回溯借东风&#34;&gt;🎮快慢指针拆项链，递归回溯借东风
 &lt;/h2&gt;&lt;p&gt;今天我正蹲在锅炉边享受难得的清静，熟悉的Steam Deck风扇声又由远及近地碾了过来。村长捧着电脑冲了进来，屏幕上闪烁着一条由圆环串联而成的项链，每个环上标着数字，还散发着淡蓝色的魔法光芒。&lt;/p&gt;
 &lt;p&gt;&amp;ldquo;小白！游戏里掉落了一条神秘的项链！&amp;ldquo;村长的眼睛比项链还亮，&amp;ldquo;你看，这链子一共 &lt;code&gt;n&lt;/code&gt; 个环，&lt;code&gt;n&lt;/code&gt; 还是偶数！游戏提示说蕴含什么对称的力量——从两头往中间数，第 &lt;code&gt;i&lt;/code&gt; 个环和第 &lt;code&gt;n-1-i&lt;/code&gt; 个环叫‘孪生环’！每对孪生环放在一起会产生能量共鸣，共鸣值就是两个环上的数字之和！需要找出最强共鸣值提交给锻造台，才能解锁传说中的对称之盾！&amp;rdquo;&lt;/p&gt;
@@ -10701,10 +10701,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode3838 绝对防御！手动Hash与模运算的土豆级零信任协议</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-13/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-13/</link>
         <pubDate>Sat, 13 Jun 2026 22:13:24 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-13/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-13/</guid>
         <description>&lt;h2 id=&#34;绝对防御手动hash与模运算的土豆级零信任协议&#34;&gt;🎮绝对防御！手动Hash与模运算的土豆级零信任协议
 &lt;/h2&gt;&lt;p&gt;今天一大早，村长神神秘秘地塞给我一本皱巴巴的手册，封面上歪歪扭扭写着《v2.6.13版字母权重表》，旁边还盖了个萝卜章。手册里夹着一张纸条，上面是几串密文单词，每个单词旁边画着鬼画符一样的标记。&lt;/p&gt;
 &lt;p&gt;“小白，”村长压低声音，眼神里透着三分警惕七分得意，“我最近搞了套加密算法，能把所有任务指令都编码成奇怪的字符串。你看这张表，a对应几斤几两，b对应几斤几两……全是我亲手标的。纸条上那几串密文，你给我实时翻译下看看。”&lt;/p&gt;
@@ -10757,10 +10757,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode3559 二进制传送门觉醒：当每个节点都能瞬间跳跃</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-12/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-12/</link>
         <pubDate>Fri, 12 Jun 2026 15:25:32 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-12/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-12/</guid>
         <description>&lt;h2 id=&#34;二进制传送门觉醒当每个节点都能瞬间跳跃&#34;&gt;🎮二进制传送门觉醒：当每个节点都能瞬间跳跃
 &lt;/h2&gt;&lt;p&gt;今天一大早，我刚推开村口锅炉房的门，就看见村长蹲在那儿，顶着两个黑眼圈，怀里抱着笔记本电脑，屏幕上&amp;rsquo;&amp;lsquo;奇数流宗师&amp;rsquo;&amp;lsquo;几个烫金大字一闪一闪的，后面跟着密密麻麻的查询列表，滚动条缩成了一个小点。墨菲定律诚不欺我——怕什么来什么。&lt;/p&gt;
 &lt;p&gt;&amp;lsquo;&amp;lsquo;小白！&amp;lsquo;&amp;lsquo;村长看到我，像装了雷达一样从地上弹起来，&amp;lsquo;&amp;lsquo;这个成就太难了！你看，宗师成就要求处理任意两个节点之间的路径查询，不是只有根到叶子那么简单！&amp;lsquo;&amp;lsquo;他疯狂划拉屏幕，&amp;lsquo;&amp;lsquo;查询可能是从1号到5号，从3号到7号，从8号到2号……我把昨天你那套压扁成链的代码套进去，跑的我风扇狂转，Steam Deck差点起飞——结果还没跑完！&amp;rsquo;&amp;rsquo;&lt;/p&gt;
@@ -10983,10 +10983,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode3558：对称性的觉醒：当奇数和偶数平分天下</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-11/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-11/</link>
         <pubDate>Thu, 11 Jun 2026 13:00:38 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-11/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-11/</guid>
         <description>&lt;h2 id=&#34;-对称性的觉醒当奇数和偶数平分天下&#34;&gt;🎮 对称性的觉醒：当奇数和偶数平分天下
 &lt;/h2&gt;&lt;p&gt;听说村长最近沉迷于一款叫《技能树大亨》的RPG游戏——我怀疑这老头把省下来的钱全充了Steam余额，账号时长怕不是比我刷题还多。今天一大早，我正蹲在锅炉边添柴，电脑屏幕突然弹出老头的远程协助请求。点下接受，村长的游戏画面直接投屏过来——他的人物正卡在技能树界面，鼠标在一棵枝繁叶茂的树状图上疯狂画圈，技能节点之间的连线旁还标注着&amp;quot;普通升级: 1点&amp;quot;和&amp;quot;强化升级: 2点&amp;quot;。&lt;/p&gt;
 &lt;p&gt;&amp;ldquo;小白！我的隐藏成就卡住了！&amp;ldquo;村长的声音从屏幕那头炸出来，急得像是副本门口等着拉人的团长，&amp;ldquo;从根技能1号出发，每条连线可以选普通升级花1点，或者强化升级花2点。隐藏成就叫&amp;rsquo;奇数流大师&amp;rsquo;，要求算出有多少种加点法能使到达最深那个终极技能的总消耗是奇数！”&lt;/p&gt;
@@ -11057,10 +11057,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode3691从堆到树：一道题的两个平行宇宙</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-10/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-10/</link>
         <pubDate>Wed, 10 Jun 2026 16:10:20 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-10/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-10/</guid>
         <description>&lt;h2 id=&#34;从堆到树一道题的两个平行宇宙&#34;&gt;🎮从堆到树：一道题的两个平行宇宙
 &lt;/h2&gt;&lt;p&gt;今天的任务卷轴——3691. 最大子数组总值 II——规则赫然写着：选恰好 k 个&lt;strong&gt;不同的非空子数组，可以重叠，同一个子数组不能被选择超过一次&lt;/strong&gt;。求最大极差之和。&lt;/p&gt;
 &lt;p&gt;我差点笑出声。这不就是老勇者昨天拿红笔在我羊皮纸上改出来的那道“如果加上约束”吗？连标点符号都没改！直接上昨天那套代码——隧道模型 + 贪心堆 + 稀疏表。稀疏表预处理 O(n log n)，每条隧道初始最深段入堆，候选池恒定 n 个，每次弹堆顶累加极差、同一隧道缩一格压回，k 次堆操作 O(k log n)。提交，AC，一气呵成。&lt;/p&gt;
@@ -11347,10 +11347,10 @@ Python 解释器：&amp;ldquo;兄弟，我知道你是搞算法的，但你能�
         </item>
         <item>
         <title>leetcode3689 贪心策略的两种命运：可重复选vs不可重复选</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-09/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-09/</link>
         <pubDate>Tue, 09 Jun 2026 17:16:07 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-09/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-09/</guid>
         <description>&lt;h2 id=&#34;-贪心策略的两种命运可重复选vs不可重复选&#34;&gt;🎮 贪心策略的两种命运：可重复选vs不可重复选
 &lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;能摆的时候别卷，该卷的时候别摆&lt;/p&gt;
@@ -11474,10 +11474,10 @@ st&lt;a class=&#34;link&#34; href=&#34;%e9%95%bf%e5%ba%a64&#34; &gt;2&lt;/a&gt;:
         </item>
         <item>
         <title>leetcode2161 装备分拣：一行流的诱惑与分桶的正道</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-08/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-08/</link>
         <pubDate>Mon, 08 Jun 2026 12:47:26 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-08/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-08/</guid>
         <description>&lt;h2 id=&#34;-装备分拣一行流的诱惑与分桶的正道&#34;&gt;🎮 装备分拣：一行流的诱惑与分桶的正道
 &lt;/h2&gt;&lt;p&gt;“小白！”村长一脚踹开大门，怀里抱着一堆闪闪发光的装备，“昨晚勇士团连夜刷副本，爆了一地装备！你看这战力值——&lt;code&gt;[9, 12, 5, 10, 14, 3, 10]&lt;/code&gt;。现在要以战力 10 为基准分三批：比 10 弱的给新手村，等于 10 的放仓库备用，比 10 强的给精英团。而且同一批装备必须按掉落顺序排列——这样好查记录，知道是哪只 BOSS 爆的！”&lt;/p&gt;
 &lt;p&gt;我接过装备清单扫了一眼，这不就是稳定三路划分吗？快排里的 partition 一个原地交换下去，相同元素的先后顺序直接乱套——这里要求组内保序，那就不能原地搞了，得上辅助空间。三个桶，一趟遍历：比 pivot 小的进左桶，相等的进中桶，大的进右桶。从左往右依次遍历，每个桶天然保持原数组的先后顺序。&lt;/p&gt;
@@ -11535,10 +11535,10 @@ st&lt;a class=&#34;link&#34; href=&#34;%e9%95%bf%e5%ba%a64&#34; &gt;2&lt;/a&gt;:
         </item>
         <item>
         <title>leetcode2196：树根猎人：从一堆父子关系里揪出老祖宗</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-07/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-07/</link>
         <pubDate>Sun, 07 Jun 2026 22:40:48 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-07/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-07/</guid>
         <description>&lt;h2 id=&#34;-树根猎人从一堆父子关系里揪出老祖宗&#34;&gt;🎮 树根猎人：从一堆父子关系里揪出老祖宗
 &lt;/h2&gt;&lt;p&gt;一只灰扑扑的信鸽扑棱着翅膀从窗口栽了进来，精准地砸中了我刚泡好的方便面。我解开它腿上的字条一看——是村长的笔迹：&amp;ldquo;邻村要建棵树，你帮忙看看。&amp;rdquo;&lt;/p&gt;
 &lt;p&gt;&amp;ldquo;建树？&amp;ldquo;我一个刷算法的，什么时候接了土木工程的活儿？这委托费够不够赔我这碗红烧牛肉面！翻到字条背面，还有一整页三元组：&lt;code&gt;[parent, child, isLeft]&lt;/code&gt;。我恍然大悟，此树非彼树。邻村要建的是一棵家谱二叉树，但现在只有一堆零散的父子关系——不成树，也不知道根在哪。村长要我根据这些描述把树拼好，并找出根节点。&lt;/p&gt;
@@ -11605,10 +11605,10 @@ children = set()
         </item>
         <item>
         <title>leetcode2574：空间复杂度O(1)？村长说这是节俭美德！</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-06/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-06/</link>
         <pubDate>Sat, 06 Jun 2026 12:36:25 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-06/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-06/</guid>
         <description>&lt;p&gt;🎮 空间复杂度O(1)？村长说这是节俭美德！&lt;/p&gt;
 &lt;p&gt;“小白，村里要搞个村运会！”村长塞给我一张皱巴巴的纸，上面歪歪扭扭画着一排数字：&lt;code&gt;[10, 4, 8, 3]&lt;/code&gt;，“你看，这是咱村拔河比赛的对阵表！”&lt;/p&gt;
 &lt;p&gt;我定睛一看，“这……不就是个数组吗？”&lt;/p&gt;
@@ -11686,10 +11686,10 @@ children = set()
         </item>
         <item>
         <title>leetcode3753：游乐园峰谷过山车II</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-05/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-05/</link>
         <pubDate>Fri, 05 Jun 2026 11:12:16 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-05/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-05/</guid>
         <description>&lt;h2 id=&#34;-游乐园峰谷过山车-ii当数据量膨胀到万亿级&#34;&gt;🎮 游乐园峰谷过山车 II：当数据量膨胀到万亿级
 &lt;/h2&gt;&lt;p&gt;“来了。”&lt;/p&gt;
 &lt;p&gt;我靠窗坐着，魔法书摊在膝上，手边一杯茶冒着热气。窗外传来熟悉的脚步声——不是那种出大事的急匆匆跑法，而是不紧不慢、带着“ 我要来吓唬你了但我其实很期待看你反应 ” 的节奏。上次游乐园试运营、正式服连着来的时候，也是这个步调。如果把村长的每次出场录下来做傅里叶变换，峰值频率大概在“焦虑”和“幸灾乐祸”之间。&lt;/p&gt;
@@ -11743,10 +11743,10 @@ children = set()
         </item>
         <item>
         <title>leetcode3751：游乐园峰谷过山车</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-04/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-04/</link>
         <pubDate>Thu, 04 Jun 2026 16:50:01 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-04/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-04/</guid>
         <description>&lt;h2 id=&#34;-游乐园峰谷过山车数位dp的修行&#34;&gt;🎮 游乐园峰谷过山车：数位DP的修行
 &lt;/h2&gt;&lt;h4 id=&#34;第一章村长的新任务&#34;&gt;第一章：村长的新任务
 &lt;/h4&gt;&lt;p&gt;&amp;ldquo;小白！别睡了！有新任务了！&amp;rdquo; 村长一脚踹开我家大门，手里挥舞着一份皱巴巴的羊皮卷轴。我一个激灵从床上弹起来，下意识就去摸魔法书——这开场白我太熟了，每次村长用这个句式，后面铁定跟着一道新题。&lt;/p&gt;
@@ -11904,10 +11904,10 @@ children = set()
         </item>
         <item>
         <title>leetcode3635：游乐园正式服的挑战</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-03/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-03/</link>
         <pubDate>Wed, 03 Jun 2026 10:39:17 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-03/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-03/</guid>
         <description>&lt;h2 id=&#34;-游乐园正式服的挑战当昨天的代码遇上今天的数据量&#34;&gt;🎮 游乐园正式服的挑战：当昨天的代码遇上今天的数据量
 &lt;/h2&gt;&lt;p&gt;上回说到，我和老勇者从“算法乐园”逃回村里，及时救活了村里的魔法锅炉。今天，我蹲在炉子旁边添柴边打盹，火焰舔着锅底，浓汤咕嘟咕嘟冒泡，节奏稳得像台跑了十年没崩过的服务器。昨天的游乐园副本虽然惊险，但好歹白嫖了两份战报，O(n+m) 的剪枝优化躺在魔法书里，想想还有点小得意。&lt;/p&gt;
 &lt;p&gt;正迷糊着，一阵急促的脚步声由远及近。我睁眼一看，村长又来了。这回他手里没有门票，而是举着一封烫金信封：“小白，算法乐园那边来消息了——说上次的游园体验是‘试运营版本’，现在正式版上线了，叫 ‘3635 - 最早完成陆地和水上游乐设施的时间 II’。规则一模一样，但是——”&lt;/p&gt;
@@ -11957,10 +11957,10 @@ children = set()
         </item>
         <item>
         <title>leetcode3633：游乐园大冒险</title>
-        <link>http://localhost:1315/posts/leetcode_stories/26-06-02/</link>
+        <link>http://localhost:8080/posts/leetcode_stories/26-06-02/</link>
         <pubDate>Tue, 02 Jun 2026 10:48:27 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/leetcode_stories/26-06-02/</guid>
+        <guid>http://localhost:8080/posts/leetcode_stories/26-06-02/</guid>
         <description>&lt;h2 id=&#34;-游乐园大冒险从暴力枚举到剪枝优化的最早回村攻略&#34;&gt;🎮 游乐园大冒险——从暴力枚举到剪枝优化的最早回村攻略
 &lt;/h2&gt;&lt;p&gt;昨天帮村长省下一大笔糖果钱，今天一大早，老头就笑呵呵地塞给我两张游乐园门票：“小白，干得漂亮！这是给你的福利——新开的‘算法乐园’，陆地项目和水上项目随便挑。不过有个条件——”&lt;/p&gt;
 &lt;p&gt;他压低声音，眼神突然犀利起来：“村里的魔法锅炉等着你回来添柴，你得给我早点回村。陆地区和水区各玩一个就撤，顺序你定，但要算出怎么安排能最早回来。记住，我要的是最早回村时间，不是玩得最爽——别玩疯了忘了正事！”&lt;/p&gt;

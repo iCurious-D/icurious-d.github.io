@@ -2,6 +2,7 @@
 date = '2026-06-08T14:04:38+08:00'
 draft = false
 title = '每日随机一句话'
+weight = 20
 
 +++
 

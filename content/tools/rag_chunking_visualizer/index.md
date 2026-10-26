@@ -4,6 +4,7 @@ draft = false
 title = 'RAG 分块可视化工具'
 tags = ["AI", "RAG", "工具"]
 description = "输入一段文本，可视化展示不同分块策略（固定长度 / 语义分块）的效果，直观理解 chunk_size 和 overlap 参数的影响。"
+weight = 12
 +++
 
 输入一段文本，调整参数，实时查看不同分块策略的效果。

@@ -4,6 +4,7 @@ draft = false
 title = 'Prompt 生成器'
 tags = ["AI", "Prompt", "工具"]
 description = "通过表单填写角色、任务、格式、约束等要素，一键生成结构化的高质量 Prompt。"
+weight = 11
 +++
 
 通过填写表单要素，自动生成结构化的 Prompt，可直接复制使用。

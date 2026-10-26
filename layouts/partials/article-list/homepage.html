@@ -1,23 +1,14 @@
 <article class="homepage-card">
     <a class="homepage-card__link" href="{{ .RelPermalink }}" aria-label="{{ .Title }}"></a>
     <div class="homepage-card__content">
-        {{ $icon := .Params.icon }}
-        {{ if not $icon }}
-            {{ $category := "" }}
-            {{ with .Params.categories }}{{ $category = index . 0 }}{{ end }}
-            {{ $categoryLower := lower $category }}
-            {{ if eq $categoryLower "项目实战" }}{{ $icon = "🛠️" }}
-            {{ else if eq $categoryLower "ai 技术笔记" }}{{ $icon = "🧩" }}
-            {{ else if eq $categoryLower "leetcode题解" }}{{ $icon = "📝" }}
-            {{ else if eq .Section "tools" }}{{ $icon = "🔧" }}
-            {{ else if eq .Section "kids" }}{{ $icon = "🎨" }}
-            {{ else }}{{ $icon = "📄" }}{{ end }}
-        {{ end }}
-
-        <h2 class="homepage-card__title">
-            <span class="homepage-card__icon">{{ $icon }}</span>
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-        </h2>
+        <div class="homepage-card__header">
+            <span class="homepage-card__tag homepage-card__tag--{{ if eq .Section "projects" }}project{{ else if eq .Section "leetcode" }}leetcode{{ else }}article{{ end }}">
+                {{ if eq .Section "projects" }}项目{{ else if eq .Section "leetcode" }}题解{{ else }}文章{{ end }}
+            </span>
+            <h2 class="homepage-card__title">
+                <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </h2>
+        </div>
 
         {{ with .Params.description }}
         <p class="homepage-card__desc">{{ . }}</p>
@@ -30,20 +21,6 @@
                     {{ .Date.Format "Jan 02, 2006" }}
                 </time>
             </span>
-
-            <span class="homepage-card__meta-item">
-                {{ partial "helper/icon" "clock" }}
-                {{ T "article.readingTime" .ReadingTime }}
-            </span>
-
-            {{ if .Params.categories }}
-            <span class="homepage-card__meta-item homepage-card__category">
-                {{ partial "helper/icon" "categories" }}
-                {{ range (.GetTerms "categories") }}
-                <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
-                {{ end }}
-            </span>
-            {{ end }}
         </div>
     </div>
 </article>

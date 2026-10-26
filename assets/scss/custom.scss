@@ -75,6 +75,13 @@
     text-align: left;
 }
 
+// 隐藏侧边栏导航菜单滚动条（保留滚动能力）
+#main-menu {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar { display: none; }
+}
+
 // ── 4. 文章卡片 hover 上浮动画 + 可点击区域优化 ────────────
 .article-list article {
     transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
@@ -441,10 +448,10 @@
 
 // 8g. 首页卡片新样式（图标标题 + 描述 + 底部元信息，悬停显示左侧竖条）
 .article-list--homepage {
-    gap: 24px;
+    gap: 16px;
 
     .homepage-card {
-        padding: 28px 32px !important;
+        padding: 20px 24px !important;
         border-radius: var(--card-border-radius) !important;
         border-left: 3px solid transparent;
         background: var(--card-background);
@@ -457,6 +464,37 @@
             box-shadow: var(--shadow-l2);
         }
 
+        &__header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        &__tag {
+            flex-shrink: 0;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.6;
+            letter-spacing: 0.5px;
+
+            &--project {
+                background: rgba(230, 126, 34, 0.12);
+                color: #e67e22;
+            }
+
+            &--article {
+                background: rgba(41, 128, 185, 0.12);
+                color: #2980b9;
+            }
+
+            &--leetcode {
+                background: rgba(39, 174, 96, 0.12);
+                color: #27ae60;
+            }
+        }
+
         &__link {
             position: absolute;
             inset: 0;
@@ -467,19 +505,16 @@
         &__content {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 10px;
             position: relative;
             z-index: 2;
         }
 
         &__title {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 600;
             line-height: 1.35;
             margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
 
             a {
                 color: var(--card-text-color-main);
@@ -490,18 +525,15 @@
             }
         }
 
-        &__icon {
-            font-size: 1.7rem;
-            line-height: 1;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
         &__desc {
-            font-size: 1.55rem;
-            line-height: 1.25;
+            font-size: 1.45rem;
+            line-height: 1.6;
             color: var(--card-text-color-secondary);
             margin: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         &__meta {
@@ -633,5 +665,62 @@
             background-color: rgba(233, 30, 99, 0.08);
             .categories-list-item__name { color: #e91e63; }
         }
+    }
+}
+
+// 10. 首页分隔线与“查看全部”链接
+.homepage-divider {
+    margin: 12px 0 12px;
+    border: none;
+    border-top: 1px solid var(--card-separator-color);
+}
+
+.homepage-view-all {
+    display: block;
+    text-align: center;
+    margin-top: 12px;
+    padding: 4px 0;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--accent-color);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+        opacity: 0.75;
+    }
+}
+
+// 11. 移动端与可访问性
+:where(a, button, input, textarea, select):focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+    .article-list--homepage .homepage-card {
+        padding: 16px 14px !important;
+
+        &__title {
+            align-items: flex-start;
+            font-size: 1.9rem;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+
+    .article-list article:hover,
+    .career-button:hover {
+        transform: none;
     }
 }

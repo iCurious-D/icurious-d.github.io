@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
-        <title>Git on gugugu</title>
-        <link>http://localhost:1315/tags/git/</link>
-        <description>Recent content in Git on gugugu</description>
+        <title>Git on gugugu｜AI 应用工程师</title>
+        <link>http://localhost:8080/tags/git/</link>
+        <description>Recent content in Git on gugugu｜AI 应用工程师</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>zh-cn</language>
-        <lastBuildDate>Mon, 08 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1315/tags/git/index.xml" rel="self" type="application/rss+xml" /><item>
+        <language>zh-CN</language>
+        <lastBuildDate>Mon, 08 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:8080/tags/git/index.xml" rel="self" type="application/rss+xml" /><item>
         <title>Git 常用命令备忘</title>
-        <link>http://localhost:1315/notes/git_tips/</link>
+        <link>http://localhost:8080/notes/git_tips/</link>
         <pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate>
         
-        <guid>http://localhost:1315/notes/git_tips/</guid>
+        <guid>http://localhost:8080/notes/git_tips/</guid>
         <description>&lt;h2 id=&#34;撤销操作&#34;&gt;撤销操作
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;撤销工作区修改：&lt;code&gt;git checkout -- &amp;lt;file&amp;gt;&lt;/code&gt;&lt;/li&gt;
@@ -26,10 +26,10 @@
         </item>
         <item>
         <title>Git 快速上手：原理、命令与底层实现</title>
-        <link>http://localhost:1315/posts/ai_notes/git_note/</link>
+        <link>http://localhost:8080/posts/ai_notes/git_note/</link>
         <pubDate>Mon, 15 Dec 2025 14:38:11 +0800</pubDate>
         
-        <guid>http://localhost:1315/posts/ai_notes/git_note/</guid>
+        <guid>http://localhost:8080/posts/ai_notes/git_note/</guid>
         <description>&lt;h2 id=&#34;git-快速上手原理命令与底层实现&#34;&gt;Git 快速上手：原理、命令与底层实现
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Git&lt;/strong&gt; 是现代软件开发中不可或缺的版本控制工具。
 本文简单梳理了 Git 的常用命令、核心原理、开发流程、最佳实践以及底层实现。&lt;/p&gt;

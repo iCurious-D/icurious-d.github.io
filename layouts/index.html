@@ -1,47 +1,51 @@
 {{ define "main" }}
-    {{/* ── 获取所有主页文章，分离置顶与普通文章 ── */}}
-    {{ $allPages := where .Site.RegularPages "Section" "in" .Site.Params.mainSections }}
-    {{ $allPages = where $allPages "Params.hidden" "!=" true }}
-    {{ $pinnedPages := where $allPages "Params.pinned" true }}
-    {{ $pinnedProjects := where $pinnedPages "Section" "projects" }}
-    {{ $pinnedArticles := where $pinnedPages "Section" "posts" }}
-    {{ $regularPages := where $allPages "Params.pinned" "!=" true | first 10 }}
+    {{/* ── 获取三个区块的内容 ── */}}
+    {{ $allPages := where .Site.RegularPages "Params.hidden" "!=" true }}
+    {{ $projectPages := where $allPages "Section" "projects" | first 3 }}
+    {{ $postPages := where $allPages "Section" "posts" | first 3 }}
+    {{ $leetcodePages := where $allPages "Section" "leetcode" | first 3 }}
 
-    {{/* ── 精选文章/项目（项目在前、文章在后） ── */}}
-    {{ with $pinnedPages }}
-    <section class="homepage-featured">
-        <div class="section-label">
-            <span class="section-label__icon">⭐</span>
-            <span class="section-label__text">精选</span>
-        </div>
-        <div class="article-list article-list--homepage">
-            {{ range $pinnedProjects }}
-                {{ partial "article-list/homepage" . }}
-            {{ end }}
-            {{ range $pinnedArticles }}
-                {{ partial "article-list/homepage" . }}
-            {{ end }}
-        </div>
-    </section>
-    {{ end }}
-
-    {{/* ── 分隔线 + 最新标签 ── */}}
-    {{ if and $pinnedPages $regularPages }}
-    <hr class="homepage-hr">
-    <div class="section-label">
-        <span class="section-label__icon">📰</span>
-        <span class="section-label__text">最新</span>
-    </div>
-    {{ end }}
-
-    {{/* ── 最新文章列表 ── */}}
-    {{ with $regularPages }}
-    <section class="homepage-latest">
+    {{/* ── 项目区 ── */}}
+    {{ with $projectPages }}
+    <section class="homepage-section">
         <div class="article-list article-list--homepage">
             {{ range . }}
                 {{ partial "article-list/homepage" . }}
             {{ end }}
         </div>
+        <a class="homepage-view-all" href="{{ relURL "projects/" }}">查看全部项目 →</a>
+    </section>
+    {{ end }}
+
+    {{ if and $projectPages $postPages }}
+    <hr class="homepage-divider">
+    {{ end }}
+
+    {{/* ── 文章区 ── */}}
+    {{ with $postPages }}
+    <section class="homepage-section">
+        <div class="article-list article-list--homepage">
+            {{ range . }}
+                {{ partial "article-list/homepage" . }}
+            {{ end }}
+        </div>
+        <a class="homepage-view-all" href="{{ relURL "posts/" }}">查看全部文章 →</a>
+    </section>
+    {{ end }}
+
+    {{ if and $postPages $leetcodePages }}
+    <hr class="homepage-divider">
+    {{ end }}
+
+    {{/* ── 题解区 ── */}}
+    {{ with $leetcodePages }}
+    <section class="homepage-section">
+        <div class="article-list article-list--homepage">
+            {{ range . }}
+                {{ partial "article-list/homepage" . }}
+            {{ end }}
+        </div>
+        <a class="homepage-view-all" href="{{ relURL "leetcode/" }}">查看全部题解 →</a>
     </section>
     {{ end }}
 
